@@ -6,14 +6,37 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1">
 	<title>Origo exempel</title>
 	<link href="css/style.css" rel="stylesheet">
+	<style media="screen">
+		#progress {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			height: 0.4em;
+			background: rgba(228, 18, 11, 0.7);
+			width: 0;
+			transition: width 250ms;
+		}
+		#progress2 {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			height: 0.4em;
+			background: rgba(11, 155, 226, 0.7);
+			width: 0;
+			transition: width 250ms;
+		}
+	</style>
 </head>
 <body>
-<div id="app-wrapper">
-</div>
+		<div id="app-wrapper"></div>
 <script src="js/origo.js"></script>
 <script type="text/javascript">
 	//Init origo
     origo.map.init('index.json');
+		$ = jQuery;
+		$(document).ready( function() {
+			console.log('test');
+		});
 </script>
 </body>
 </html>
