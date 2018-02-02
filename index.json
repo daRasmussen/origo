@@ -256,7 +256,7 @@
       "title": "PARK PUNKT",
       "group": "drift_park",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "editable": true,
       "attributes": [
         {
@@ -292,7 +292,7 @@
       "title": "PARK LINJE",
       "group": "drift_park",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "editable": true,
       "attributes": [
         {
@@ -328,7 +328,7 @@
       "title": "NATUR YTA",
       "group": "drift_natur",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "editable": true,
       "attributes": [
         {
@@ -365,7 +365,7 @@
       "title": "NATUR PUNKT",
       "group": "drift_natur",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "editable": true,
       "attributes": [
         {
@@ -402,7 +402,7 @@
       "title": "NATUR LINJE",
       "group": "drift_natur",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "editable": true,
       "attributes": [
         {
@@ -439,7 +439,7 @@
       "title": "GATU YTA",
       "group": "drift_gata",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "editable": true,
       "attributes": [
         {
@@ -477,7 +477,7 @@
       "title": "GATU PUNKT",
       "group": "drift_gata",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "editable": true,
       "attributes": [
         {
@@ -515,7 +515,7 @@
       "title": "GATU LINJE",
       "group": "drift_gata",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "editable": true,
       "attributes": [
         {
@@ -1220,18 +1220,6 @@
       "visible": false
     },
     {
-      "name": "Allah",
-      "id": "144, 143, 0, 1, 2, 3, 173, 175, 11, 169, 174, 12, 135, 165, 136, 164, 163, 162, 161, 159, 160, 166, 171, 172, 150, 31, 149, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 156, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 133, 158, 157, 70, 71, 72, 73, 141, 74, 75, 76, 77, 78, 170, 137, 138, 139, 79, 80, 81, 82, 83, 84, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 168, 120, 121, 122",
-      "title": "Allah",
-      "group": "parkytor",
-      "queryable": false,
-      "source": "tff",
-      "style": "ic_list",
-      "abstract": "<a href=tecken.pdf>PDF</a>",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
       "name": "gras_ovr",
       "id": "89",
       "title": "Gräs",
@@ -1622,6 +1610,17 @@
       "style": "strandskydd",
       "type": "AGS_TILE",
       "visible": false
+    },
+    {
+      "name": "sandbox",
+      "id": "",
+      "title": "sandbox",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "strandskydd",
+      "type": "DYN_AGS_TILE",
+      "visible": true
     },
     {
       "attribution": "&copy Lantmäteriet Geodatasamverkan",

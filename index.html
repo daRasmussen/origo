@@ -16,27 +16,30 @@
 			width: 0;
 			transition: width 250ms;
 		}
-		#progress2 {
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			height: 0.4em;
-			background: rgba(11, 155, 226, 0.7);
-			width: 0;
-			transition: width 250ms;
-		}
 	</style>
 </head>
-<body>
+<body onload="onload()">
 		<div id="app-wrapper"></div>
 <script src="js/origo.js"></script>
 <script type="text/javascript">
 	//Init origo
     origo.map.init('index.json');
-		$ = jQuery;
-		$(document).ready( function() {
-			console.log('test');
-		});
+		function onload(){
+			//var sandbox = window.origo.map.viewer.getLayer("sandbox");
+
+			//var map = window.origo.map;
+			//console.log(map);
+			//var viewer = map.viewer;
+			//console.log(viewer.getMap());
+			//var getMap = viewer.getMap();
+			//console.log(getMap);
+			//console.log(getMap.getLayers());
+		}
+		//$ = jQuery;
+		//$(document).ready( function() {
+		//	console.log('test');
+		//});
+
 </script>
 </body>
 </html>

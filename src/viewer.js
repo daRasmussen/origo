@@ -92,6 +92,7 @@ function init(el, mapOptions) {
   }
 
   loadMap();
+  
   settings.layers = createLayers(mapOptions.layers, urlParams.layers);
   addLayers(settings.layers);
 

@@ -2,6 +2,8 @@
 
 window.proj4 = require('proj4');
 global.jQuery = require("jquery");
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
 
 var $ = require('jquery');
 var Viewer = require('./src/viewer');
@@ -17,10 +19,12 @@ origo.map.init = function(options, opt_config) {
   var config = opt_config ? $.extend(origo.config, opt_config) : origo.config;
 
   var map = mapLoader(options, config);
+
   if (map) {
     map.then(function(config) {
       init(config);
     })
+    origo.map.viewer = Viewer;
     return Viewer;
   } else {
     return undefined;

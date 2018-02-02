@@ -58,7 +58,6 @@ function init(opt_options) {
 
   map.on('click', onClick);
   $(document).on('enableInteraction', onEnableInteraction);
-
 }
 
 function getSelectionLayer() {
@@ -160,7 +159,7 @@ function clear() {
   selectionLayer.clear();
   sidebar.setVisibility(false);
   if (overlay) {
-    Viewer.removeOverlays(overlay);      
+    Viewer.removeOverlays(overlay);
   }
   console.log("Clearing selection");
 }
