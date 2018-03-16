@@ -1,15 +1,15 @@
 "use strict";
 
-var ol = require('openlayers');
-var $ = require('jquery');
-var template = require("./templates/viewer.handlebars");
-var Modal = require('./modal');
-var utils = require('./utils');
-var isUrl = require('./utils/isurl');
-var elQuery = require('./utils/elquery');
-var featureinfo = require('./featureinfo');
-var maputils = require('./maputils');
-var style = require('./style')();
+var ol           = require('openlayers');
+var $            = require('jquery');
+var template     = require("./templates/viewer.handlebars");
+var Modal        = require('./modal');
+var utils        = require('./utils');
+var isUrl        = require('./utils/isurl');
+var elQuery      = require('./utils/elquery');
+var featureinfo  = require('./featureinfo');
+var maputils     = require('./maputils');
+var style        = require('./style')();
 var layerCreator = require('./layercreator');
 
 var map;
@@ -71,7 +71,9 @@ function init(el, mapOptions) {
       extent: settings.projectionExtent,
       units: getUnits(settings.projectionCode)
     });
-    settings.resolutions = mapOptions.resolutions || undefined;
+    //settings.resolutions = mapOptions.resolutions || undefined;
+    settings.resolutions = getLevels(mapOptions.resolutions.level) || undefined;
+
     settings.tileGrid = maputils.tileGrid(settings);
   }
 
@@ -92,7 +94,7 @@ function init(el, mapOptions) {
   }
 
   loadMap();
-  
+
   settings.layers = createLayers(mapOptions.layers, urlParams.layers);
   addLayers(settings.layers);
 
@@ -112,7 +114,53 @@ function init(el, mapOptions) {
     });
   }
   featureinfo.init(settings.featureinfoOptions);
+
+  map.once('postrender', function(){
+    var stable = [];
+    var layers = map.getLayers();
+    layers.forEach(function(l) {
+      if(l.get('type') === 'AGS_TILE'){
+        stable.push(l.get('id'));
+      }
+    });
+    require('./ids').stable = stable;
+  });
 }
+function getLevels(level){
+  var tmp = [];
+  var res = [
+    1146.8799999999999,
+    573.4399999999999,
+    286.71999999999997,
+    143.35999999999999,
+    71.67999999999999,
+    35.839999999999996,
+    17.919999999999998,
+    8.959999999999999,
+    4.4799999999999995,
+    2.2399999999999998,
+    1.1199999999999999,
+    0.5599999999999999,
+    0.28,
+    0.14,
+    0.056,
+    0.028,
+    0.014,
+    0.007,
+    0.0035,
+    0.00175,
+    0.000875
+  ];
+  for(var index in res){
+    if(index <= level){  
+      tmp.push(res[index]);
+    }
+  };
+  return tmp;
+}
+function aim(interval){
+  return 2293.76*Math.exp((-0.693147)*interval);
+};
 
 function addLayers(layers) {
   layers.forEach(function(layer) {
@@ -150,6 +198,7 @@ function loadMap() {
       enableRotation: settings.enableRotation
     })
   });
+
 }
 
 function parseArg() {
@@ -157,7 +206,6 @@ function parseArg() {
   var elements = str.split("&");
 
   for (var i = 0; i < elements.length; i++) {
-
     //center coordinates
     if (i == 0) {
       var z = elements[i].split(",");
