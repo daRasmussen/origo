@@ -19,7 +19,7 @@ Progress.prototype.addLoaded = function() {
   setTimeout(function() {
     ++this_.loaded;
     this_.update();
-  }, 1000);
+  }, 100);
 };
 /** Update the progress bar. **/
 Progress.prototype.update = function() {
@@ -31,7 +31,7 @@ Progress.prototype.update = function() {
     var this_ = this;
     setTimeout(function() {
       this_.hide();
-    }, 500);
+    }, 600);
   }
 };
 /**  Show the progress bar. **/

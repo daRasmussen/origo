@@ -4,7 +4,7 @@ var ol = require('openlayers');
 var progressBar = require('../progressBar');
 module.exports = function tile(options, source) {
   options.source = source;
-  var progress = new progressBar(document.getElementById('progress'));
+  var progress = new progressBar(document.getElementById('o-progress'));
 
   source.on('tileloadstart', function() {
     progress.addLoading();
