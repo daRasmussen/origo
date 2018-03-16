@@ -1,28 +1,24 @@
 "use strict";
 
-var $ = require('jquery');
-var viewer = require('./viewer');
-var mapUtils = require('./maputils');
-var group = require('./layer/group');
-var type = {};
+var $             = require('jquery');
+var viewer        = require('./viewer');
+var mapUtils      = require('./maputils');
+var group         = require('./layer/group');
+var type          = {};
 var layerCreator;
-type.WFS = require('./layer/wfs');
-type.AGS_FEATURE = require('./layer/agsfeature');
-type.TOPOJSON = require('./layer/topojson');
-type.GEOJSON = require('./layer/geojson');
-type.WMS = require('./layer/wms');
-type.WMTS = require('./layer/wmts');
-type.AGS_TILE = require('./layer/agstile');
-type.XYZ = require('./layer/xyz');
-type.OSM = require('./layer/osm');
-type.VECTORTILE = require('./layer/vectortile');
-type.FEATURE = require('./layer/featurelayer');
-type.GROUP = groupLayer;
-
-var visibleLayersIDS = require('./visibleLayersIDS');
-var visibleTILELayersIDS = require('./visibleTILELayersIDS');
+type.WFS          = require('./layer/wfs');
+type.AGS_FEATURE  = require('./layer/agsfeature');
+type.TOPOJSON     = require('./layer/topojson');
+type.GEOJSON      = require('./layer/geojson');
+type.WMS          = require('./layer/wms');
+type.WMTS         = require('./layer/wmts');
+type.AGS_TILE     = require('./layer/agstile');
 type.DYN_AGS_TILE = require('./layer/dynagstile');
-var t = require('./layer/dynagstile');
+type.XYZ          = require('./layer/xyz');
+type.OSM          = require('./layer/osm');
+type.VECTORTILE   = require('./layer/vectortile');
+type.FEATURE      = require('./layer/featurelayer');
+type.GROUP        = groupLayer;
 
 layerCreator = function layerCreator(opt_options) {
   var defaultOptions = {
@@ -66,91 +62,152 @@ layerCreator = function layerCreator(opt_options) {
 
   if (type.hasOwnProperty(layerOptions.type)) {
     var layer = type[layerOptions.type](layerOptions, layerCreator);
-
-    // This evnt listner listens for change of visiblity of each layer.
-    layer.on('change:visible', function(){
-      fillVisibleTILELayersIDS(layer);
-      if(this.get('type') === 'AGS_TILE'){
-         this.setOpacity(0);
-         //console.log(this.get('id'));
-      }
-      //else if(this.get('type') === 'DYN_AGS_TILE'){
-      //   var source = this.getSource();
-      //   // MISSING ALL PARAMS
-      //   source.updateParams({
-      //     params: {'layers': 'show:'+visibleLayersIDS.ids.join()},
-      //   });
-      if(this.get('type') === 'DYN_AGS_TILE'){
-        this.setOpacity(1);
-        // var sourceOptions = {
-        //   url: "https://kartor.vasteras.se/arcgis/rest/services/ext/tff_skotsel_dyn/MapServer/",
-        //   projection: viewer.getProjection(),
-        //   params: {
-        //     layers: 'show: 122'
-        //   }
-        // };
-        // var url = "https://kartor.vasteras.se/arcgis/rest/services/ext/tff_skotsel_dyn/MapServer/";
-        // var projection = viewer.getProjection();
-        // var params = {
-        //   layers: 'show'+visibleLayersIDS.ids.join()
-        // };
-        console.log(viewer.getExtent());
-        //console.log(this.get('id'));
-        //this.set('id', '122');
-        console.log(visibleTILELayersIDS.ids.join());
-        var source = this.getSource();
-        source.updateParams({layers: 'show: '+visibleTILELayersIDS.ids.join(), extent: viewer.getExtent()});
-        //source.refresh();
-        //console.log(this.get('id'));
-      }
-    });
+    agsTileEvents(layer);
     return layer;
   } else {
     console.log('Layer type is missing or layer type is not correct. Check your layer definition: ');
-    console.log(layerOptions);
   }
 }
-/**
-  * This method fills the global parameter visibleTILELayersIDS.
-  * This includes ids for all layers types of AGS_TILE.
-  */
-function fillVisibleTILELayersIDS(layer){
+function agsTileEvents(layer){
   if(layer.get('type') === 'AGS_TILE'){
-    var id = layer.get('id');
-    var index = visibleTILELayersIDS.ids.indexOf(id);
-    if(index === -1){
-      visibleTILELayersIDS.ids.splice(visibleTILELayersIDS.length, 0, id);
-    } else {
-      visibleTILELayersIDS.ids = removeItem(visibleTILELayersIDS.ids, id);
-    }
+    layer.on('change:visible', function(){
+      if(this.get('visible')){
+        this.getSource().updateParams({layers: "show: 1337"});
+        addCollected(layer);
+        kickOff(viewer);
+      } else if(!this.get('visible')) {
+        this.getSource().updateParams({layers: "show: "+this.get('id')});
+        removeCollected(layer);
+        kickOff(viewer);
+      }
+    });
   }
+};
+function kickOff(viewer){
+  viewer.getLayers().forEach(function(layer){
+    ///////////////// TEST
+    var stable = require('./ids').stable;
+    var collected = require('./ids').collected;
+    collected = structure(stable, collected);
+    var indices = hand(stable, collected);
+    clear(layer, indices);
+    var mpl = 20;
+    switch(cardinal(collected.length, mpl)){
+      case 1:
+        toggle(layer, indices, collected, 'cloaked0', (mpl-mpl), mpl);
+      break;
+      case 2:
+        toggle(layer, indices, collected, 'cloaked0', mpl, mpl*2);
+        toggle(layer, indices, collected, 'cloaked1', (mpl-mpl), mpl);
+      break;
+      case 3:
+        toggle(layer, indices, collected, 'cloaked0', mpl*2, mpl*3);
+        toggle(layer, indices, collected, 'cloaked1', mpl, mpl*2);
+        toggle(layer, indices, collected, 'cloaked2', (mpl-mpl), mpl);
+      break;
+      case 4:
+        toggle(layer, indices, collected, 'cloaked0', mpl*3, mpl*4);
+        toggle(layer, indices, collected, 'cloaked1', mpl*2, mpl*3);
+        toggle(layer, indices, collected, 'cloaked2', mpl, mpl*2);
+        toggle(layer, indices, collected, 'cloaked3', (mpl-mpl), mpl);
+      break;
+      case 5:
+        toggle(layer, indices, collected, 'cloaked0', mpl*4, mpl*5);
+        toggle(layer, indices, collected, 'cloaked1', mpl*3, mpl*4);
+        toggle(layer, indices, collected, 'cloaked2', mpl*2, mpl*3);
+        toggle(layer, indices, collected, 'cloaked3', mpl, mpl*2);
+        toggle(layer, indices, collected, 'cloaked4', (mpl-mpl), mpl);
+      break;
+      //case 0:
+        // if(layer.get('type') === 'DYN_AGS_TILE'){
+        //   var source = layer.getSource();
+        //   revise(indices, source, []);
+        // };
+        //clear(layer, indices);
+      //break;
+    }
+  });
+};
+function clear(layer, indices){
+  if(layer.get('type') === 'DYN_AGS_TILE'){
+    var source = layer.getSource();
+    revise(indices, source, []);
+  };
 }
-/**
-  * This method fills the global parameter visibleLayersIDS.
-  * This includes ids for all types of layers.
-  */
-function fillVisibleLayersIDS(layer){
-  var id = layer.get('id');
-  var index = visibleLayersIDS.ids.indexOf(id);
-  if(index === -1){
-    visibleLayersIDS.ids.splice(visibleLayersIDS.length, 0, id);
+function toggle(layer, indices, collected, name, min, max){
+  if(layer.get('name') === name){
+    var source = layer.getSource();
+    revise(indices, source, collected.slice(min, max));
+  };
+};
+function roof(bulk, crest){
+  return bulk * crest;
+};
+function tin(bulk, crest){
+  return roof(bulk, crest) - roof(bulk, crest);
+}
+function cardinal(bulk, crest){
+  return Math.ceil(bulk / crest) >= 0 ? Math.ceil(bulk / crest) : 0;
+};
+
+function revise(indices, source, collected){
+  if(indices[0] > 0){
+    source.updateParams(colligate(collected));
+  } else if(indices[0] !== undefined){
+    source.updateParams(colligate(collected.reverse()));
   } else {
-    visibleLayersIDS.ids = removeItem(visibleLayersIDS.ids, id);
+    source.updateParams(colligate([]));
   }
-}
-/**
- * This method takes a list and parameter remove.
- * And returns a list without the parameter remove.
- */
-function removeItem(list, remove){
-  var tmp = [];
-  for(var item in list){
-    if(list[item] !== remove){
-      tmp.push(list[item]);
+};
+function hand(stable, collected){
+  var indices = new Array(collected.length);
+  for (var index in collected) indices[index] = index;
+  return indices.sort(function (x, y) {
+    return stable.indexOf(collected[x]) < stable.indexOf(collected[y]) ? -1 : stable.indexOf(collected[x]) > stable.indexOf(collected[y]) ? 1 : 0; });
+};
+// FROM dynagstile.js
+function colligate(ids){
+  return {
+    "dynamicLayers": produce(ids)
+  };
+};
+function produce(ids){
+    var result = "";
+    for(var drawn in ids){
+      result += (drawn == (ids.length-1)) ? reorder(drawn, ids[drawn]) : reorder(drawn, ids[drawn])+',';
+    }
+  return "["+result+"]";
+};
+function reorder(drawn, inUse){
+  return JSON.stringify({"id":drawn, source: {"mapLayerId": inUse}});
+};
+function addCollected(layer){
+  var stable = require('./ids').stable;
+  var collected = require('./ids').collected;
+  var id = layer.get('id');
+  collected.push(id);
+  collected = structure(stable, collected);
+};
+function removeCollected(layer){
+  var stable = require('./ids').stable;
+  var collected = require('./ids').collected;
+  var id = layer.get('id');
+  collected.splice(collected.indexOf(id), 1);
+  collected = structure(stable, collected);
+};
+function structure(stable, collected){
+  var tidy = [];
+  for(var x in stable){
+    for(var y in collected){
+      if(stable[x] === collected[y]){
+        tidy[x] = collected[y];
+      }
     }
   }
-  return tmp;
-}
+  return tidy.filter(function(x){
+    return (x !== (undefined || null || ''));
+  });
+};
 
 function groupLayer(options) {
   var layers;
