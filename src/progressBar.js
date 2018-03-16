@@ -19,7 +19,7 @@ Progress.prototype.addLoaded = function() {
   setTimeout(function() {
     ++this_.loaded;
     this_.update();
-  }, 100);
+  }, 1000);
 };
 /** Update the progress bar. **/
 Progress.prototype.update = function() {
