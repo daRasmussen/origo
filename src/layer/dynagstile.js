@@ -13,28 +13,90 @@ var tile                 = require('./tile');
  * @return {Object} a tile layer with a configured ags tile source. That support dynamic layers.
  */
 var dynAgsTile = function dynAgsTile(layerOptions) {
-    var agsDefault            = { layerType: 'tile', featureinfoLayer: undefined };
+    var agsDefault            = { layerType: 'tile', featureinfoLayer: undefined};
     var sourceDefault         = {};
     var agsOptions            = $.extend(agsDefault, layerOptions);
     var sourceOptions         = $.extend(sourceDefault, viewer.getMapSource()[layerOptions.source]);
+
     sourceOptions.attribution = agsOptions.attribution;
     sourceOptions.projection  = viewer.getProjection();
-    sourceOptions.tileSize    = agsOptions.tileSize;
+    //sourceOptions.tileSize    = agsOptions.tileSize;
+    // var map = viewer.getMap();
+    // var s = map.getSize();
+    // var w = s[0];
+    // var h = s[1];
+    // var ow = 512; //w/4;
+    // var oh = 512; //h/4;
+    // console.log(w, h);
+    // console.log(ow, oh);
+    // console.log(Math.ceil(ow), Math.ceil(oh));
+
+    var e = viewer.getMap().getView().calculateExtent(viewer.getMap().getSize());
+    var w = ol.extent.getWidth(e);
+    var h = ol.extent.getHeight(e);
+    //var wk = w/512;
+    //var hk = h/512;
+    //console.log(wk, hk);
+
+    // 3000 ms
+    //var ow = w/0.98 * (512/w);
+    //var oh = h/0.95 * (512/h);
+
+    var ow = w/1.51 * (512/w);
+    var oh = h/1.48 * (512/h);
+
+    //var ow = w/256; 6000ms
+    //var oh = h/256;
+
+    //console.log(1/wk, 1/hk);
+    console.log(ow, oh);
+    //sourceOptions.tileSize    = [512, 512];
+    sourceOptions.tileSize = [ow, oh];
+    sourceOptions.tileSizes   = [
+      [w/0.48 * (512/w), h/0.45 * (512/h)], // 4 096 000
+      [w/0.48 * (512/w), h/0.45 * (512/h)], // 2 048 000
+      [w/0.48 * (512/w), h/0.45 * (512/h)], // 1 024 000
+      [w/0.48 * (512/w), h/0.45 * (512/h)], // 512 000 start
+      [w/0.48 * (512/w), h/0.45 * (512/h)], // 256 000
+      [w/0.98 * (512/w), h/0.95 * (512/h)], // 128 000
+      [w/1.48 * (512/w), h/1.45 * (512/h)], // 64 000
+      [w/1.49 * (512/w), h/1.46 * (512/h)], // 32 000
+      [w/1.49 * (512/w), h/1.46 * (512/h)], // 16 000
+      [w/1.49 * (512/w), h/1.46 * (512/h)], // 8 000
+      [w/1.49 * (512/w), h/1.46 * (512/h)], // 4 000
+      [w/1.49 * (512/w), h/1.46 * (512/h)], // 2 000
+      [w/1.49 * (512/w), h/1.46 * (512/h)], // 1 000
+      [w/1.49 * (512/w), h/1.46 * (512/h)], // 500
+      [w/1.49 * (512/w), h/1.46 * (512/h)] // 200
+    ];
+    sourceOptions.extent = viewer.getExtent();
+    sourceOptions.resolutions = viewer.getResolutions();
     sourceOptions.params      = colligate(JSON.parse("[" + agsOptions.id + "]"));
-    var agsSource             = createSource(sourceOptions);
+
+    var tg = new ol.tilegrid.TileGrid({
+                         tileSizes: sourceOptions.tileSizes,
+                         //tileSize: sourceOptions.tileSize,
+                         //extent: sourceOptions.extent,
+                         extent: viewer.getMap().getView().calculateExtent(viewer.getMap().getSize()),
+                         resolutions: sourceOptions.resolutions
+                       });
+
+    var agsSource             = createSource(sourceOptions, tg);
   return tile(agsOptions, agsSource);
   /**
    * This method creates a arcgis tile that supports REST and dynamic layers.
    * @param {Object} options Options for source.
    * @return {Object} return an source TileArcGISRest object
    */
-  function createSource(options) {
+  function createSource(options, tg) {
+    //console.log(options);
       var source = new ol.source.TileArcGISRest({
-        attributions: options.attribution,
-        projection  : options.projection,
+        //attributions: options.attribution,
+        //projection  : options.projection,
         crossOrigin : 'anonymous',
         params      : options.params,
-        url         : options.url
+        url         : options.url,
+        tileGrid    : tg
       });
     return source;
   }
@@ -46,7 +108,8 @@ var dynAgsTile = function dynAgsTile(layerOptions) {
  */
 function colligate(ids){
   return {
-    "dynamicLayers": produce(ids)
+    "dynamicLayers": produce(ids),
+    "DPI": 90
   };
 };
 /**

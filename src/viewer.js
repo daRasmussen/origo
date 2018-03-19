@@ -49,6 +49,7 @@ function init(el, mapOptions) {
       }
     }
   }
+
   settings.params = urlParams = mapOptions.params || {};
   settings.map = mapOptions.map;
   settings.url = mapOptions.url;
@@ -59,7 +60,9 @@ function init(el, mapOptions) {
   settings.center = urlParams.center || mapOptions.center;
   settings.zoom = urlParams.zoom || mapOptions.zoom;
   mapOptions.tileGrid = mapOptions.tileGrid || {};
-  settings.tileSize = mapOptions.tileGrid.tileSize ? [mapOptions.tileGrid.tileSize,mapOptions.tileGrid.tileSize] : [256,256];
+
+  //settings.tileSize = mapOptions.tileGrid.tileSize ? [mapOptions.tileGrid.tileSize,mapOptions.tileGrid.tileSize] : [256,256];
+
   settings.alignBottomLeft = mapOptions.tileGrid.alignBottomLeft;
 
   if (mapOptions.hasOwnProperty('proj4Defs') || mapOptions.projectionCode=="EPSG:3857" || mapOptions.projectionCode=="EPSG:4326") {
@@ -152,7 +155,7 @@ function getLevels(level){
     0.000875
   ];
   for(var index in res){
-    if(index <= level){  
+    if(index <= level){
       tmp.push(res[index]);
     }
   };

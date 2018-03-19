@@ -19,7 +19,7 @@
     {
       "name": "mapmenu",
       "options": {
-        "isActive": true
+        "isActive": false
       }
     },
     {
@@ -36,6 +36,12 @@
           "area"
         ],
         "default": "length"
+      }
+    },
+    {
+      "name": "scale",
+      "options": {
+        "scaleText": "1:"
       }
     },
     {
@@ -71,22 +77,9 @@
     6610405
   ],
   "zoom": 4,
-  "resolutions": [
-    1146.8799999999999,
-    573.4399999999999,
-    286.71999999999997,
-    143.35999999999999,
-    71.67999999999999,
-    35.839999999999996,
-    17.919999999999998,
-    8.959999999999999,
-    4.4799999999999995,
-    2.2399999999999998,
-    1.1199999999999999,
-    0.5599999999999999,
-    0.27999999999999997,
-    0.13999999999999999
-  ],
+  "resolutions": {
+    "level": 14
+  },
   "source": {
     "tff": {
       "url": "https://kartor.vasteras.se/arcgis/rest/services/ext/tff_skotsel_dyn/MapServer/"
@@ -145,17 +138,15 @@
         },
         {
           "name": "gatuytor",
-          "title": "Gata, ytor",
+          "title": "Gata, ytor"
+        },
+        {
+          "name": "ovrigt",
+          "title": "Gata, ytor övrig ansvarig",
           "groups": [
             {
-              "name": "ovrigt",
-              "title": "Yta, övrig ansvarig",
-              "groups": [
-                {
-                  "name": "ovrigt_sub",
-                  "title": "Yta, övrig ansvarig"
-                }
-              ]
+              "name": "ovrigt_sub",
+              "title": "Övrig ansvarig"
             }
           ]
         }
@@ -171,17 +162,15 @@
         },
         {
           "name": "parkytor",
-          "title": "Park, ytor",
+          "title": "Park, ytor"
+        },
+        {
+          "name": "parkytor_ovr",
+          "title": "Yta, övrig ansvarig",
           "groups": [
             {
-              "name": "parkytor_ovr",
-              "title": "Yta, övrig ansvarig",
-              "groups": [
-                {
-                  "name": "parkytor_ovr_sub",
-                  "title": "Yta, övrig ansvarig"
-                }
-              ]
+              "name": "parkytor_ovr_sub",
+              "title": "Övrig ansvarig"
             }
           ]
         }
@@ -208,45 +197,13 @@
     {
       "name": "background",
       "title": "Bakgrundskartor"
+    },
+    {
+      "name": "cloakedGrp",
+      "title": "cloakedGrp"
     }
   ],
   "layers": [
-    {
-      "name": "drift_park_yta",
-      "geometryType": "Polygon",
-      "id": "6",
-      "source": "tff_edit",
-      "style": "polygon-blue",
-      "title": "PARK YTA",
-      "group": "drift_park",
-      "type": "AGS_FEATURE",
-      "visible": false,
-      "editable": true,
-      "attributes": [
-        {
-          "title": "Datum: ",
-          "name": "DATUMTID",
-          "type": "date",
-          "maxLength": 50
-        },
-        {
-          "title": "Signatur: ",
-          "name": "SIGNATUR",
-          "type": "dropdown",
-          "options": [
-            "Yvonne",
-            "Roger",
-            "Hanna"
-          ]
-        },
-        {
-          "title": "Anteckning: ",
-          "name": "ANTECKNING",
-          "type": "text",
-          "maxLength": 1073741822
-        }
-      ]
-    },
     {
       "name": "drift_park_pkt",
       "geometryType": "Point",
@@ -273,79 +230,6 @@
             "Yvonne",
             "Roger",
             "Hanna"
-          ]
-        },
-        {
-          "title": "Anteckning: ",
-          "name": "ANTECKNING",
-          "type": "text",
-          "maxLength": 1073741822
-        }
-      ]
-    },
-    {
-      "name": "drift_park_lin",
-      "geometryType": "LineString",
-      "id": "8",
-      "source": "tff_edit",
-      "style": "line-blue",
-      "title": "PARK LINJE",
-      "group": "drift_park",
-      "type": "AGS_FEATURE",
-      "visible": false,
-      "editable": true,
-      "attributes": [
-        {
-          "title": "Datum: ",
-          "name": "DATUMTID",
-          "type": "date",
-          "maxLength": 50
-        },
-        {
-          "title": "Signatur: ",
-          "name": "SIGNATUR",
-          "type": "dropdown",
-          "options": [
-            "Yvonne",
-            "Roger",
-            "Hanna"
-          ]
-        },
-        {
-          "title": "Anteckning: ",
-          "name": "ANTECKNING",
-          "type": "text",
-          "maxLength": 1073741822
-        }
-      ]
-    },
-    {
-      "name": "drift_natur_yta",
-      "geometryType": "Polygon",
-      "id": "14",
-      "source": "tff_edit",
-      "style": "polygon-yellow",
-      "title": "NATUR YTA",
-      "group": "drift_natur",
-      "type": "AGS_FEATURE",
-      "visible": false,
-      "editable": true,
-      "attributes": [
-        {
-          "title": "Datum: ",
-          "name": "DATUMTID",
-          "type": "date",
-          "maxLength": 50
-        },
-        {
-          "title": "Signatur: ",
-          "name": "SIGNATUR",
-          "type": "dropdown",
-          "options": [
-            "Kerstin",
-            "Jörgen",
-            "Susanna",
-            "Kris"
           ]
         },
         {
@@ -394,12 +278,197 @@
       ]
     },
     {
+      "name": "drift_gata_pkt",
+      "geometryType": "Point",
+      "id": "10",
+      "source": "tff_edit",
+      "style": "circle-red",
+      "title": "GATU PUNKT",
+      "group": "drift_gata",
+      "type": "AGS_FEATURE",
+      "visible": false,
+      "editable": true,
+      "attributes": [
+        {
+          "title": "Datum: ",
+          "name": "DATUMTID",
+          "type": "date",
+          "maxLength": 50
+        },
+        {
+          "title": "Signatur: ",
+          "name": "SIGNATUR",
+          "type": "dropdown",
+          "options": [
+            "Emma",
+            "Roy",
+            "Jonatan",
+            "Sandra",
+            "Madde"
+          ]
+        },
+        {
+          "title": "Anteckning: ",
+          "name": "ANTECKNING",
+          "type": "text",
+          "maxLength": 1073741822
+        }
+      ]
+    },
+    {
+      "name": "drift_park_lin",
+      "geometryType": "LineString",
+      "id": "8",
+      "source": "tff_edit",
+      "style": "line-blue",
+      "title": "PARK LINJE",
+      "group": "drift_park",
+      "type": "AGS_FEATURE",
+      "visible": false,
+      "editable": true,
+      "attributes": [
+        {
+          "title": "Datum: ",
+          "name": "DATUMTID",
+          "type": "date",
+          "maxLength": 50
+        },
+        {
+          "title": "Signatur: ",
+          "name": "SIGNATUR",
+          "type": "dropdown",
+          "options": [
+            "Yvonne",
+            "Roger",
+            "Hanna"
+          ]
+        },
+        {
+          "title": "Anteckning: ",
+          "name": "ANTECKNING",
+          "type": "text",
+          "maxLength": 1073741822
+        }
+      ]
+    },
+    {
       "name": "drift_natur_lin",
       "geometryType": "LineString",
       "id": "16",
       "source": "tff_edit",
       "style": "line-yellow",
       "title": "NATUR LINJE",
+      "group": "drift_natur",
+      "type": "AGS_FEATURE",
+      "visible": false,
+      "editable": true,
+      "attributes": [
+        {
+          "title": "Datum: ",
+          "name": "DATUMTID",
+          "type": "date",
+          "maxLength": 50
+        },
+        {
+          "title": "Signatur: ",
+          "name": "SIGNATUR",
+          "type": "dropdown",
+          "options": [
+            "Kerstin",
+            "Jörgen",
+            "Susanna",
+            "Kris"
+          ]
+        },
+        {
+          "title": "Anteckning: ",
+          "name": "ANTECKNING",
+          "type": "text",
+          "maxLength": 1073741822
+        }
+      ]
+    },
+    {
+      "name": "drift_gata_lin",
+      "geometryType": "LineString",
+      "id": "11",
+      "source": "tff_edit",
+      "style": "line-red",
+      "title": "GATU LINJE",
+      "group": "drift_gata",
+      "type": "AGS_FEATURE",
+      "visible": false,
+      "editable": true,
+      "attributes": [
+        {
+          "title": "Datum: ",
+          "name": "DATUMTID",
+          "type": "date",
+          "maxLength": 50
+        },
+        {
+          "title": "Signatur: ",
+          "name": "SIGNATUR",
+          "type": "dropdown",
+          "options": [
+            "Emma",
+            "Roy",
+            "Jonatan",
+            "Sandra",
+            "Madde"
+          ]
+        },
+        {
+          "title": "Anteckning: ",
+          "name": "ANTECKNING",
+          "type": "text",
+          "maxLength": 1073741822
+        }
+      ]
+    },
+    {
+      "name": "drift_park_yta",
+      "geometryType": "Polygon",
+      "id": "6",
+      "source": "tff_edit",
+      "style": "polygon-blue",
+      "title": "PARK YTA",
+      "group": "drift_park",
+      "type": "AGS_FEATURE",
+      "visible": false,
+      "editable": true,
+      "attributes": [
+        {
+          "title": "Datum: ",
+          "name": "DATUMTID",
+          "type": "date",
+          "maxLength": 50
+        },
+        {
+          "title": "Signatur: ",
+          "name": "SIGNATUR",
+          "type": "dropdown",
+          "options": [
+            "Yvonne",
+            "Roger",
+            "Hanna"
+          ]
+        },
+        {
+          "title": "Anteckning: ",
+          "name": "ANTECKNING",
+          "type": "text",
+          "maxLength": 1073741822
+        }
+      ]
+    },
+    {
+      "name": "drift_natur_yta",
+      "geometryType": "Polygon",
+      "id": "14",
+      "source": "tff_edit",
+      "style": "polygon-yellow",
+      "title": "NATUR YTA",
       "group": "drift_natur",
       "type": "AGS_FEATURE",
       "visible": false,
@@ -469,82 +538,6 @@
       ]
     },
     {
-      "name": "drift_gata_pkt",
-      "geometryType": "Point",
-      "id": "10",
-      "source": "tff_edit",
-      "style": "circle-red",
-      "title": "GATU PUNKT",
-      "group": "drift_gata",
-      "type": "AGS_FEATURE",
-      "visible": false,
-      "editable": true,
-      "attributes": [
-        {
-          "title": "Datum: ",
-          "name": "DATUMTID",
-          "type": "date",
-          "maxLength": 50
-        },
-        {
-          "title": "Signatur: ",
-          "name": "SIGNATUR",
-          "type": "dropdown",
-          "options": [
-            "Emma",
-            "Roy",
-            "Jonatan",
-            "Sandra",
-            "Madde"
-          ]
-        },
-        {
-          "title": "Anteckning: ",
-          "name": "ANTECKNING",
-          "type": "text",
-          "maxLength": 1073741822
-        }
-      ]
-    },
-    {
-      "name": "drift_gata_lin",
-      "geometryType": "LineString",
-      "id": "11",
-      "source": "tff_edit",
-      "style": "line-red",
-      "title": "GATU LINJE",
-      "group": "drift_gata",
-      "type": "AGS_FEATURE",
-      "visible": false,
-      "editable": true,
-      "attributes": [
-        {
-          "title": "Datum: ",
-          "name": "DATUMTID",
-          "type": "date",
-          "maxLength": 50
-        },
-        {
-          "title": "Signatur: ",
-          "name": "SIGNATUR",
-          "type": "dropdown",
-          "options": [
-            "Emma",
-            "Roy",
-            "Jonatan",
-            "Sandra",
-            "Madde"
-          ]
-        },
-        {
-          "title": "Anteckning: ",
-          "name": "ANTECKNING",
-          "type": "text",
-          "maxLength": 1073741822
-        }
-      ]
-    },
-    {
       "name": "entreprenadgrans",
       "id": "11",
       "title": "Entreprenadgräns",
@@ -552,7 +545,53 @@
       "queryable": false,
       "source": "tff",
       "style": "entreprenadgrans",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "parkeringsomrade",
+      "id": "135",
+      "title": "Parkeringsområde",
+      "group": "parkeringbolag",
+      "queryable": false,
+      "source": "tff",
+      "style": "parkeringsomrade",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "fastighetstext",
+      "id": "173",
+      "title": "Fastighetstext",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "fastighetsgrans",
+      "id": "175",
+      "title": "Fastighetsgräns",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "ic_list",
+      "abstract": "<img class=expanded src=img/legend/fastighetsgrans.png alt=Fastighetsgräns, teckenförklaring >",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "stadyta_pbolag",
+      "id": "165",
+      "title": "Renhållningsnivåer",
+      "group": "parkeringbolag",
+      "queryable": false,
+      "source": "tff",
+      "style": "ic_list",
+      "abstract": "<img class=expanded src=img/legend/stadyta.png alt=Renhållningsnivåer, teckenförklaring >",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -564,7 +603,75 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/stadyta.png alt=Städyta, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "gc2016_underhallsstatus",
+      "id": "144",
+      "title": "GC-bana 2016",
+      "group": "belaggningsstatus",
+      "queryable": false,
+      "source": "tff",
+      "style": "circle-green",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "gata2016_underhallsstatus",
+      "id": "143",
+      "title": "Gata 2016",
+      "group": "belaggningsstatus",
+      "queryable": false,
+      "source": "tff",
+      "style": "circle-green",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "gc2015_underhallsstatus",
+      "id": "0",
+      "title": "GC-bana 2015",
+      "group": "belaggningsstatus",
+      "queryable": false,
+      "source": "tff",
+      "style": "circle-green",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "gata2015_underhallsstatus",
+      "id": "1",
+      "title": "Gata 2015",
+      "group": "belaggningsstatus",
+      "queryable": false,
+      "source": "tff",
+      "style": "circle-green",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "gata2014_underhallsutredning",
+      "id": "3",
+      "title": "Gata 2014",
+      "group": "belaggningsstatus",
+      "queryable": false,
+      "source": "tff",
+      "style": "ic_list",
+      "abstract": "<img class=expanded src=img/legend/komfort_inv.png alt=Kvalitet, teckenförklaring >",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "gc2014_underhallsutredning",
+      "id": "2",
+      "title": "GC-bana 2014",
+      "group": "belaggningsstatus",
+      "queryable": false,
+      "source": "tff",
+      "style": "ic_list",
+      "abstract": "<img class=expanded src=img/legend/komfort_inv.png alt=Kvalitet, teckenförklaring >",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -575,7 +682,7 @@
       "queryable": false,
       "source": "tff",
       "style": "mistel",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -586,7 +693,7 @@
       "queryable": false,
       "source": "tff",
       "style": "prio_sandning",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -597,7 +704,7 @@
       "queryable": false,
       "source": "tff",
       "style": "sopsaltning",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -608,7 +715,7 @@
       "queryable": false,
       "source": "tff",
       "style": "langedrag",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -620,7 +727,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/punktinstanser.png alt=Punktinstanser, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -632,7 +739,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/punktinstanser.png alt=Punktinstanser, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -643,7 +750,7 @@
       "queryable": false,
       "source": "tff",
       "style": "mellanlagring",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -654,7 +761,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "abstract": "<img class=expanded src=img/legend/sandupplag.png alt=Vinterskötsel, teckenförklaring >",
       "visible": false
     },
@@ -666,7 +773,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "abstract": "<img class=expanded src=img/legend/litet_padrag.png alt=Kantklipp, teckenförklaring >",
       "visible": false
     },
@@ -678,7 +785,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "abstract": "<img class=expanded src=img/legend/litetpadrag.png alt=Kantklipp, teckenförklaring >",
       "visible": false
     },
@@ -690,7 +797,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false,
       "abstract": "<img class=expanded src=img/legend/stora_leder_ejsalt.png alt=Stora leder, teckenförklaring >"
     },
@@ -703,7 +810,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/stortpadrag_vag.png alt=Kvalitet, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -714,7 +821,7 @@
       "queryable": false,
       "source": "tff",
       "style": "snobortforsling",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -725,7 +832,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false,
       "abstract": "<img class=expanded src=img/legend/passager.png alt=Passager, teckenförklaring >"
     },
@@ -737,7 +844,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false,
       "abstract": "<img class=expanded src=img/legend/suggor.png alt=Suggor, teckenförklaring >"
     },
@@ -749,7 +856,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false,
       "abstract": "<img class=expanded src=img/legend/staket_gab.png alt=Staket teckenförklaring för gata >"
     },
@@ -761,7 +868,7 @@
       "queryable": false,
       "source": "tff",
       "style": "brunnar",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -772,7 +879,7 @@
       "queryable": false,
       "source": "tff",
       "style": "aco-drain",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -783,7 +890,7 @@
       "queryable": false,
       "source": "tff",
       "style": "luftpumpar",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -794,7 +901,7 @@
       "queryable": false,
       "source": "tff",
       "style": "pumpstationer",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -806,7 +913,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/bussobjekt.png alt=Bussobjekt teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -817,7 +924,7 @@
       "queryable": false,
       "source": "tff",
       "style": "vaderskydd",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -828,7 +935,7 @@
       "queryable": false,
       "source": "tff",
       "style": "brolagen",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -839,7 +946,7 @@
       "queryable": false,
       "source": "tff",
       "style": "oljeavskiljare",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -850,7 +957,7 @@
       "queryable": false,
       "source": "tff",
       "style": "pollare",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -862,7 +969,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/Farthinder.png alt=Farthinder, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -873,7 +980,7 @@
       "queryable": false,
       "source": "tff",
       "style": "parasoll",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -885,7 +992,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/solmobler.png alt=Solmöbler, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -896,7 +1003,7 @@
       "queryable": false,
       "source": "tff",
       "style": "solbrygga",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -907,7 +1014,7 @@
       "queryable": false,
       "source": "tff",
       "style": "cykelstall",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -919,7 +1026,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/parkbankar.png alt=Naturmark, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -931,7 +1038,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/papperskorg.png alt=Papperskorgar teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -942,7 +1049,7 @@
       "queryable": false,
       "source": "tff",
       "style": "trad",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -953,7 +1060,7 @@
       "queryable": false,
       "source": "tff",
       "style": "urnor",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -964,7 +1071,7 @@
       "queryable": false,
       "source": "tff",
       "style": "livboj",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -975,7 +1082,7 @@
       "queryable": false,
       "source": "tff",
       "style": "grillplatser",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -986,7 +1093,7 @@
       "queryable": false,
       "source": "tff",
       "style": "lekplatser",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -997,7 +1104,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false,
       "abstract": "<img class=expanded src=img/legend/staket_gab.png alt=Staket, teckenförklaring >"
     },
@@ -1009,51 +1116,150 @@
       "queryable": false,
       "source": "tff",
       "style": "park_obj_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
-      "name": "TFV_vag",
-      "id": "82",
-      "title": "Trafikverket",
-      "group": "ovrigt",
+      "name": "snorojning",
+      "id": "136",
+      "title": "Snöröjning",
+      "group": "parkeringbolag",
       "queryable": false,
       "source": "tff",
-      "style": "trafikverket",
-      "type": "AGS_TILE",
+      "style": "snorojning",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
-      "name": "GCovr",
-      "id": "81",
-      "title": "GC-yta",
-      "group": "ovrigt_sub",
+      "name": "brunnar_pbolag",
+      "id": "163",
+      "title": "Brunnar",
+      "group": "pbolag_objekt",
       "queryable": false,
       "source": "tff",
-      "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "style": "brunnar",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
-      "name": "trappoRovr",
-      "id": "80",
-      "title": "Trappa",
-      "group": "ovrigt_sub",
+      "name": "cykelstall_pbolag",
+      "id": "159",
+      "title": "Cykelställ",
+      "group": "pbolag_objekt",
       "queryable": false,
       "source": "tff",
-      "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "style": "cykelstall",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
-      "name": "VAGovr",
-      "id": "83",
-      "title": "Väg-yta",
-      "group": "ovrigt_sub",
+      "name": "papperskorgar_pbolag",
+      "id": "162",
+      "title": "Papperskorgar",
+      "group": "pbolag_objekt",
       "queryable": false,
       "source": "tff",
-      "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "style": "papperskorgar_pbolag",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "parkbank_pbolag",
+      "id": "161",
+      "title": "Parkbänk",
+      "group": "pbolag_objekt",
+      "queryable": false,
+      "source": "tff",
+      "style": "parkbank_pbolag",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "trad_pbolag",
+      "id": "164",
+      "title": "Träd",
+      "group": "pbolag_objekt",
+      "queryable": false,
+      "source": "tff",
+      "style": "trad",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "staket_pbolag",
+      "id": "160",
+      "title": "Staket",
+      "group": "pbolag_objekt",
+      "queryable": false,
+      "source": "tff",
+      "style": "staket_pbolag",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "fornlamningspunkt",
+      "id": "171",
+      "title": "Fornlämningspunkt",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "circle-red",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "fornlamningslinje",
+      "id": "172",
+      "title": "Fornlämningslinje",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "line-red",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "tjaraasfalt",
+      "id": "174",
+      "title": "Tjäraasfalt",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "tjaraasfalt",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "kommunagda_fastigheter",
+      "id": "169",
+      "title": "Kommunagda Fastigheter",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "kommunagda_fastigheter",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "fornlamningsyta",
+      "id": "170",
+      "title": "Fornlämningsyta",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "polygon-red",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "strandskydd",
+      "id": "168",
+      "title": "Strandskydd",
+      "group": "grupplosa",
+      "queryable": false,
+      "source": "tff",
+      "style": "strandskydd",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1064,7 +1270,51 @@
       "queryable": false,
       "source": "tff",
       "style": "markvarme",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "TFV_vag",
+      "id": "82",
+      "title": "Trafikverket",
+      "group": "ovrigt",
+      "queryable": false,
+      "source": "tff",
+      "style": "trafikverket",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "GCovr",
+      "id": "81",
+      "title": "GC-yta",
+      "group": "ovrigt_sub",
+      "queryable": false,
+      "source": "tff",
+      "style": "gatYta_ovr",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "trappoRovr",
+      "id": "80",
+      "title": "Trappa",
+      "group": "ovrigt_sub",
+      "queryable": false,
+      "source": "tff",
+      "style": "gatYta_ovr",
+      "type": "DYN_AGS_TILE",
+      "visible": false
+    },
+    {
+      "name": "VAGovr",
+      "id": "83",
+      "title": "Väg-yta",
+      "group": "ovrigt_sub",
+      "queryable": false,
+      "source": "tff",
+      "style": "gatYta_ovr",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1076,7 +1326,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/trappor.png alt=Trapport yta, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1087,7 +1337,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "abstract": "<img class=expanded src=img/legend/vag_yta.png alt=Väg-yta, teckenförklaring >",
       "visible": false
     },
@@ -1098,7 +1348,7 @@
       "group": "gatuytor",
       "queryable": false,
       "source": "tff",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/gc_yta.png alt=Gång- och cykel-yta, teckenförklaring >",
       "visible": false
@@ -1111,7 +1361,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "abstract": "<img class=expanded src=img/legend/kantklipp.png alt=Kantklipp, teckenförklaring >",
       "visible": false
     },
@@ -1123,7 +1373,7 @@
       "queryable": false,
       "source": "tff",
       "style": "ic_list",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "abstract": "<img class=expanded src=img/legend/gras.png alt=Gräsyta, teckenförklaring >",
       "visible": false
     },
@@ -1136,7 +1386,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/busk.png alt=Buskar teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1148,7 +1398,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/rabatter.png alt=Rabbater teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1159,7 +1409,7 @@
       "queryable": false,
       "source": "tff",
       "style": "skog",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1171,7 +1421,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/naturmark.png alt=Naturmark, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1183,7 +1433,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/harda_ytor_park.png alt=Hårda parkytor, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1194,7 +1444,7 @@
       "queryable": false,
       "source": "tff",
       "style": "bollplaner",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1205,7 +1455,7 @@
       "queryable": false,
       "source": "tff",
       "style": "bouleplaner",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1216,7 +1466,7 @@
       "queryable": false,
       "source": "tff",
       "style": "vatten",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1227,7 +1477,7 @@
       "queryable": false,
       "source": "tff",
       "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1238,7 +1488,7 @@
       "queryable": false,
       "source": "tff",
       "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1249,7 +1499,7 @@
       "queryable": false,
       "source": "tff",
       "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1260,7 +1510,7 @@
       "queryable": false,
       "source": "tff",
       "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1271,7 +1521,7 @@
       "queryable": false,
       "source": "tff",
       "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1282,7 +1532,7 @@
       "queryable": false,
       "source": "tff",
       "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1293,7 +1543,7 @@
       "queryable": false,
       "source": "tff",
       "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1304,7 +1554,7 @@
       "queryable": false,
       "source": "tff",
       "style": "gatYta_ovr",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1315,175 +1565,7 @@
       "queryable": false,
       "source": "tff",
       "style": "vagverket",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "gc2016_underhallsstatus",
-      "id": "144",
-      "title": "GC-bana 2016",
-      "group": "belaggningsstatus",
-      "queryable": false,
-      "source": "tff",
-      "style": "circle-green",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "gata2016_underhallsstatus",
-      "id": "143",
-      "title": "Gata 2016",
-      "group": "belaggningsstatus",
-      "queryable": false,
-      "source": "tff",
-      "style": "circle-green",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "gc2015_underhallsstatus",
-      "id": "0",
-      "title": "GC-bana 2015",
-      "group": "belaggningsstatus",
-      "queryable": false,
-      "source": "tff",
-      "style": "circle-green",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "gata2015_underhallsstatus",
-      "id": "1",
-      "title": "Gata 2015",
-      "group": "belaggningsstatus",
-      "queryable": false,
-      "source": "tff",
-      "style": "circle-green",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "gata2014_underhallsutredning",
-      "id": "3",
-      "title": "Gata 2014",
-      "group": "belaggningsstatus",
-      "queryable": false,
-      "source": "tff",
-      "style": "ic_list",
-      "abstract": "<img class=expanded src=img/legend/komfort_inv.png alt=Kvalitet, teckenförklaring >",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "gc2014_underhallsutredning",
-      "id": "2",
-      "title": "GC-bana 2014",
-      "group": "belaggningsstatus",
-      "queryable": false,
-      "source": "tff",
-      "style": "ic_list",
-      "abstract": "<img class=expanded src=img/legend/komfort_inv.png alt=Kvalitet, teckenförklaring >",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "parkeringsomrade",
-      "id": "135",
-      "title": "Parkeringsområde",
-      "group": "parkeringbolag",
-      "queryable": false,
-      "source": "tff",
-      "style": "parkeringsomrade",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "stadyta_pbolag",
-      "id": "165",
-      "title": "Renhållningsnivåer",
-      "group": "parkeringbolag",
-      "queryable": false,
-      "source": "tff",
-      "style": "ic_list",
-      "abstract": "<img class=expanded src=img/legend/stadyta.png alt=Renhållningsnivåer, teckenförklaring >",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "snorojning",
-      "id": "136",
-      "title": "Snöröjning",
-      "group": "parkeringbolag",
-      "queryable": false,
-      "source": "tff",
-      "style": "snorojning",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "brunnar_pbolag",
-      "id": "163",
-      "title": "Brunnar",
-      "group": "pbolag_objekt",
-      "queryable": false,
-      "source": "tff",
-      "style": "brunnar",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "cykelstall_pbolag",
-      "id": "159",
-      "title": "Cykelställ",
-      "group": "pbolag_objekt",
-      "queryable": false,
-      "source": "tff",
-      "style": "cykelstall",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "papperskorgar_pbolag",
-      "id": "162",
-      "title": "Papperskorgar",
-      "group": "pbolag_objekt",
-      "queryable": false,
-      "source": "tff",
-      "style": "papperskorgar_pbolag",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "parkbank_pbolag",
-      "id": "161",
-      "title": "Parkbänk",
-      "group": "pbolag_objekt",
-      "queryable": false,
-      "source": "tff",
-      "style": "parkbank_pbolag",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "trad_pbolag",
-      "id": "164",
-      "title": "Träd",
-      "group": "pbolag_objekt",
-      "queryable": false,
-      "source": "tff",
-      "style": "trad",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "staket_pbolag",
-      "id": "160",
-      "title": "Staket",
-      "group": "pbolag_objekt",
-      "queryable": false,
-      "source": "tff",
-      "style": "staket_pbolag",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1495,7 +1577,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/trappor_yta.png alt=Trappor parkeringsbolag, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1507,7 +1589,7 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/parkeringsbolag_yta.png alt=Hårda ytor parkeringsbolag, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
@@ -1519,106 +1601,61 @@
       "source": "tff",
       "style": "ic_list",
       "abstract": "<img class=expanded src=img/legend/parkeringsbolag_gronyta.png alt=Gröna ytor parkeringsbolag, teckenförklaring >",
-      "type": "AGS_TILE",
+      "type": "DYN_AGS_TILE",
       "visible": false
     },
     {
-      "name": "tjaraasfalt",
-      "id": "174",
-      "title": "Tjäraasfalt",
-      "group": "grupplosa",
+      "name": "cloaked0",
+      "id": " ",
+      "title": "cloaked0",
+      "group": "cloakedGrp",
       "queryable": false,
       "source": "tff",
-      "style": "tjaraasfalt",
-      "type": "AGS_TILE",
-      "visible": false
+      "style": "noStyle",
+      "type": "DYN_AGS_TILE",
+      "visible": true
     },
     {
-      "name": "kommunagda_fastigheter",
-      "id": "169",
-      "title": "Kommunagda Fastigheter",
-      "group": "grupplosa",
+      "name": "cloaked1",
+      "id": " ",
+      "title": "cloaked1",
+      "group": "cloakedGrp",
       "queryable": false,
       "source": "tff",
-      "style": "kommunagda_fastigheter",
-      "type": "AGS_TILE",
-      "visible": false
+      "style": "noStyle",
+      "type": "DYN_AGS_TILE",
+      "visible": true
     },
     {
-      "name": "fastighetstext",
-      "id": "173",
-      "title": "Fastighetstext",
-      "group": "grupplosa",
+      "name": "cloaked2",
+      "id": " ",
+      "title": "cloaked2",
+      "group": "cloakedGrp",
       "queryable": false,
       "source": "tff",
-      "style": "",
-      "type": "AGS_TILE",
-      "visible": false
+      "style": "noStyle",
+      "type": "DYN_AGS_TILE",
+      "visible": true
     },
     {
-      "name": "fastighetsgrans",
-      "id": "175",
-      "title": "Fastighetsgräns",
-      "group": "grupplosa",
+      "name": "cloaked3",
+      "id": " ",
+      "title": "cloaked3",
+      "group": "cloakedGrp",
       "queryable": false,
       "source": "tff",
-      "style": "ic_list",
-      "abstract": "<img class=expanded src=img/legend/fastighetsgrans.png alt=Fastighetsgräns, teckenförklaring >",
-      "type": "AGS_TILE",
-      "visible": false
+      "style": "noStyle",
+      "type": "DYN_AGS_TILE",
+      "visible": true
     },
     {
-      "name": "fornlamningspunkt",
-      "id": "171",
-      "title": "Fornlämningspunkt",
-      "group": "grupplosa",
+      "name": "cloaked4",
+      "id": " ",
+      "title": "cloaked4",
+      "group": "cloakedGrp",
       "queryable": false,
       "source": "tff",
-      "style": "circle-red",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "fornlamningslinje",
-      "id": "172",
-      "title": "Fornlämningslinje",
-      "group": "grupplosa",
-      "queryable": false,
-      "source": "tff",
-      "style": "line-red",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "fornlamningsyta",
-      "id": "170",
-      "title": "Fornlämningsyta",
-      "group": "grupplosa",
-      "queryable": false,
-      "source": "tff",
-      "style": "polygon-red",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "strandskydd",
-      "id": "168",
-      "title": "Strandskydd",
-      "group": "grupplosa",
-      "queryable": false,
-      "source": "tff",
-      "style": "strandskydd",
-      "type": "AGS_TILE",
-      "visible": false
-    },
-    {
-      "name": "sandbox",
-      "id": "",
-      "title": "sandbox",
-      "group": "grupplosa",
-      "queryable": false,
-      "source": "tff",
-      "style": "strandskydd",
+      "style": "noStyle",
       "type": "DYN_AGS_TILE",
       "visible": true
     },
@@ -1809,7 +1846,11 @@
     "ic_list": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              18,
+              18
+            ],
             "src": "img/png/ic_list_black_18dp.png"
           }
         }
@@ -1831,7 +1872,11 @@
     "parasoll": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/parasoll.png"
           }
         }
@@ -1840,7 +1885,11 @@
     "solbrygga": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/solbrygga.png"
           }
         }
@@ -1849,7 +1898,11 @@
     "brunnar": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              18,
+              18
+            ],
             "src": "img/legend/brunnar.gif"
           }
         }
@@ -1858,8 +1911,12 @@
     "aco-drain": [
       [
         {
-          "image": {
-            "src": "img/legend/aco_drain.png"
+          "icon": {
+            "size": [
+              18,
+              18
+            ],
+            "src": "img/legend/aco_drain.gif"
           }
         }
       ]
@@ -1979,7 +2036,11 @@
     "cykelstall": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/cykelstall.png"
           }
         }
@@ -1988,7 +2049,11 @@
     "trad": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/trad.png"
           }
         }
@@ -1997,7 +2062,11 @@
     "urnor": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/urnor.png"
           }
         }
@@ -2006,7 +2075,11 @@
     "livboj": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/livboj.png"
           }
         }
@@ -2015,7 +2088,11 @@
     "grillplatser": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/grillplats.png"
           }
         }
@@ -2024,7 +2101,11 @@
     "lekplatser": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/lekplats.png"
           }
         }
@@ -2034,10 +2115,8 @@
       [
         {
           "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(255,225,255,0.0)"
+            "color": "rgba(255,225,255,0.0)",
+            "width": 3
           }
         }
       ]
@@ -2045,7 +2124,11 @@
     "skog": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/skog.png"
           }
         }
@@ -2054,7 +2137,11 @@
     "bollplaner": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/bollplan.png"
           }
         }
@@ -2063,7 +2150,11 @@
     "bouleplaner": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/bouleplaner.png"
           }
         }
@@ -2072,7 +2163,11 @@
     "vatten": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/vatten_gob.png"
           }
         }
@@ -2093,7 +2188,11 @@
     "snobortforsling": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/snobortforsling.png"
           }
         }
@@ -2111,7 +2210,11 @@
     "prio_sandning": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/prio_sandning.png"
           }
         }
@@ -2120,7 +2223,11 @@
     "sopsaltning": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/sopsaltning.png"
           }
         }
@@ -2129,7 +2236,11 @@
     "langedrag": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/langedrag.png"
           }
         }
@@ -2138,7 +2249,11 @@
     "mellanlagring": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/mellanlagring.png"
           }
         }
@@ -2160,7 +2275,11 @@
     "snorojning": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/pbolag_sno.png"
           }
         }
@@ -2169,7 +2288,11 @@
     "entreprenadgrans": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/entreprenad_omr.png"
           }
         }
@@ -2178,7 +2301,11 @@
     "staket_pbolag": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/pbolag_staket.png"
           }
         }
@@ -2187,7 +2314,11 @@
     "papperskorgar_pbolag": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/pbolag_papperskorg.png"
           }
         }
@@ -2196,7 +2327,11 @@
     "parkbank_pbolag": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/pbolag_parkbank.png"
           }
         }
@@ -2215,7 +2350,11 @@
     "kommunagda_fastigheter": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/kommunagda_fast.png"
           }
         }
@@ -2224,8 +2363,22 @@
     "strandskydd": [
       [
         {
-          "image": {
+          "icon": {
+            "size": [
+              20,
+              20
+            ],
             "src": "img/legend/strandskydd.png"
+          }
+        }
+      ]
+    ],
+    "noStyle": [
+      [
+        {
+          "stroke": {
+            "color": "rgba(0,122,255,1.0)",
+            "width": 0
           }
         }
       ]

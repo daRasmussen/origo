@@ -69,17 +69,24 @@ layerCreator = function layerCreator(opt_options) {
   }
 }
 function agsTileEvents(layer){
-  if(layer.get('type') === 'AGS_TILE'){
+  if(layer.get('type') === 'DYN_AGS_TILE') {
+    var collected = require('./ids').collected
     layer.on('change:visible', function(){
       if(this.get('visible')){
-        this.getSource().updateParams({layers: "show: 1337"});
+        var currentExtent = viewer.getMap().getView().calculateExtent(viewer.getMap().getSize());
+        var ceStr = 'bbox='+currentExtent.join(',');
+        console.log(ceStr);
+        //this.getSource().updateParams({layers: "show: 1337"});
+        // this.getSource().updateParams({layers: "show: "+this.get('id'), box: ceStr, size: "512,512"});
+        //this.getSource().updateParams({layers: "show: "+this.get('id'), bbox: ceStr, size: "128,128", dpi: "80"});
         addCollected(layer);
-        kickOff(viewer);
+        //kickOff(viewer);
       } else if(!this.get('visible')) {
-        this.getSource().updateParams({layers: "show: "+this.get('id')});
+        //this.getSource().updateParams({layers: "show: "+this.get('id')});
         removeCollected(layer);
-        kickOff(viewer);
+        //kickOff(viewer);
       }
+
     });
   }
 };
@@ -90,54 +97,54 @@ function kickOff(viewer){
     var collected = require('./ids').collected;
     collected = structure(stable, collected);
     var indices = hand(stable, collected);
-    clear(layer, indices);
+    //clear(layer, indices);
     var mpl = 20;
     switch(cardinal(collected.length, mpl)){
       case 1:
-        toggle(layer, indices, collected, 'cloaked0', (mpl-mpl), mpl);
+        toggle(viewer, layer, indices, collected, 'cloaked0', (mpl-mpl), mpl);
       break;
       case 2:
-        toggle(layer, indices, collected, 'cloaked0', mpl, mpl*2);
-        toggle(layer, indices, collected, 'cloaked1', (mpl-mpl), mpl);
+        toggle(viewer, layer, indices, collected, 'cloaked0', mpl, mpl*2);
+        toggle(viewer, layer, indices, collected, 'cloaked1', (mpl-mpl), mpl);
       break;
       case 3:
-        toggle(layer, indices, collected, 'cloaked0', mpl*2, mpl*3);
-        toggle(layer, indices, collected, 'cloaked1', mpl, mpl*2);
-        toggle(layer, indices, collected, 'cloaked2', (mpl-mpl), mpl);
+        toggle(viewer, layer, indices, collected, 'cloaked0', mpl*2, mpl*3);
+        toggle(viewer, layer, indices, collected, 'cloaked1', mpl, mpl*2);
+        toggle(viewer, layer, indices, collected, 'cloaked2', (mpl-mpl), mpl);
       break;
       case 4:
-        toggle(layer, indices, collected, 'cloaked0', mpl*3, mpl*4);
-        toggle(layer, indices, collected, 'cloaked1', mpl*2, mpl*3);
-        toggle(layer, indices, collected, 'cloaked2', mpl, mpl*2);
-        toggle(layer, indices, collected, 'cloaked3', (mpl-mpl), mpl);
+        toggle(viewer, layer, indices, collected, 'cloaked0', mpl*3, mpl*4);
+        toggle(viewer, layer, indices, collected, 'cloaked1', mpl*2, mpl*3);
+        toggle(viewer, layer, indices, collected, 'cloaked2', mpl, mpl*2);
+        toggle(viewer, layer, indices, collected, 'cloaked3', (mpl-mpl), mpl);
       break;
       case 5:
-        toggle(layer, indices, collected, 'cloaked0', mpl*4, mpl*5);
-        toggle(layer, indices, collected, 'cloaked1', mpl*3, mpl*4);
-        toggle(layer, indices, collected, 'cloaked2', mpl*2, mpl*3);
-        toggle(layer, indices, collected, 'cloaked3', mpl, mpl*2);
-        toggle(layer, indices, collected, 'cloaked4', (mpl-mpl), mpl);
+        toggle(viewer, layer, indices, collected, 'cloaked0', mpl*4, mpl*5);
+        toggle(viewer, layer, indices, collected, 'cloaked1', mpl*3, mpl*4);
+        toggle(viewer, layer, indices, collected, 'cloaked2', mpl*2, mpl*3);
+        toggle(viewer, layer, indices, collected, 'cloaked3', mpl, mpl*2);
+        toggle(viewer, layer, indices, collected, 'cloaked4', (mpl-mpl), mpl);
       break;
-      //case 0:
-        // if(layer.get('type') === 'DYN_AGS_TILE'){
-        //   var source = layer.getSource();
-        //   revise(indices, source, []);
-        // };
-        //clear(layer, indices);
-      //break;
+      // case 0:
+      //    if(layer.get('type') === 'DYN_AGS_TILE'){
+      //      var source = layer.getSource();
+      //      revise(viewer, indices, source, []);
+      //    };
+      //   clear(viewer, layer, indices);
+      // break;
     }
   });
 };
-function clear(layer, indices){
-  if(layer.get('type') === 'DYN_AGS_TILE'){
-    var source = layer.getSource();
-    revise(indices, source, []);
-  };
-}
-function toggle(layer, indices, collected, name, min, max){
+// function clear(layer, indices){
+//   if(layer.get('type') === 'DYN_AGS_TILE'){
+//     var source = layer.getSource();
+//     revise(viewer, indices, source, []);
+//   };
+// }
+function toggle(viewer, layer, indices, collected, name, min, max){
   if(layer.get('name') === name){
     var source = layer.getSource();
-    revise(indices, source, collected.slice(min, max));
+    revise(viewer, indices, source, collected.slice(min, max));
   };
 };
 function roof(bulk, crest){
@@ -150,13 +157,13 @@ function cardinal(bulk, crest){
   return Math.ceil(bulk / crest) >= 0 ? Math.ceil(bulk / crest) : 0;
 };
 
-function revise(indices, source, collected){
+function revise(viewer, indices, source, collected){
   if(indices[0] > 0){
-    source.updateParams(colligate(collected));
+    source.updateParams(colligate(viewer, collected));
   } else if(indices[0] !== undefined){
-    source.updateParams(colligate(collected.reverse()));
+    source.updateParams(colligate(viewer, collected.reverse()));
   } else {
-    source.updateParams(colligate([]));
+    source.updateParams(colligate(viewer, []));
   }
 };
 function hand(stable, collected){
@@ -166,9 +173,13 @@ function hand(stable, collected){
     return stable.indexOf(collected[x]) < stable.indexOf(collected[y]) ? -1 : stable.indexOf(collected[x]) > stable.indexOf(collected[y]) ? 1 : 0; });
 };
 // FROM dynagstile.js
-function colligate(ids){
+function colligate(viewer, ids) {
+  var currentExtent = viewer.getMap().getView().calculateExtent(viewer.getMap().getSize());
+  //var ceStr = 'bbox='+currentExtent.join(',');
   return {
-    "dynamicLayers": produce(ids)
+    "dynamicLayers": produce(ids),
+    "bbox": currentExtent.join(','),
+    "size": "1,1"
   };
 };
 function produce(ids){

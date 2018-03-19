@@ -7,39 +7,32 @@
 	<title>Origo exempel</title>
 	<link href="css/style.css" rel="stylesheet">
 	<style media="screen">
-		#progress {
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			height: 0.4em;
-			background: rgba(228, 18, 11, 0.7);
-			width: 0;
-			transition: width 250ms;
+		img.expanded {
+			max-width: max-content;
+			flex: 1;
+				max-width: 50%;
 		}
+		input[type$="date"] {
+			width: 100%;
+		}
+		.o-legend-item-img {
+			padding-left: 1px;
+			padding-right: 4px;
+		}
+		.o-map #o-menutools li:first-child {
+				height: .7em;
+		}
+		/* #o-group-cloakedGrp {
+			display:none;
+		}; */
 	</style>
 </head>
-<body onload="onload()">
+<body>
 		<div id="app-wrapper"></div>
 <script src="js/origo.js"></script>
 <script type="text/javascript">
 	//Init origo
-    origo.map.init('index.json');
-		function onload(){
-			//var sandbox = window.origo.map.viewer.getLayer("sandbox");
-
-			//var map = window.origo.map;
-			//console.log(map);
-			//var viewer = map.viewer;
-			//console.log(viewer.getMap());
-			//var getMap = viewer.getMap();
-			//console.log(getMap);
-			//console.log(getMap.getLayers());
-		}
-		//$ = jQuery;
-		//$(document).ready( function() {
-		//	console.log('test');
-		//});
-
+  origo.map.init('index.json');
 </script>
 </body>
 </html>
