@@ -122,8 +122,17 @@ function init(el, mapOptions) {
     var stable = [];
     var layers = map.getLayers();
     layers.forEach(function(l) {
-      if(l.get('type') === 'AGS_TILE'){
-        stable.push(l.get('id'));
+      if(l.get('type') === 'DYN_AGS_TILE'){
+        if
+          (
+          l.get('name') !== 'cloaked0' &&
+          l.get('name') !== 'cloaked1' &&
+          l.get('name') !== 'cloaked2' &&
+          l.get('name') !== 'cloaked3' &&
+          l.get('name') !== 'cloaked4'
+          ){
+          stable.push(l.get('id'));
+        }
       }
     });
     require('./ids').stable = stable;
