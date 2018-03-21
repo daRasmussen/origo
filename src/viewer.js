@@ -117,7 +117,11 @@ function init(el, mapOptions) {
     });
   }
   featureinfo.init(settings.featureinfoOptions);
-
+  /**
+   * Handles a postrender event by updating the global variable stable
+   * that contains the ids of the map layers.
+   * @return {[Array]} Each element in list is a stored static value of layer id.
+   */
   map.once('postrender', function(){
     var stable = [];
     var layers = map.getLayers();
@@ -138,6 +142,11 @@ function init(el, mapOptions) {
     require('./ids').stable = stable;
   });
 }
+/**
+ * This moethod returns a list of resolutions, based on the configurations.
+ * @param {[Integer]} level 0 - 19
+ * @return {[Array]} A list of resolutions.
+ */
 function getLevels(level){
   var tmp = [];
   var res = [
@@ -170,6 +179,12 @@ function getLevels(level){
   };
   return tmp;
 }
+/**
+ * This method reterns a generic calculation based on a exponential fit
+ * of presetted resolutions.
+ * @param {[Integer]} interval 0 . 20
+ * @return {[Number]} Generic resolution value.
+ */
 function aim(interval){
   return 2293.76*Math.exp((-0.693147)*interval);
 };
