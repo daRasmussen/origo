@@ -77,6 +77,8 @@ module.exports = function createForm(obj) {
       }
       el = '<div><label>' + label + '</label><br><input type="color" id="' + id + '" value="' + val + '"></div>';
       break;
+    default:
+      break;
   }
   return el;
 }
