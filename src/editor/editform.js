@@ -27,16 +27,11 @@ module.exports = function createForm(obj) {
       el = '<div class="o-form-checkbox"><label>' + label + '</label><input type="checkbox" id="' + id + '" value="' + val + '"' + checked + '></div>';
       break;
     case 'dropdown':
-      firstOption;
-      if (val) {
-        firstOption = '<option value="' + val + '" selected>' + val + '</option>';
-      } else {
-        firstOption = '<option value="" selected>Välj</option>';
-      }
+      firstOption = val ? '<option value="' + val + '" selected>' + val + '</option>' : '<option value="" selected>Välj</option>';
       el = '<div class="' + cls + '"><label>' + label + '</label><br><select id=' + id + '>' + firstOption;
-      for (var i = 0; i < dropdownOptions.length; i++) {
-        el += '<option value="' + dropdownOptions[i] + '">' + dropdownOptions[i] + '</option>';
-      }
+      dropdownOptions.forEach(function (i) {
+        el +=  '<option value="' + i + '">' + i + '</option>';
+      });
       el += '</select></div>';
       break;
     case 'image':
