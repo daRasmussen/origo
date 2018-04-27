@@ -122,6 +122,7 @@ function onClick(evt) {
     getFeatureInfo.getFeaturesFromRemote(evt)
       .done(function(data) {
         var serverResult = data || [];
+        console.log(data);
         var result = serverResult.concat(clientResult);
         if (result.length > 0) {
           selectionLayer.clear();

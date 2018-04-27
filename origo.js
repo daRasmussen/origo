@@ -16,7 +16,10 @@ origo.config = require('./conf/origoConfig');
 origo.controls = require('./conf/origoControls');
 
 origo.map.init = function(options, opt_config) {
+
   var config = opt_config ? $.extend(origo.config, opt_config) : origo.config;
+  // get state of object.
+  //console.log(Object.keys(config));
 
   var map = mapLoader(options, config);
 

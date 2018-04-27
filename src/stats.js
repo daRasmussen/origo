@@ -8,6 +8,12 @@ var round2 = require('./utils/round2');
 var ol = require('openlayers');
 var $ = require('jquery');
 var convert = require('convert-units');
+var d3 = require('d3');
+var d3Dsv = require('d3-dsv');
+var d3Scale = require('d3-scale');
+var d3Shape = require('d3-shape');
+var d3Axis = require('d3-axis');
+var c3 = require('c3');
 var overlayArray = [];
 var map;
 var options;
@@ -15,10 +21,10 @@ var activeButton;
 var defaultButton;
 var type;
 var sketch;
-var measure;
-var measureTooltip;
-var measureTooltipElement;
-var measureStyleOptions;
+var stats;
+var statsTooltip;
+var statsTooltipElement;
+var statsStyleOptions;
 var helpTooltip;
 var helpTooltipElement;
 var drawnFeatures;
@@ -29,7 +35,12 @@ var measureTools;
 var defaultTool;
 var lengthTool = { 'isEnabled': false };
 var areaTool = { 'isEnabled': false };
-var outputString = { 'settings': { 'precision': { 'length': 0, 'area': 0 }, 'unit': { 'length': 'm', 'area': 'm2' }, 'units': { 'length': [], 'area': [] } } };
+var outputString = { 'settings': { 'precision': { 'length': 2, 'area': 2 }, 'unit': { 'length': 'm', 'area': 'm2' }, 'units': { 'length': ['km', 'm', 'cm'], 'area': ['km2', 'ha', 'm2', 'cm2', 'mm2'] } } };
+var singleSelect;
+var visibleLayers = [];
+var data = [];
+var dataJSON = [];
+var sum = 0;
 
 function outputLength(length, precision, units) {
   var converted = [];
@@ -116,9 +127,9 @@ function pointerMoveHandler(evt) {
       tooltipCoord = geom.getLastCoordinate();
     }
 
-    measureTooltipElement.innerHTML = output;
+    statsTooltipElement.innerHTML = output;
     label = output;
-    measureTooltip.setPosition(tooltipCoord);
+    statsTooltip.setPosition(tooltipCoord);
   }
 
   if (evt.type === 'pointermove') {
@@ -128,27 +139,27 @@ function pointerMoveHandler(evt) {
 }
 
 function onEnableInteraction(e) {
-  if (e.interaction === 'measure') {
-    $('#o-measure-button button').addClass('o-measure-button-true');
-    if (lengthTool.isEnabled) { $('#o-measure-line-button').removeClass('o-hidden'); }
-    if (areaTool.isEnabled) { $('#o-measure-polygon-button').removeClass('o-hidden'); }
-    $('#o-measure-button').removeClass('tooltip');
+  if (e.interaction === 'stats') {
+    $('#o-stats-button button').addClass('o-stats-button-true');
+    if (lengthTool.isEnabled) { $('#o-stats-hand-button').removeClass('o-hidden'); }
+    if (areaTool.isEnabled) { $('#o-stats-polygon-button').removeClass('o-hidden'); }
+    $('#o-stats-button').removeClass('tooltip');
     // setActive(true);
     isActive = true;
     defaultButton.trigger('click');
   } else {
     if (activeButton) {
-      activeButton.removeClass('o-measure-button-true');
+      activeButton.removeClass('o-stats-button-true');
     }
 
-    $('#o-measure-button button').removeClass('o-measure-button-true');
-    if (lengthTool.isEnabled) { $('#o-measure-line-button').addClass('o-hidden'); }
-    if (areaTool.isEnabled) { $('#o-measure-polygon-button').addClass('o-hidden'); }
-    $('#o-measure-button').addClass('tooltip');
+    $('#o-stats-button button').removeClass('o-stats-button-true');
+    if (lengthTool.isEnabled) { $('#o-stats-hand-button').addClass('o-hidden'); }
+    if (areaTool.isEnabled) { $('#o-stats-polygon-button').addClass('o-hidden'); }
+    $('#o-stats-button').addClass('tooltip');
 
     map.un('pointermove', pointerMoveHandler);
     map.un('click', pointerMoveHandler);
-    map.removeInteraction(measure);
+    map.removeInteraction(stats);
     drawnFeatures.setVisible(false);
     Viewer.removeOverlays(overlayArray);
     drawnFeatures.getSource().clear();
@@ -164,82 +175,82 @@ function onEnableInteraction(e) {
 function render(target) {
   if (lengthTool.isEnalbed || areaTool.isEnabled) {
     var toolbar = utils.createElement('div', '', {
-      id: 'o-measure-toolbar',
+      id: 'o-stats-toolbar',
       cls: 'o-toolbar-horizontal'
     });
     $(target).append(toolbar);
 
     var mb = utils.createButton({
-      id: 'o-measure-button',
-      cls: 'o-measure-button',
-      iconCls: 'o-icon-steady-measure',
-      src: '#steady-measure',
+      id: 'o-stats-button',
+      cls: 'o-stats-button',
+      iconCls: 'o-icon-steady-stats',
+      src: '#steady-stats',
       tooltipText: 'Mät i kartan'
     });
-    $('#' + 'o-measure-toolbar').append(mb);
+    $('#' + 'o-stats-toolbar').append(mb);
   }
 
   if (lengthTool.isEnabled) {
     var lb = utils.createButton({
-      id: 'o-measure-line-button',
-      cls: 'o-measure-type-button',
-      iconCls: 'o-icon-minicons-line-vector',
-      src: '#minicons-line-vector',
-      tooltipText: 'Linje',
+      id: 'o-stats-hand-button',
+      cls: 'o-stats-type-button',
+      iconCls: 'o-icon-minicons-hand-vector',
+      src: '#minicons-hand-vector',
+      tooltipText: 'Enkel',
       tooltipPlacement: 'north'
     });
-    $('#' + 'o-measure-toolbar').append(lb);
-    $('#o-measure-line-button').addClass('o-hidden');
+    $('#' + 'o-stats-toolbar').append(lb);
+    $('#o-stats-hand-button').addClass('o-hidden');
   }
 
   if (areaTool.isEnabled) {
     var pb = utils.createButton({
-      id: 'o-measure-polygon-button',
-      cls: 'o-measure-type-button',
+      id: 'o-stats-polygon-button',
+      cls: 'o-stats-type-button',
       iconCls: 'o-icon-minicons-square-vector',
       src: '#minicons-square-vector',
-      tooltipText: 'Yta',
+      tooltipText: 'Box',
       tooltipPlacement: 'north'
     });
-    $('#' + 'o-measure-toolbar').append(pb);
-    $('#o-measure-polygon-button').addClass('o-hidden');
+    $('#' + 'o-stats-toolbar').append(pb);
+    $('#o-stats-polygon-button').addClass('o-hidden');
   }
 }
 
 function clickMeasureButton(e) {
   toggleMeasure();
-  $('#o-measure-button button').blur();
+  $('#o-stats-button button').blur();
   e.preventDefault();
 }
 function clickLineButton(e) {
   type = 'LineString';
-  toggleType($('#o-measure-line-button button'));
-  $('#o-measure-line-button button').blur();
+  toggleType($('#o-stats-hand-button button'));
+  $('#o-stats-hand-button button').blur();
   e.preventDefault();
 }
 function clickAreaButton(e) {
   type = 'Polygon';
-  toggleType($('#o-measure-polygon-button button'));
-  $('#o-measure-polygon-button button').blur();
+  toggleType($('#o-stats-polygon-button button'));
+  $('#o-stats-polygon-button button').blur();
   e.preventDefault();
 }
 function bindUIActions() {
   if (lengthTool.isEnabled || areaTool.isEnabled) {
-    $('#o-measure-button').on('click', clickMeasureButton);
+    $('#o-stats-button').on('click', clickMeasureButton);
   }
 
   if (lengthTool.isEnabled) {
-    $('#o-measure-line-button').on('click', clickLineButton);
+    $('#o-stats-hand-button').on('click', clickLineButton);
   }
 
   if (areaTool.isEnabled) {
-    $('#o-measure-polygon-button').on('click', clickAreaButton);
+    $('#o-stats-polygon-button').on('click', clickAreaButton);
   }
 }
 
 function createStyle(feature) {
   var featureType = feature.getGeometry().getType();
-  var measureStyle = featureType === 'LineString' ? style.createStyleRule(measureStyleOptions.linestring) : style.createStyleRule(measureStyleOptions.polygon);
+  var measureStyle = featureType === 'LineString' ? style.createStyleRule(statsStyleOptions.linestring) : style.createStyleRule(statsStyleOptions.polygon);
   return measureStyle;
 }
 
@@ -249,28 +260,182 @@ function setSketch(e) {
 }
 function unToolTip() {
   // unset tooltip so that a new one can be created
-  $(measureTooltipElement).remove();
-  measureTooltipElement = null;
+  $(statsTooltipElement).remove();
+  statsTooltipElement = null;
   createMeasureTooltip();
   $(helpTooltipElement).removeClass('o-hidden');
 }
 function unSketch(e) {
   var feature = e.feature;
+  var map = Viewer.getMap();
   feature.setStyle(createStyle(feature));
   feature.getStyle()[0].getText().setText(label);
   sketch = null;
   unToolTip();
 }
+
+function createPieChartLegend() {
+  var chart = c3.generate({
+    bindto: '#circleChart',
+    data: {
+        columns: [
+          ['k0_9'].concat(data[0]),
+          ['k10_19'].concat(data[1] - 2),
+          ['k20_29'].concat(data[2]),
+          ['m0_9'].concat(data[3] + 1),
+          ['m10_19'].concat(data[4]),
+          ['m20_29'].concat(data[5] + 1),
+        ],
+        type : 'donut',
+        onclick: function (d, i) { console.log("onclick", d, i); },
+        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+    },
+    donut: {
+        title: "Procentfördelning"
+    }
+});
+}
+function barChart() {
+  var chart = c3.generate({
+    bindto: '#barChart',
+    data: {
+        columns: [
+          ['k0_9'].concat(data[0]),
+          ['k10_19'].concat(data[1] - 2),
+          ['k20_29'].concat(data[2]),
+          ['m0_9'].concat(data[3] + 1),
+          ['m10_19'].concat(data[4]),
+          ['m20_29'].concat(data[5] + 1),
+
+        ],
+        type: 'bar'
+    },
+    bar: {
+        width: {
+            ratio: 0.5 // this makes bar width 50% of length between ticks
+        }
+        // or
+        //width: 100 // this makes bar width 100px
+    }
+});
+}
+function kartesisktChart() {
+  var first = data.slice(0,3);
+  var last = data.slice(-3);
+  last.forEach(function(part, index, theArray) {
+    theArray[index] = part - 1;
+  });
+  var chart = c3.generate({
+    bindto: '#kartesisktChart',
+    data: {
+      columns: [
+        ['Kvinnors ålder'].concat(first),
+        ['Mäns ålder'].concat(last)
+      ],
+      onclick: function(d, element) {
+        chart.internal.config.tooltip_show = true;
+        chart.internal.showTooltip([d], element);
+        chart.internal.config.tooltip_show = false;
+      }
+    },
+    tooltip: {
+        show: true
+    }
+  });
+}
+function createLinearLegend() {
+  var formatPercent = d3.format('.0%');
+  var formatNumber = d3.format('.0f');
+
+  var threshold = d3.scaleThreshold()
+    .domain([10, 20, 30, 40])
+    .range(['#6e7c5a', '#a0b28f', '#d8b8b3', '#b45554', '#760000']);
+
+  var x = d3.scaleLinear()
+    .domain([0, 50])
+    .range([0, 240]);
+
+  var xAxis = d3Axis.axisBottom(x)
+    .tickSize(13)
+    .tickValues(threshold.domain())
+    .tickFormat(5, "+%");
+
+  var g = d3.select('.d3LinearLegend g').call(xAxis);
+
+  g.select('.domain')
+    .remove();
+
+  g.selectAll('rect')
+    .data(threshold.range().map(function(color) {
+      var d = threshold.invertExtent(color);
+      if (d[0] == null) d[0] = x.domain()[0];
+      if (d[1] == null) d[1] = x.domain()[1];
+      return d;
+    }))
+    .enter().insert('rect', '.tick')
+    .attr('height', 8)
+    .attr('x', function(d) { return x(d[0]); })
+    .attr('width', function(d) { return x(d[1]) - x(d[0]); })
+    .attr('fill', function(d) { return threshold(d[0]); });
+
+  d3.selectAll('text').remove();
+  g.append('text')
+    .attr('fill', '#000')
+    .attr('font-weight', 'bold')
+    .attr('text-anchor', 'start')
+    .attr('font-size', '40px')
+    .attr('y', -6)
+    .data([{'sum': sum}])
+    .text(function(d) { return 'Summan: ' +d.sum; });
+}
+function getSum(a) {
+  return a.reduce(function(accumulator, currentValue, currentIndex, array) {
+    return accumulator + currentValue;
+  });
+}
 function addInteraction() {
   drawnFeatures.setVisible(true);
 
-  measure = new ol.interaction.Draw({
+  stats = new ol.interaction.Draw({
     source: source,
     type: type,
-    style: style.createStyleRule(measureStyleOptions.interaction)
+    style: style.createStyleRule(statsStyleOptions.interaction)
   });
 
-  map.addInteraction(measure);
+  singleSelect = new ol.interaction.Select({
+    toggleCondition: ol.events.condition.never
+  });
+  map.addInteraction(singleSelect);
+  // map.addInteraction(stats);
+  var layers = map.getLayers();
+  // visibleLayers
+  function getRelevantLayers(l) {
+    if (l.get('visible') && l.get('name') !== 'topowebbkartan_nedtonad' && l.get('name') !== 'stats') {
+      visibleLayers.push(l.get('name'));
+    }
+  }
+  var selectedFeatures = singleSelect.getFeatures();
+  selectedFeatures.on(['add', 'remove'], function() {
+    data = [];
+    visibleLayers = [];
+    layers.forEach(getRelevantLayers);
+    visibleLayers.forEach( function(l) {
+      var tmp = selectedFeatures.getArray().map( function(feature) {
+        return feature.get(l);
+      });
+      var oi = isNaN(parseInt(tmp[0], 10)) ? 0 : parseInt(tmp[0], 10);
+      data.push(oi);
+      dataJSON.push({'field': l,  'value': oi});
+      // console.log(dataJSON);
+    });
+    sum = getSum(data);
+    createLinearLegend();
+    createPieChartLegend();
+    kartesisktChart();
+    barChart();
+  });
+
 
   createMeasureTooltip();
   createHelpTooltip();
@@ -278,8 +443,8 @@ function addInteraction() {
   map.on('pointermove', pointerMoveHandler);
   map.on('click', pointerMoveHandler);
 
-  measure.on('drawstart', setSketch, this);
-  measure.on('drawend', unSketch, this);
+  stats.on('drawstart', setSketch, this);
+  stats.on('drawend', unSketch, this);
 }
 
 function createHelpTooltip() {
@@ -288,7 +453,7 @@ function createHelpTooltip() {
   }
 
   helpTooltipElement = document.createElement('div');
-  helpTooltipElement.className = 'o-tooltip o-tooltip-measure';
+  helpTooltipElement.className = 'o-tooltip o-tooltip-stats';
 
   helpTooltip = new ol.Overlay({
     element: helpTooltipElement,
@@ -301,22 +466,22 @@ function createHelpTooltip() {
 }
 
 function createMeasureTooltip() {
-  if (measureTooltipElement) {
-    measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+  if (statsTooltipElement) {
+    statsTooltipElement.parentNode.removeChild(statsTooltipElement);
   }
 
-  measureTooltipElement = document.createElement('div');
-  measureTooltipElement.className = 'o-tooltip o-tooltip-measure';
+  statsTooltipElement = document.createElement('div');
+  statsTooltipElement.className = 'o-tooltip o-tooltip-stats';
 
-  measureTooltip = new ol.Overlay({
-    element: measureTooltipElement,
+  statsTooltip = new ol.Overlay({
+    element: statsTooltipElement,
     offset: [0, -15],
     positioning: 'bottom-center',
     stopEvent: false
   });
 
-  overlayArray.push(measureTooltip);
-  map.addOverlay(measureTooltip);
+  overlayArray.push(statsTooltip);
+  map.addOverlay(statsTooltip);
 }
 
 function toggleMeasure() {
@@ -328,19 +493,19 @@ function toggleMeasure() {
   } else {
     $('.o-map').trigger({
       type: 'enableInteraction',
-      interaction: 'measure'
+      interaction: 'stats'
     });
   }
 }
 
 function toggleType(button) {
   if (activeButton) {
-    activeButton.removeClass('o-measure-button-true');
+    activeButton.removeClass('o-stats-button-true');
   }
 
-  button.addClass('o-measure-button-true');
+  button.addClass('o-stats-button-true');
   activeButton = button;
-  map.removeInteraction(measure);
+  map.removeInteraction(stats);
   addInteraction();
 }
 
@@ -368,14 +533,7 @@ function setVar(obj, prop, val, warn) {
 function init(optOptions) {
   options = optOptions || {};
   options.debug.show.warn = setVar(options.debug.show, 'warn', true, true);
-  outputString.settings.precision.length = setVar(options.precision, 'length', 2, options.debug.show.warn);
-  outputString.settings.precision.area = setVar(options.precision, 'area', 2, options.debug.show.warn);
-  outputString.settings.unit.length = setVar(options.units, 'length', 'm', options.debug.show.warn);
-  outputString.settings.unit.area = setVar(options.units, 'area', 'm2', options.debug.show.warn);
-  outputString.settings.units.length = setVar(options.units, 'length', [], options.debug.show.warn);
-  outputString.settings.units.area = setVar(options.units, 'area', [], options.debug.show.warn);
-  defaultTool = setVar(options, 'default', 'length', options.debug.show.warn);
-  measureTools = setVar(options, 'measureTools', ['length', 'area'], options.debug.show.warn);
+  measureTools = setVar(options, 'measureTools', ['area', 'length'], options.debug.show.warn);
   lengthTool.isEnabled = measureTools.indexOf('length') >= 0;
   areaTool.isEnabled = measureTools.indexOf('area') >= 0;
 
@@ -383,12 +541,12 @@ function init(optOptions) {
     var target = setVar(options, 'target', '#o-toolbar-maptools', options.debug.show.warn);
     map = Viewer.getMap();
     source = new ol.source.Vector();
-    measureStyleOptions = styleTypes.getStyle('measure');
+    statsStyleOptions = styleTypes.getStyle('stats');
 
     // Drawn features
     drawnFeatures = new ol.layer.Vector({
       source: source,
-      name: 'measure',
+      name: 'stats',
       visible: false,
       zIndex: 6
     });
@@ -399,7 +557,7 @@ function init(optOptions) {
 
     render(target);
     bindUIActions();
-    defaultButton = defaultTool === 'area' ? $('#o-measure-polygon-button button') : $('#o-measure-line-button button');
+    defaultButton = defaultTool === 'area' ? $('#o-stats-polygon-button button') : $('#o-stats-hand-button button');
   }
 }
 

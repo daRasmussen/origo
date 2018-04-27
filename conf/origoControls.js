@@ -19,5 +19,6 @@ controls.attribution = require('../src/attribution');
 controls.position = require('../src/position');
 controls.fullscreen = require('../src/fullscreen');
 controls.splash = require('../src/splash');
+controls.stats = require('../src/stats');
 
 module.exports = controls;

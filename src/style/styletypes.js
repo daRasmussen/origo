@@ -2,14 +2,13 @@
 
 var pin = require('./pin');
 var measure = require('./measure');
+var stats = require('./stats');
 
 module.exports = function() {
-
   var styleTypes = {};
-
-  styleTypes.pin = pin;
+  styleTypes.pin     = pin;
   styleTypes.measure = measure;
-
+  styleTypes.stats   = stats;
   return {
     getStyle: function getStyle(type) {
       if(type) {

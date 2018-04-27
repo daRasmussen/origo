@@ -1,6 +1,7 @@
 "use strict";
 
 var controlInitialiser = function(controls) {
+    
     var controlName, controlOptions;
     controls.forEach(function(control) {
         controlName = control.name;

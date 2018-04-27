@@ -542,6 +542,10 @@ function autoPan() {
   /*End workaround*/
 }
 
+function getOverlays() {
+  return map.getOverlays();
+}
+
 function removeOverlays(overlays) {
   if (overlays) {
     if (overlays.constructor === Array || overlays instanceof ol.Collection) {
@@ -612,7 +616,8 @@ module.exports.getTileGrid = getTileGrid;
 module.exports.getTileSize = getTileSize;
 module.exports.autoPan = autoPan;
 module.exports.removeOverlays = removeOverlays;
-module.exports.checkScale= checkScale;
+module.exports.checkScale = checkScale;
 module.exports.getMapName = getMapName;
 module.exports.getConsoleId = getConsoleId;
 module.exports.getUrl = getUrl;
+module.exports.getOverlays = getOverlays;
