@@ -4,10 +4,7 @@
  * @return {[String]} Object as string.
  */
 function objectToString(v) {
-  if (v instanceof Object) {
-    return '[' + v + ']';
-  }
-  return new Error('Can return a string of objet type.');
+  return String('[' + v + ']');
 }
 /**
  * Checks property and returns default values.

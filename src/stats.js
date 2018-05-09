@@ -1,129 +1,159 @@
 'use strict';
 
+// TODO :: Imported modules variables should start with a bit letter
+// TODO :: Big letter as CONSTRUCTOR
+// Last import i the inspector.
+
 var Viewer = require('./viewer');
-var utils = require('./utils');
+var Utils = require('./utils');
 var style = require('./style')();
 var styleTypes = require('./style/styletypes');
 var round2 = require('./utils/round2');
+var inspect = require('./inspect');
+
 var ol = require('openlayers');
 var $ = require('jquery');
-var convert = require('convert-units');
+
+// TODO :: Statistics remove unnecessary modules.
 var d3 = require('d3');
-var d3Dsv = require('d3-dsv');
-var d3Scale = require('d3-scale');
-var d3Shape = require('d3-shape');
 var d3Axis = require('d3-axis');
+
 var c3 = require('c3');
+var Chart = require('chart.js');
+
 var overlayArray = [];
-var map;
+// var map;
 var options;
 var activeButton;
 var defaultButton;
+
 var type;
 var sketch;
+
 var stats;
 var statsTooltip;
 var statsTooltipElement;
 var statsStyleOptions;
+
 var helpTooltip;
 var helpTooltipElement;
-var drawnFeatures;
-var source;
+
+// var drawnFeatures;
+// var source;
 var label;
+
 var isActive = false;
 var measureTools;
 var defaultTool;
 var lengthTool = { 'isEnabled': false };
 var areaTool = { 'isEnabled': false };
-var outputString = { 'settings': { 'precision': { 'length': 2, 'area': 2 }, 'unit': { 'length': 'm', 'area': 'm2' }, 'units': { 'length': ['km', 'm', 'cm'], 'area': ['km2', 'ha', 'm2', 'cm2', 'mm2'] } } };
+
+var settings = {
+  'tool': {
+    'toolName': 'stats',
+    'active': true
+  },
+  'interactions': {
+    'default': 'featureInfo',
+    'tool': 'statsInfo' // was stats
+  },
+  'buttons': {
+    'default': '',
+    'active': ''
+  },
+  'target': {
+    'id': {
+      'mapTools': '#o-toolbar-maptools',
+      'buttons': {
+        'stats': '#o-stats-button',
+        'hand': '#o-stats-hand-button',
+        'square': '#o-stats-square-button'
+      }
+    },
+    'class': {
+      'map': '.o-map',
+      'true': {
+        'stats': '.o-stats-button-true'
+      }
+    }
+  },
+  'map': null
+};
+
+var select = {
+  'layers': [],
+  'type': {
+    'single': {
+      'interaction': null,
+      'helpMsg': 'Klicka för att börja mäta, Håll inne Shift för att mäta flera.'
+    },
+    'box': {
+      'interaction': null,
+      'helpMsg': 'Håll inne Ctrl och sedan klicka för att börja mäta'
+    },
+    'selected': null
+  },
+  'tools': {
+    'names': [],
+    'list': [
+      {
+        'name': 'single',
+        'enabled': null,
+        'icon': 'hand',
+        'toolTip': 'Singel',
+        'tipPlace': 'north'
+      },
+      {
+        'name': 'box',
+        'enabled': null,
+        'icon': 'square',
+        'toolTip': 'Box',
+        'tipPlace': 'north'
+      }
+    ]
+  }
+};
+// var toolName;
+
+// var select;
+// var single = { 'name': 'single', 'enabled': false };
+// var box = { 'name': 'box', 'enabled': false };
+
+var charts;
+var line = { 'enabled': false };
+var bar = { 'enabled': false };
+var radar = { 'enabled': false };
+var pie = { 'enabled': false };
+var polar = { 'enabled': false };
+var bubble = { 'enabled': false };
+
 var singleSelect;
-var visibleLayers = [];
+var boxSelect;
+var selected;
+var tmpSelect;
+// var tmpLayers = [];
+
+var visibleLayers = []; // select Layers
 var data = [];
 var dataJSON = [];
+
 var sum = 0;
-
-function outputLength(length, precision, units) {
-  var converted = [];
-  var out = 0.00 + ' m';
-  units.forEach((i) => {
-    converted.push(round2(convert(length).from('m').to(i), precision) + ' ' + i);
-  });
-  converted.forEach((c) => {
-    if (c.split(' ')[0] >= 0.99 && c.split(' ')[0] <= 999.99 ) {
-      out = c;
-    }
-  });
-  return out;
-}
-
-function formatLength(line) {
-  var projection = map.getView().getProjection();
-  var length = ol.Sphere.getLength(line, { projection });
-  var precision = outputString.settings.precision.length;
-  var units = outputString.settings.units.length;
-  var unit = outputString.settings.unit.length;
-  var output = units[0] === null ? round2(convert(length).from('m').to(unit), precision) + ' ' + unit : outputLength(length, precision, units);
-  var htmlElem = document.createElement('span');
-  htmlElem.innerHTML = output;
-  return htmlElem.textContent;
-}
-
-function addSup(unit, sup) {
-  return unit + '<sup>' + sup + '</sup>';
-}
-function convertToSup(unit, sup) {
-  return sup === '' ? unit : addSup(unit.split(sup)[0], sup);
-}
-
-function outputArea(area, precision, units) {
-  var converted = [];
-  var out = 0.00 + addSup('m', 2);
-  units.forEach((i) => {
-    var d = i.match(/\d+/g) === null ? '' : i.match(/\d+/g)[0];
-    var u = i.match(/[a-zA-Z]+/g) === null ? 'm' : i.match(/[a-zA-Z]+/g)[0];
-    converted.push(round2(convert(area).from('m2').to(i), precision) + ' ' + convertToSup(u, d));
-  });
-  converted.forEach((c) => {
-    if (c.split(' ')[0] >= 0.99 && c.split(' ')[0] <= 9999.99 ) {
-      out = c;
-    }
-  });
-  return out;
-}
-function deSup(element) {
-  if (element.tagName === 'SUP') {
-    element.textContent = String.fromCharCode(element.textContent.charCodeAt(0) + 128);
-  }
-}
-function formatArea(polygon) {
-  var projection = map.getView().getProjection();
-  var area = ol.Sphere.getArea(polygon, { projection });
-  var precision = outputString.settings.precision.area;
-  var units = outputString.settings.units.area;
-  var unit = outputString.settings.unit.area;
-  var output = units[0] === null ? round2(convert(area).from('m2').to(unit), precision) + ' ' + addSup(unit, '2') : outputArea(area, precision, units);
-  var htmlElem = document.createElement('span');
-  htmlElem.innerHTML = output;
-  [].forEach.call(htmlElem.children, deSup);
-  return htmlElem.textContent;
-}
+var avg = 0.00;
 
 // Display and move tooltips with pointer
 function pointerMoveHandler(evt) {
   if (evt.dragging) { return; }
 
+  // Depending on what tool is display diffrent helpMsg
   var helpMsg = 'Klicka för att börja mäta';
   var tooltipCoord = evt.coordinate;
 
   if (sketch) {
     var output;
     var geom = (sketch.getGeometry());
-
     if (geom instanceof ol.geom.Polygon) {
-      output = formatArea(/** @type {ol.geom.Polygon} */ (geom));
       tooltipCoord = geom.getInteriorPoint().getCoordinates();
     } else if (geom instanceof ol.geom.LineString) {
-      output = formatLength(/** @type {ol.geom.LineString} */ (geom));
       tooltipCoord = geom.getLastCoordinate();
     }
 
@@ -139,104 +169,150 @@ function pointerMoveHandler(evt) {
 }
 
 function onEnableInteraction(e) {
-  if (e.interaction === 'stats') {
+  if (e.interaction === settings.interactions.tool) {
     $('#o-stats-button button').addClass('o-stats-button-true');
     if (lengthTool.isEnabled) { $('#o-stats-hand-button').removeClass('o-hidden'); }
-    if (areaTool.isEnabled) { $('#o-stats-polygon-button').removeClass('o-hidden'); }
+    if (areaTool.isEnabled) { $('#o-stats-square-button').removeClass('o-hidden'); }
     $('#o-stats-button').removeClass('tooltip');
     // setActive(true);
     isActive = true;
+    settings.tool.active = true;
     defaultButton.trigger('click');
   } else {
+    // TODO:: Clear selection
     if (activeButton) {
       activeButton.removeClass('o-stats-button-true');
     }
 
     $('#o-stats-button button').removeClass('o-stats-button-true');
     if (lengthTool.isEnabled) { $('#o-stats-hand-button').addClass('o-hidden'); }
-    if (areaTool.isEnabled) { $('#o-stats-polygon-button').addClass('o-hidden'); }
+    if (areaTool.isEnabled) { $('#o-stats-square-button').addClass('o-hidden'); }
     $('#o-stats-button').addClass('tooltip');
 
-    map.un('pointermove', pointerMoveHandler);
-    map.un('click', pointerMoveHandler);
-    map.removeInteraction(stats);
-    drawnFeatures.setVisible(false);
+    settings.map.un('pointermove', pointerMoveHandler);
+    settings.map.un('click', pointerMoveHandler);
+    settings.map.removeInteraction(stats);
+    // drawnFeatures.setVisible(false);
     Viewer.removeOverlays(overlayArray);
-    drawnFeatures.getSource().clear();
+    // drawnFeatures.getSource().clear();
     // setActive(false);
     isActive = false;
+    settings.tool.active = false;
+  }
+}
+/** TODO:: Write commentst
+ * [createTool description]
+ * @param {[type]} toolName [description]
+ * @param {[type]} icon     [description]
+ * @param {[type]} toolTip  [description]
+ * @param {[type]} tipPlace [description]
+ * @return {[type]} [description]
+ */
+function createTool(toolName, icon, toolTip, tipPlace) {
+  $('#o-' + toolName + '-toolbar').append(Utils.createButton({
+    id: 'o-' + toolName + '-' + icon + '-button',
+    cls: 'o-' + toolName + '-type-button',
+    iconCls: 'o-icon-minicons-' + icon + '-vector',
+    src: '#minicons-' + icon + '-vector',
+    tooltipText: toolTip,
+    tooltipPlacement: tipPlace
+  }));
+  $('#o-' + toolName + '-' + icon + '-button').addClass('o-hidden');
+}
+/**
+ * [addButton adds a button to the canvas and appends a toolTip text.]
+ * @param {[String]} target  [The name of the target element]
+ * @param {[String]} name    [The name of the toolTip ]
+ * @param {[String]} toolTip [The text that is displayed on hover aka. tooltip]
+ * @return {[HTML]} [Appends a new toolbar to the map.]
+ */
+function addButton(target, name, toolTip) {
+  $('#o-' + name + '-toolbar')
+    .append(Utils.createButton({
+      id: 'o-' + name + '-button',
+      cls: 'o-' + name + '-button',
+      iconCls: 'o-icon-steady-' + name,
+      src: '#steady-' + name,
+      tooltipText: toolTip
+    }));
+}
+/**
+ * [createControl Creates a new div element]
+ * @param {[String]} target [Name of the target element]
+ * @param {[String]} name   [Name of the toolbar]
+ * @param {[String]} toolTip [The text that is displayed on hover aka. tooltip]
+ * @return {[HTML]} [Appends a new toolbar to the map.]
+ */
+function createControl(target, name, toolTip) {
+  var toolbar = Utils.createElement('div', '', {
+    id: 'o-' + name + '-toolbar',
+    cls: 'o-toolbar-horizontal'
+  });
+  $(target).append(toolbar);
+  addButton(target, name, toolTip);
+}
+function render2(target) {
+  if (allEnabled(select.tools.list)) {
+    createControl(target, settings.tool.toolName, 'Mät i kartan2');
+  }
+  var list = select.tools.list;
+  for (var index in list) {
+    if (list[index].enabled) {
+      createTool(settings.tool.toolName, list[index].icon, list[index].toolTip, list[index].tipPlace);
+    }
   }
 }
 
-// function setActive(state) {
-//   isActive = state ? true : false;
-// }
-
-function render(target) {
-  if (lengthTool.isEnalbed || areaTool.isEnabled) {
-    var toolbar = utils.createElement('div', '', {
-      id: 'o-stats-toolbar',
-      cls: 'o-toolbar-horizontal'
-    });
-    $(target).append(toolbar);
-
-    var mb = utils.createButton({
-      id: 'o-stats-button',
-      cls: 'o-stats-button',
-      iconCls: 'o-icon-steady-stats',
-      src: '#steady-stats',
-      tooltipText: 'Mät i kartan'
-    });
-    $('#' + 'o-stats-toolbar').append(mb);
-  }
-
-  if (lengthTool.isEnabled) {
-    var lb = utils.createButton({
-      id: 'o-stats-hand-button',
-      cls: 'o-stats-type-button',
-      iconCls: 'o-icon-minicons-hand-vector',
-      src: '#minicons-hand-vector',
-      tooltipText: 'Enkel',
-      tooltipPlacement: 'north'
-    });
-    $('#' + 'o-stats-toolbar').append(lb);
-    $('#o-stats-hand-button').addClass('o-hidden');
-  }
-
-  if (areaTool.isEnabled) {
-    var pb = utils.createButton({
-      id: 'o-stats-polygon-button',
-      cls: 'o-stats-type-button',
-      iconCls: 'o-icon-minicons-square-vector',
-      src: '#minicons-square-vector',
-      tooltipText: 'Box',
-      tooltipPlacement: 'north'
-    });
-    $('#' + 'o-stats-toolbar').append(pb);
-    $('#o-stats-polygon-button').addClass('o-hidden');
+/** TODO :: Add comments
+ * [addClick description]
+ * @param {[type]} event [description]
+ * @returns {[type]} event [description]
+ */
+function clickStatsButton2(event) {
+  toogleInteraction(settings.target.class.map, settings.interactions.default, settings.interactions.tool);
+  $(settings.target.id.buttons.stats + ' button').blur();
+  event.preventDefault();
+}
+function bindTools() {
+  // add event listner
+  //
+  toggleType2();
+}
+function bindStatsButton() {
+  if (allEnabled(select.tools.list)) {
+    $(settings.target.id.buttons.stats).on('click', clickStatsButton2);
   }
 }
+function bindUIActions2() {
+  bindStatsButton();
+  bindTools();
+}
 
-function clickMeasureButton(e) {
+function clickStatsButton(e) {
   toggleMeasure();
   $('#o-stats-button button').blur();
   e.preventDefault();
 }
 function clickLineButton(e) {
-  type = 'LineString';
+  selected = 'single';
+  select.type.selected = 'single';
+  type = 'Point';
   toggleType($('#o-stats-hand-button button'));
   $('#o-stats-hand-button button').blur();
   e.preventDefault();
 }
 function clickAreaButton(e) {
+  selected = 'box';
+  select.type.selected = 'box';
   type = 'Polygon';
-  toggleType($('#o-stats-polygon-button button'));
-  $('#o-stats-polygon-button button').blur();
+  toggleType($('#o-stats-square-button button'));
+  $('#o-stats-square-button button').blur();
   e.preventDefault();
 }
+
 function bindUIActions() {
   if (lengthTool.isEnabled || areaTool.isEnabled) {
-    $('#o-stats-button').on('click', clickMeasureButton);
+    $('#o-stats-button').on('click', clickStatsButton2);
   }
 
   if (lengthTool.isEnabled) {
@@ -244,7 +320,7 @@ function bindUIActions() {
   }
 
   if (areaTool.isEnabled) {
-    $('#o-stats-polygon-button').on('click', clickAreaButton);
+    $('#o-stats-square-button').on('click', clickAreaButton);
   }
 }
 
@@ -278,52 +354,88 @@ function createPieChartLegend() {
   var chart = c3.generate({
     bindto: '#circleChart',
     data: {
-        columns: [
-          ['k0_9'].concat(data[0]),
-          ['k10_19'].concat(data[1] - 2),
-          ['k20_29'].concat(data[2]),
-          ['m0_9'].concat(data[3] + 1),
-          ['m10_19'].concat(data[4]),
-          ['m20_29'].concat(data[5] + 1),
-        ],
-        type : 'donut',
-        onclick: function (d, i) { console.log("onclick", d, i); },
-        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+      columns: [
+        ['k0_9'].concat(data[0]),
+        ['k10_19'].concat(data[1] - 2),
+        ['k20_29'].concat(data[2]),
+        ['m0_9'].concat(data[3] + 1),
+        ['m10_19'].concat(data[4]),
+        ['m20_29'].concat(data[5] + 1)
+      ],
+      type: 'donut'
     },
     donut: {
-        title: "Procentfördelning"
+      title: 'Procentfördelning'
     }
-});
+  });
+}
+function testCharts() {
+  var ctx = document.getElementById('myChart');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
 }
 function barChart() {
   var chart = c3.generate({
     bindto: '#barChart',
     data: {
-        columns: [
-          ['k0_9'].concat(data[0]),
-          ['k10_19'].concat(data[1] - 2),
-          ['k20_29'].concat(data[2]),
-          ['m0_9'].concat(data[3] + 1),
-          ['m10_19'].concat(data[4]),
-          ['m20_29'].concat(data[5] + 1),
+      columns: [
+        ['k0_9'].concat(data[0]),
+        ['k10_19'].concat(data[1] - 2),
+        ['k20_29'].concat(data[2]),
+        ['m0_9'].concat(data[3] + 1),
+        ['m10_19'].concat(data[4]),
+        ['m20_29'].concat(data[5] + 1)
 
-        ],
-        type: 'bar'
+      ],
+      type: 'bar'
     },
     bar: {
-        width: {
-            ratio: 0.5 // this makes bar width 50% of length between ticks
-        }
-        // or
-        //width: 100 // this makes bar width 100px
+      width: {
+        ratio: 0.5 // this makes bar width 50% of length between ticks
+      }
+      // or
+      // width: 100 // this makes bar width 100px
     }
-});
+  });
 }
 function kartesisktChart() {
-  var first = data.slice(0,3);
+  var first = data.slice(0, 3);
   var last = data.slice(-3);
-  last.forEach(function(part, index, theArray) {
+  last.forEach(function (part, index, theArray) {
     theArray[index] = part - 1;
   });
   var chart = c3.generate({
@@ -333,14 +445,14 @@ function kartesisktChart() {
         ['Kvinnors ålder'].concat(first),
         ['Mäns ålder'].concat(last)
       ],
-      onclick: function(d, element) {
+      onclick: function (d, element) {
         chart.internal.config.tooltip_show = true;
         chart.internal.showTooltip([d], element);
         chart.internal.config.tooltip_show = false;
       }
     },
     tooltip: {
-        show: true
+      show: true
     }
   });
 }
@@ -359,7 +471,7 @@ function createLinearLegend() {
   var xAxis = d3Axis.axisBottom(x)
     .tickSize(13)
     .tickValues(threshold.domain())
-    .tickFormat(5, "+%");
+    .tickFormat(5, '+%');
 
   var g = d3.select('.d3LinearLegend g').call(xAxis);
 
@@ -367,7 +479,7 @@ function createLinearLegend() {
     .remove();
 
   g.selectAll('rect')
-    .data(threshold.range().map(function(color) {
+    .data(threshold.range().map(function (color) {
       var d = threshold.invertExtent(color);
       if (d[0] == null) d[0] = x.domain()[0];
       if (d[1] == null) d[1] = x.domain()[1];
@@ -375,9 +487,9 @@ function createLinearLegend() {
     }))
     .enter().insert('rect', '.tick')
     .attr('height', 8)
-    .attr('x', function(d) { return x(d[0]); })
-    .attr('width', function(d) { return x(d[1]) - x(d[0]); })
-    .attr('fill', function(d) { return threshold(d[0]); });
+    .attr('x', function (d) { return x(d[0]); })
+    .attr('width', function (d) { return x(d[1]) - x(d[0]); })
+    .attr('fill', function (d) { return threshold(d[0]); });
 
   d3.selectAll('text').remove();
   g.append('text')
@@ -387,64 +499,207 @@ function createLinearLegend() {
     .attr('font-size', '40px')
     .attr('y', -6)
     .data([{'sum': sum}])
-    .text(function(d) { return 'Summan: ' +d.sum; });
+    .text(function (d) { return 'Summan: ' + d.sum; });
+}
+function add(accumulator, currentValue) {
+  return accumulator + currentValue;
 }
 function getSum(a) {
-  return a.reduce(function(accumulator, currentValue, currentIndex, array) {
-    return accumulator + currentValue;
-  });
+  return a.reduce(add);
 }
+function getAvg(a) {
+  return round2(getSum(a) / a.length, 2);
+}
+
+/**
+ * [selectLayers description]
+ * @param {[type]} a [description]
+ * @param {[type]} v [description]
+ * @return {[type]} [description]
+ */
+function getSelectableVisible(a, v) {
+  var r = [];
+  if (v) {
+    a.forEach(function (l) {
+      if (l instanceof ol.layer.Vector && l.get('visible')) {
+        r.push(l);
+      }
+    });
+    return r;
+  }
+  a.forEach(function (l) {
+    if (l instanceof ol.layer.Vector) {
+      r.push(l);
+    }
+  });
+  return r;
+}
+
+/**
+ * [getRelevantLayers description]
+ * @param {[type]} l [description]
+ * @return {[type]} [description]
+ */
+function addInteraction2() {
+  select.type.single.interaction = new ol.interaction.Select({
+    condition: ol.events.condition.click,
+    layers: getSelectableVisible(settings.map.getLayers(), true)
+  });
+  settings.map.addInteraction(select.type.single.interaction);
+  var selectedFeatures = select.type.single.interaction.getFeatures();
+
+  if (select.type.selected === 'box') {
+    select.type.box.interaction = new ol.interaction.DragBox({
+      condition: ol.events.condition.platformModifierKeyOnly,
+      layers: getSelectableVisible(settings.map.getLayers(), true)
+    });
+    settings.map.addIntercation(select.type.box.interaction);
+    select.type.box.on('boxstart', function () {
+      console.log('boxstart')
+      var extent = select.type.box.interaction.getGeometry().getExtent();
+      select.layers.forEach(function (layer) {
+        layer.getSource().forEachFeatureIntersectingExtent(extent, function (feature) {
+            selectedFeatures.push(feature);
+          });
+      });
+    });
+    select.type.box.on('boxend', function () {
+      console.log('boxend')
+    });
+  }
+}
+
 function addInteraction() {
-  drawnFeatures.setVisible(true);
+  // drawnFeatures.setVisible(true);
 
-  stats = new ol.interaction.Draw({
-    source: source,
-    type: type,
-    style: style.createStyleRule(statsStyleOptions.interaction)
-  });
+  // stats = new ol.interaction.Draw({
+  //   source: source,
+  //   type: type,
+  //   style: style.createStyleRule(statsStyleOptions.interaction)
+  // });
+  //
+  // var layers = null;
+  // var selectedFeatures = null;
 
-  singleSelect = new ol.interaction.Select({
-    toggleCondition: ol.events.condition.never
-  });
-  map.addInteraction(singleSelect);
-  // map.addInteraction(stats);
-  var layers = map.getLayers();
-  // visibleLayers
   function getRelevantLayers(l) {
     if (l.get('visible') && l.get('name') !== 'topowebbkartan_nedtonad' && l.get('name') !== 'stats') {
       visibleLayers.push(l.get('name'));
     }
   }
-  var selectedFeatures = singleSelect.getFeatures();
-  selectedFeatures.on(['add', 'remove'], function() {
-    data = [];
-    visibleLayers = [];
-    layers.forEach(getRelevantLayers);
-    visibleLayers.forEach( function(l) {
-      var tmp = selectedFeatures.getArray().map( function(feature) {
-        return feature.get(l);
-      });
-      var oi = isNaN(parseInt(tmp[0], 10)) ? 0 : parseInt(tmp[0], 10);
-      data.push(oi);
-      dataJSON.push({'field': l,  'value': oi});
-      // console.log(dataJSON);
+  if (selected === 'single') {
+    singleSelect = new ol.interaction.Select({
+      condition: ol.events.condition.click,
+      layers: select.layers
+      // toggleCondition: ol.events.condition.never
     });
-    sum = getSum(data);
-    createLinearLegend();
-    createPieChartLegend();
-    kartesisktChart();
-    barChart();
-  });
+    settings.map.addInteraction(singleSelect);
+    // map.addInteraction(stats);
 
+    var layers = settings.map.getLayers();
+    // visibleLayers
+
+    var selectedFeatures = singleSelect.getFeatures();
+    selectedFeatures.on(['add', 'remove'], function () {
+      data = [];
+      visibleLayers = [];
+      layers.forEach(getRelevantLayers);
+      visibleLayers.forEach( function (l) {
+        var tmp = selectedFeatures.getArray().map( function (feature) {
+          return feature.get(l);
+        });
+        var oi = isNaN(parseInt(tmp[0], 10)) ? 0 : parseInt(tmp[0], 10);
+        data.push(oi);
+        dataJSON.push({'field': l,  'value': oi});
+        // console.log(dataJSON);
+      });
+
+      sum = getSum(data);
+      avg = getAvg(data);
+      document.getElementById('sumVal').innerHTML = sum;
+      document.getElementById('medVal').innerHTML = avg;
+
+      // createLinearLegend();
+      // kartesisktChart();
+
+      createPieChartLegend();
+      barChart();
+      testCharts();
+
+    });
+  } else if (selected === 'box') {
+    tmpSelect = new ol.interaction.Select({
+      condition: ol.events.condition.click
+    });
+    settings.map.addInteraction(tmpSelect);
+
+    var sf = tmpSelect.getFeatures();
+
+    // var slayers = [];
+    // var sff = [];
+
+    boxSelect = new ol.interaction.DragBox({
+      condition: ol.events.condition.platformModifierKeyOnly
+    });
+    settings.map.addInteraction(boxSelect);
+
+    boxSelect.on('boxend', function () {
+      // features that intersect the box are added to the collection of
+      // selected features
+      var extent = boxSelect.getGeometry().getExtent();
+      var map = settings.map;
+
+      map.getLayers().forEach(function (l) {
+        if (l instanceof ol.layer.Vector && l.get('id') === 'flera_joins1_nyko3') {
+          // tmpLayers.push(l);
+          l.getSource().forEachFeatureIntersectingExtent(extent, function (f) {
+            sf.push(f);
+            // sff.push(f);
+          });
+        }
+      });
+    });
+
+    // clear selection when drawing a new box and when clicking on the map
+    boxSelect.on('boxstart', function () {
+      // console.log('clear');
+      // console.log(selectedFeatures)
+      // daniel.forEach(function(l){
+      //   l.clear();
+      // });
+
+      // console.log(sf.getKeys());
+      // console.log(sf.get('length'));
+      // console.log(boxSelect.getKeys());
+      // console.log(tmpSelect.getFeatures());
+
+      // console.log(slayers.length);
+      // console.log(sff.length);
+
+      // slayers.forEach(function(l){
+      //   sff.forEach(function(f){
+      //     l.getSource().removeFeature(f);
+      //   });
+      // });
+
+      // sf.clear();
+
+      // tmpLayers.forEach(function(layer){
+      //   if (layer instanceof ol.layer.Vector && layer.get('id') === 'flera_joins1_nyko3') {
+      //     console.log(layer);
+      //     layer.getSource().clear();
+      //   }
+      // });
+    });
+  }
 
   createMeasureTooltip();
   createHelpTooltip();
 
-  map.on('pointermove', pointerMoveHandler);
-  map.on('click', pointerMoveHandler);
+  settings.map.on('pointermove', pointerMoveHandler);
+  settings.map.on('click', pointerMoveHandler);
 
-  stats.on('drawstart', setSketch, this);
-  stats.on('drawend', unSketch, this);
+  // stats.on('drawstart', setSketch, this);
+  // stats.on('drawend', unSketch, this);
 }
 
 function createHelpTooltip() {
@@ -462,7 +717,7 @@ function createHelpTooltip() {
   });
 
   overlayArray.push(helpTooltip);
-  map.addOverlay(helpTooltip);
+  settings.map.addOverlay(helpTooltip);
 }
 
 function createMeasureTooltip() {
@@ -481,9 +736,28 @@ function createMeasureTooltip() {
   });
 
   overlayArray.push(statsTooltip);
-  map.addOverlay(statsTooltip);
+  settings.map.addOverlay(statsTooltip);
 }
-
+/** TODO :: Write comments
+ * [toogleInteraction description]
+ * @param {[type]} target       [description]
+ * @param {[type]} interaction0 [description]
+ * @param {[type]} interaction1 [description]
+ * @return {[type]} [description]
+ */
+function toogleInteraction(target, interaction0, interaction1) {
+  if (settings.tool.active) {
+    $(target).trigger({
+      type: 'enableInteraction',
+      interaction: interaction0
+    });
+  } else {
+    $(target).trigger({
+      type: 'enableInteraction',
+      interaction: interaction1
+    });
+  }
+}
 function toggleMeasure() {
   if (isActive) {
     $('.o-map').trigger({
@@ -498,67 +772,99 @@ function toggleMeasure() {
   }
 }
 
+function toggleType2(button) {
+  var trueCls = settings.target.class.true.stats;
+  settings.buttons.active.removeClass(trueCls);
+  settings.buttons.active = button.addClass(trueCls);
+
+  // remove current interaction.
+  // settings.map.removeInteraction(stats);
+
+  settings.map.removeInteraction(select.type.single.interaction);
+  settings.map.removeInteraction(select.type.box.interaction);
+  addInteraction2();
+}
 function toggleType(button) {
   if (activeButton) {
-    activeButton.removeClass('o-stats-button-true');
+    activeButton.removeClass('.o-stats-button-true');
   }
 
-  button.addClass('o-stats-button-true');
+  button.addClass('.o-stats-button-true');
   activeButton = button;
-  map.removeInteraction(stats);
+  // remove current interaction.
+  settings.map.removeInteraction(selected);
+  settings.map.removeInteraction(singleSelect);
+  settings.map.removeInteraction(boxSelect);
+  settings.map.removeInteraction(tmpSelect);
   addInteraction();
 }
 
-function objectToString(v) {
-  if (v instanceof Object) {
-    return '[' + v + ']';
+/** TODO :: Write comments
+ * [initMapTool description]
+ * @return {[type]} [description]
+ */
+function initMapTool() {
+  settings.target.id.mapTools = inspect(options, 'target', '#o-toolbar-maptools', options.inspect.show.warn);
+  settings.map = Viewer.getMap();
+  select.layers = getSelectableVisible(settings.map.getLayers(), false);
+
+  $(settings.target.class.map).on('enableInteraction', onEnableInteraction);
+  // TODO :: Continue clean UP FIX:: ploygon, add Charts, add dynamic legend.
+  render2(settings.target.id.mapTools);
+  bindUIActions();
+  defaultButton = defaultTool === 'area' ? $('#o-stats-polygon-button button') : $('#o-stats-hand-button button');
+}
+/**
+ * [isEnabled takes an array an checks if all items are enabled]
+ * @param {[Array]} a [array of tools]
+ * @return {Boolean} [are all values enabled]
+ */
+function allEnabled(a) {
+  for (var i in a   ) {
+    if (!a[i].enabled) return false;
   }
-  return v;
+  return true;
 }
-
-function hasNameWarning(o, p, v) {
-  return o.hasOwnProperty('name') ? console.warn('The ' + o.name + ' property ' + p + ' is unset. A default value has been set to ' + objectToString(v) + '.') : console.warn('The property ' + p + ' is unset. A default value has been set to ' + objectToString(v) + '.');
+/**
+ * [connectNames connects names list from options with given objects list.]
+ * @param {[Array]} names [List of tool names]
+ * @param {[Array]} list  [list of objects]
+ * @return {[Object]} [updates list of objects by enablnig them]
+ */
+function connectNames(names, list) {
+  names.forEach(function (name) {
+    list.forEach(function (tool) {
+      tool.enabled = tool.enabled === null ? name === tool.name : true;
+    });
+  });
 }
-
-function setVar(obj, prop, val, warn) {
-  if (!obj.hasOwnProperty(prop)) {
-    if (warn) {
-      hasNameWarning(obj, prop, val);
-    }
-    return val;
-  }
-  return obj[prop];
-}
-
-function init(optOptions) {
+/**
+ * This function initiates the stats tool.
+ * @param {[Object]} optOptions [options settings from controls]
+ * @return {[Object]} Stats Toolkit [A control for visualizing geodata in charts]
+ */
+module.exports.init = function (optOptions) {
   options = optOptions || {};
-  options.debug.show.warn = setVar(options.debug.show, 'warn', true, true);
-  measureTools = setVar(options, 'measureTools', ['area', 'length'], options.debug.show.warn);
+  options.inspect.show.warn = inspect(options.inspect.show, 'warn', true, true);
+  select.tools.names = inspect(options, 'select', ['single'], options.inspect.show.warn);
+  settings.tool.toolName = inspect(options, 'toolName', ['stats'], options.inspect.show.warn);
+  connectNames(select.tools.names, select.tools.list);
+
+  charts = inspect(options, 'charts', ['circle', 'bar'], options.inspect.show.warn);
+  line.enabled = charts.includes('line');
+  bar.enabled = charts.includes('bar');
+  radar.enabled = charts.includes('radar');
+  pie.enabled = charts.includes('pie');
+  polar.enabled = charts.includes('polar');
+  bubble.enabled = charts.includes('bubble');
+
+  measureTools =  inspect(options, 'measureTools', ['area', 'length'], options.inspect.show.warn);
   lengthTool.isEnabled = measureTools.indexOf('length') >= 0;
   areaTool.isEnabled = measureTools.indexOf('area') >= 0;
 
-  if (lengthTool.isEnabled || areaTool.isEnabled) {
-    var target = setVar(options, 'target', '#o-toolbar-maptools', options.debug.show.warn);
-    map = Viewer.getMap();
-    source = new ol.source.Vector();
-    statsStyleOptions = styleTypes.getStyle('stats');
-
-    // Drawn features
-    drawnFeatures = new ol.layer.Vector({
-      source: source,
-      name: 'stats',
-      visible: false,
-      zIndex: 6
-    });
-
-    map.addLayer(drawnFeatures);
-
-    $('.o-map').on('enableInteraction', onEnableInteraction);
-
-    render(target);
-    bindUIActions();
-    defaultButton = defaultTool === 'area' ? $('#o-stats-polygon-button button') : $('#o-stats-hand-button button');
+  if (allEnabled(select.tools.list)) {
+    initMapTool();
+  } else {
+    throw Error('Cannot initialize stats into #o-map-tools.');
   }
-}
-
-module.exports.init = init;
+};

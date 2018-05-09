@@ -64,7 +64,31 @@
 		    border-top: none;
 		}
 	</style>
-	<link rel="stylesheet" href="./css/c3.css">
+	<style>
+#statsSamf {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#statsSamf td, #statsSamf th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#statsSamf tr:nth-child(even){background-color: #f2f2f2;}
+
+#statsSamf tr:hover {background-color: #ddd;}
+
+#statsSamf th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+
 </head>
 <body>
 		<div id="app-wrapper"></div>
@@ -74,6 +98,7 @@
   origo.map.init('index.json');
 </script>
 <script>
+
 function openDiagram(evt, diaName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -86,6 +111,18 @@ function openDiagram(evt, diaName) {
     }
     document.getElementById(diaName).style.display = "block";
     evt.currentTarget.className += " active";
+}
+function closeDiagram(evt, diaName) {
+	var i, tabcontent, tablinks;
+	tabcontent = document.getElementsByClassName("tabcontent");
+	for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+	}
+	tablinks = document.getElementsByClassName("tablinks");
+	for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" active", "");
+	}
+	evt.currentTarget.className += " deactive";
 }
 </script>
 </body>

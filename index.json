@@ -4,11 +4,15 @@
       "name": "stats",
       "options": {
         "name": "options",
-        "debug": {
+        "inspect": {
           "show": {
             "warn": true
           }
-        }
+        },
+        "select": ["single", "box"],
+        "charts": ["line", "bar", "radar", "pie", "polar", "bubble"],
+        "target": "#o-toolbar-maptools",
+        "toolName": "stats"
       }
     },
     {

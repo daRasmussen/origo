@@ -34,10 +34,10 @@ var outputString = { 'settings': { 'precision': { 'length': 0, 'area': 0 }, 'uni
 function outputLength(length, precision, units) {
   var converted = [];
   var out = 0.00 + ' m';
-  units.forEach((i) => {
+  units.forEach(function (i) {
     converted.push(round2(convert(length).from('m').to(i), precision) + ' ' + i);
   });
-  converted.forEach((c) => {
+  converted.forEach(function (c) {
     if (c.split(' ')[0] >= 0.99 && c.split(' ')[0] <= 999.99 ) {
       out = c;
     }
@@ -47,7 +47,7 @@ function outputLength(length, precision, units) {
 
 function formatLength(line) {
   var projection = map.getView().getProjection();
-  var length = ol.Sphere.getLength(line, { projection });
+  var length = ol.Sphere.getLength(line, { projection: projection });
   var precision = outputString.settings.precision.length;
   var units = outputString.settings.units.length;
   var unit = outputString.settings.unit.length;
@@ -67,12 +67,12 @@ function convertToSup(unit, sup) {
 function outputArea(area, precision, units) {
   var converted = [];
   var out = 0.00 + addSup('m', 2);
-  units.forEach((i) => {
+  units.forEach(function (i) {
     var d = i.match(/\d+/g) === null ? '' : i.match(/\d+/g)[0];
     var u = i.match(/[a-zA-Z]+/g) === null ? 'm' : i.match(/[a-zA-Z]+/g)[0];
     converted.push(round2(convert(area).from('m2').to(i), precision) + ' ' + convertToSup(u, d));
   });
-  converted.forEach((c) => {
+  converted.forEach(function (c) {
     if (c.split(' ')[0] >= 0.99 && c.split(' ')[0] <= 9999.99 ) {
       out = c;
     }
@@ -86,7 +86,7 @@ function deSup(element) {
 }
 function formatArea(polygon) {
   var projection = map.getView().getProjection();
-  var area = ol.Sphere.getArea(polygon, { projection });
+  var area = ol.Sphere.getArea(polygon, { procjetion: projection });
   var precision = outputString.settings.precision.area;
   var units = outputString.settings.units.area;
   var unit = outputString.settings.unit.area;
@@ -367,20 +367,20 @@ function setVar(obj, prop, val, warn) {
 
 function init(optOptions) {
   options = optOptions || {};
-  options.debug.show.warn = setVar(options.debug.show, 'warn', true, true);
-  outputString.settings.precision.length = setVar(options.precision, 'length', 2, options.debug.show.warn);
-  outputString.settings.precision.area = setVar(options.precision, 'area', 2, options.debug.show.warn);
-  outputString.settings.unit.length = setVar(options.units, 'length', 'm', options.debug.show.warn);
-  outputString.settings.unit.area = setVar(options.units, 'area', 'm2', options.debug.show.warn);
-  outputString.settings.units.length = setVar(options.units, 'length', [], options.debug.show.warn);
-  outputString.settings.units.area = setVar(options.units, 'area', [], options.debug.show.warn);
-  defaultTool = setVar(options, 'default', 'length', options.debug.show.warn);
-  measureTools = setVar(options, 'measureTools', ['length', 'area'], options.debug.show.warn);
+  options.inspect.show.warn = setVar(options.inspect.show, 'warn', true, true);
+  outputString.settings.precision.length = setVar(options.precision, 'length', 2, options.inspect.show.warn);
+  outputString.settings.precision.area = setVar(options.precision, 'area', 2, options.inspect.show.warn);
+  outputString.settings.unit.length = setVar(options.units, 'length', 'm', options.inspect.show.warn);
+  outputString.settings.unit.area = setVar(options.units, 'area', 'm2', options.inspect.show.warn);
+  outputString.settings.units.length = setVar(options.units, 'length', [], options.inspect.show.warn);
+  outputString.settings.units.area = setVar(options.units, 'area', [], options.inspect.show.warn);
+  defaultTool = setVar(options, 'default', 'length', options.inspect.show.warn);
+  measureTools = setVar(options, 'measureTools', ['length', 'area'], options.inspect.show.warn);
   lengthTool.isEnabled = measureTools.indexOf('length') >= 0;
   areaTool.isEnabled = measureTools.indexOf('area') >= 0;
 
   if (lengthTool.isEnabled || areaTool.isEnabled) {
-    var target = setVar(options, 'target', '#o-toolbar-maptools', options.debug.show.warn);
+    var target = setVar(options, 'target', '#o-toolbar-maptools', options.inspect.show.warn);
     map = Viewer.getMap();
     source = new ol.source.Vector();
     measureStyleOptions = styleTypes.getStyle('measure');
