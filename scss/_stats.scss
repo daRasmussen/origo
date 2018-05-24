@@ -1,4 +1,4 @@
-.o-icon-minicons-hand-vector {
+.o-icon-minicons-hand-vector, .o-icon-minicons-square-vector{
   padding: .3em;
   height: 1.4em;
   width: 1.4em;
@@ -15,7 +15,8 @@
   pointer-events: none;
 }
 .o-stats-button-true .o-icon-fa-pencil,
-.o-stats-button-true .o-icon-steady-measure,
-.o-stats-button-true .o-icon-minicons-hand-vector {
+.o-stats-button-true .o-icon-steady-stats,
+.o-stats-button-true .o-icon-minicons-hand-vector,
+.o-stats-button-true .o-icon-minicons-square-vector {
   fill: $o-btn-active-color;
 }

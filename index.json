@@ -83,11 +83,35 @@
       "url": "https://www.malardalskartan.se/geoserver/mdk/ows/",
       "workspace": "mdk"
     },
+    "mdk_stat": {
+      "url": "https://www.malardalskartan.se/geoserver/mdk/ows/",
+      "workspace": "mdk_stat"
+    },
     "basemap": {
       "url": "https://www.malardalskartan.se/geowebcache/service/wmts/"
     }
   },
   "groups": [
+    {
+      "name": "rutor",
+      "title": "Rutor",
+      "groups": [
+        {
+          "name": "rut_alder",
+          "title": "Ålder",
+          "groups":[
+            {
+             "name": "rut_alder_kvinnor",
+             "title": "Kvinnor"
+           },
+           {
+             "name": "rut_alder_man",
+             "title": "Män"
+           }
+          ]
+        }
+      ]
+    },
     {
       "name": "alder",
       "title": "Ålder",
@@ -108,6 +132,156 @@
     }
   ],
   "layers": [
+    {
+      "name": "kvinnor_0_ar___5_ar_",
+      "id": "bef_alder_kvinnor_0_ar___5_ar_",
+      "visible": true,
+      "title": "k0 - 5 år",
+      "group": "rut_alder_kvinnor",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "kvinnor_6_ar___15_ar_",
+      "id": "bef_alder_kvinnor_6_ar___15_ar_",
+      "visible": true,
+      "title": "k6 - 15 år",
+      "group": "rut_alder_kvinnor",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "kvinnor_16_ar___15_ar_",
+      "id": "bef_alder_kvinnor_16_ar___20_ar_",
+      "visible": true,
+      "title": "k16 - 20 år",
+      "group": "rut_alder_kvinnor",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "kvinnor_21_ar___64_ar_",
+      "id": "bef_alder_kvinnor_21_ar___64_ar_",
+      "visible": true,
+      "title": "k21 - 64 år",
+      "group": "rut_alder_kvinnor",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "kvinnor_65_ar___117_ar_",
+      "id": "bef_alder_kvinnor_65_ar___117_ar_",
+      "visible": true,
+      "title": "k65 - 117 år",
+      "group": "rut_alder_kvinnor",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "man_0_ar___5_ar_",
+      "id": "bef_alder_man_0_ar___5_ar_",
+      "visible": true,
+      "title": "m0 - 5 år",
+      "group": "rut_alder_man",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "man_6_ar___15_ar_",
+      "id": "bef_alder_man_6_ar___15_ar_",
+      "visible": true,
+      "title": "m6 - 15 år",
+      "group": "rut_alder_man",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "man_16_ar___15_ar_",
+      "id": "bef_alder_man_16_ar___20_ar_",
+      "visible": true,
+      "title": "m16 - 20 år",
+      "group": "rut_alder_man",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "man_21_ar___64_ar_",
+      "id": "bef_alder_man_21_ar___64_ar_",
+      "visible": true,
+      "title": "m21 - 64 år",
+      "group": "rut_alder_man",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
+    {
+      "name": "man_65_ar___117_ar_",
+      "id": "bef_alder_man_65_ar___117_ar_",
+      "visible": true,
+      "title": "m65 - 117 år",
+      "group": "rut_alder_man",
+      "source": "mdk_stat",
+      "style": "simple",
+      "type": "WFS",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
     {
       "name": "m0_9",
       "id": "flera_joins1_nyko3",
@@ -248,7 +422,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(110, 124, 90, 0.4)"
+            "color": "rgba(222, 251, 45, 0.4)"
           }
         }
       ],
@@ -259,7 +433,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(160, 178, 143, 0.4)"
+            "color": "rgba(218, 182, 75, 0.4)"
           }
         }
       ],
@@ -304,7 +478,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(110, 124, 90, 0.4)"
+            "color": "rgba(222, 251, 45, 0.4)"
           }
         }
       ],
@@ -315,7 +489,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(160, 178, 143, 0.4)"
+            "color": "rgba(218, 182, 75, 0.4)"
           }
         }
       ],
@@ -360,7 +534,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(110, 124, 90, 0.4)"
+            "color": "rgba(222, 251, 45, 0.4)"
           }
         }
       ],
@@ -371,7 +545,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(160, 178, 143, 0.4)"
+            "color": "rgba(218, 182, 75, 0.4)"
           }
         }
       ],
@@ -416,7 +590,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(110, 124, 90, 0.4)"
+            "color": "rgba(222, 251, 45, 0.4)"
           }
         }
       ],
@@ -427,7 +601,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(160, 178, 143, 0.4)"
+            "color": "rgba(218, 182, 75, 0.4)"
           }
         }
       ],
@@ -472,7 +646,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(110, 124, 90, 0.4)"
+            "color": "rgba(222, 251, 45, 0.4)"
           }
         }
       ],
@@ -483,7 +657,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(160, 178, 143, 0.4)"
+            "color": "rgba(218, 182, 75, 0.4)"
           }
         }
       ],
@@ -528,7 +702,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(110, 124, 90, 0.4)"
+            "color": "rgba(222, 251, 45, 0.4)"
           }
         }
       ],
@@ -539,7 +713,7 @@
             "color": "rgba(0,0,0,1.0)"
           },
           "fill": {
-            "color": "rgba(160, 178, 143, 0.4)"
+            "color": "rgba(218, 182, 75, 0.4)"
           }
         }
       ],
@@ -557,6 +731,61 @@
       [
         {
           "filter": "[m0_9] < 40",
+          "stroke": {
+            "color": "rgba(0,0,0,1.0)"
+          },
+          "fill": {
+            "color": "rgba(180, 85, 84, 0.4)"
+          }
+        }
+      ],
+      [
+        {
+          "stroke": {
+            "color": "rgba(0,0,0,1.0)"
+          },
+          "fill": {
+            "color": "rgba(180, 0, 0, 0.4)"
+          }
+        }
+      ]
+    ],"k0_5s": [
+      [
+        {
+          "filter": "[total] < 10",
+          "stroke": {
+            "color": "rgba(0,0,0,1.0)"
+          },
+          "fill": {
+            "color": "rgba(222, 251, 45, 0.4)"
+          }
+        }
+      ],
+      [
+        {
+          "filter": "[total] < 20",
+          "stroke": {
+            "color": "rgba(0,0,0,1.0)"
+          },
+          "fill": {
+            "color": "rgba(218, 182, 75, 0.4)"
+          }
+        }
+      ],
+      [
+        {
+          "filter": "[total] < 30",
+          "stroke": {
+            "color": "rgba(0,0,0,1.0)"
+          },
+          "fill": {
+            "color": "rgba(216, 184, 179, 0.4)"
+          }
+        }
+      ],
+      [
+        {
+          "filter": "[total] < 40",
           "stroke": {
             "color": "rgba(0,0,0,1.0)"
           },

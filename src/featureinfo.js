@@ -114,6 +114,7 @@ function identify(items, target, coordinate) {
   }
 }
 function onClick(evt) {
+
   savedPin = undefined;
   //Featurinfo in two steps. Concat serverside and clientside when serverside is finished
   var clientResult = getFeatureInfo.getFeaturesAtPixel(evt, clusterFeatureinfoLevel);
@@ -192,3 +193,4 @@ module.exports.getSelection = getSelection;
 module.exports.getPin = getPin;
 module.exports.getHitTolerance = getHitTolerance;
 module.exports.identify = identify;
+module.exports.setActive = setActive;

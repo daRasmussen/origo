@@ -24,7 +24,7 @@ function hasNameWarning(o, p, v) {
  * @param {Boolean} warn should user be prompted?
  * @returns {Object} object with the new value.
  */
-module.exports = function setInspector(obj, prop, val, warn) {
+module.exports = function (obj, prop, val, warn) {
   if (!obj.hasOwnProperty(prop)) {
     if (warn) {
       hasNameWarning(obj, prop, val);
