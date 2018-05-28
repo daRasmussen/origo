@@ -45,12 +45,9 @@ var wfs = function wfs(layerOptions) {
       queryFilter = options.filter ? '&CQL_FILTER=' + options.filter : '';
     }
     else{
-      queryFilter = options.filter ? '&CQL_FILTER=' + options.filter + ' AND BBOX(' + options.geometryName + ',' : '&BBOX(';
+      queryFilter = options.filter ? '&CQL_FILTER=' + options.filter + ' AND BBOX(' + options.geometryName + ',' : '&BBOX=';
     }
     var bboxProjectionCode = options.filter ? "'" + options.projectionCode + "')" : options.projectionCode;
-
-    // console.log(queryFilter)
-    // console.log(bboxProjectionCode);
     vectorSource = new ol.source.Vector({
       attributions: options.attribution,
       format: new ol.format.GeoJSON({
@@ -62,32 +59,8 @@ var wfs = function wfs(layerOptions) {
           'version=1.1.0&request=GetFeature&typeName=' + options.featureType +
           '&outputFormat=application/json' +
           '&srsname=' + options.projectionCode;
-
-        //bboxProjectionCode = bboxProjectionCode.substring(0, 1) !== "'" ? "'"+bboxProjectionCode+"'" : bboxProjectionCode;
-        //bboxProjectionCode = bboxProjectionCode.substring(bboxProjectionCode.length-1,bboxProjectionCode.getLength) !== ")" ? bboxProjectionCode+")" : bboxProjectionCode;
-
         url += options.strategy === 'all' ? queryFilter : queryFilter + extent.join(',') + ',' + bboxProjectionCode;
-        if(options.featureType === 'bef_alder_kvinnor_0_ar___5_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_kvinnor_0_ar___5_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_kvinnor_6_ar___15_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_kvinnor_6_ar___15_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_kvinnor_16_ar___20_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_kvinnor_16_ar___20_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_kvinnor_21_ar___64_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_kvinnor_21_ar___64_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_kvinnor_65_ar___117_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_kvinnor_65_ar___117_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_man_0_ar___5_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_man_0_ar___5_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_man_6_ar___15_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_man_6_ar___15_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_man_16_ar___20_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_man_16_ar___20_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_man_21_ar___64_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_man_21_ar___64_ar_&outputFormat=application%2Fjson'
-        } else if(options.featureType === 'bef_alder_man_65_ar___117_ar_') {
-          url = 'https://www.malardalskartan.se/geoserver/mdk_stat/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=bef_alder_man_65_ar___117_ar_&outputFormat=application%2Fjson'
-        }
+        url = encodeURI(url);
         $.ajax({
             url: url,
             cache: false
