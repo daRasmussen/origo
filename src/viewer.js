@@ -110,6 +110,7 @@ function init(el, mapOptions) {
       geometry: new ol.geom[urlParams.selection.geometryType](urlParams.selection.coordinates)
     });
   }
+
   featureinfo.init(settings.featureinfoOptions);
 }
 

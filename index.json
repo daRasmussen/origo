@@ -19,18 +19,21 @@
       "name": "print"
     },
     {
+      "name": "featureinfo"
+    },
+	{
+      "name": "link",
+      "options": {
+        "title": "Hjälp om kartan",
+        "url": "../portal-help/help.html"
+      }
+    },
+    {
       "name": "about",
       "options": {
         "buttonText": "Om Origo",
         "title": "Om Origo",
         "content": "<p>Origo är ett ramverk för webbkartor. Ramverket bygger på JavaScript-biblioteket OpenLayers 3. Du kan använda Origo för att skapa egna webbaserade kartapplikationer.</p><br><p>Projektet drivs och underhålls av ett antal svenska kommuner. Besök gärna <a href='https://github.com/origo-map/origo' target='_blank'>Origo på GitHub</a> för mer information.</p>"
-      }
-    },
-    {
-      "name": "link",
-      "options": {
-        "title": "Origo",
-        "url": "https://github.com/origo-map/origo"
       }
     },
     {
@@ -63,61 +66,77 @@
     "visible": true
   }
 },
-  "projectionCode": "EPSG:3857",
+  "projectionCode": "EPSG:3010",
   "projectionExtent": [
-    -20026376.39,
-    -20048966.10,
-    20026376.39,
-    20048966.10
+      -1678505.1838360203,
+    4665380,
+    2431912.7361639794,
+    8775797.92
   ],
   "proj4Defs": [
       {
-        "code": "EPSG:3006",
-        "projection": "+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+        "code": "EPSG:3010",
+        "alias": "urn:ogc:def:crs:EPSG::3010",
+          "projection": "+proj=tmerc +lat_0=0 +lon_0=16.5 +k=1 +x_0=150000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
       }
   ],
   "extent": [
-    -20026376.39,
-    -20048966.10,
-    20026376.39,
-    20048966.10
+    -1678505.1838360203,
+    4665380,
+    2431912.7361639794,
+    8775797.92
   ],
   "center": [
-    1700000,
-    8275000
+      153797,
+      6612614
   ],
-  "zoom": 8,
+  "home": [
+      134966,
+      6593080,
+      176372,
+      6636922
+  ],
+  "zoom": 4,
   "resolutions": [
-    156543.03,
-    78271.52,
-    39135.76,
-    19567.88,
-    9783.94,
-    4891.97,
-    2445.98,
-    1222.99,
-    611.50,
-    305.75,
-    152.87,
-    76.437,
-    38.219,
-    19.109,
-    9.5546,
-    4.7773,
-    2.3887,
-    1.1943,
-    0.5972
+    1146.8799999999999,
+    573.4399999999999,
+    286.71999999999997,
+    143.35999999999999,
+    71.67999999999999,
+    35.839999999999996,
+    17.919999999999998,
+    8.959999999999999,
+    4.4799999999999995,
+    2.2399999999999998,
+    1.1199999999999999,
+    0.5599999999999999,
+    0.27999999999999997,
+    0.13999999999999999,
+	0.056
   ],
   "source": {
+    "bebyggelse": {
+      "url": "http://vst00216s/arcgis/rest/services/int/Bebyggelse/FeatureServer/"
+    },
     "local": {
       "url": "http://localhost/geoserver/wms"
+    },
+	"basemap": {
+      "url": "https://kartserver.vasteras.se/geowebcache/service/wmts"
     }
   },
   "groups": [
     {
       "name": "test",
       "title": "Test",
-      "expanded": true
+      "expanded": true,
+      "groups": [
+        {
+          "name": "llg",
+          "title": "LandLord",
+          "expanded": true
+        }
+      ]
     },
     {
       "name": "background",
@@ -127,39 +146,92 @@
   ],
   "layers": [
     {
-      "name": "origo-cities",
-      "title": "Origokommuner",
-      "group": "test",
-      "source": "data/origo-cities-3857.geojson",
-      "style": "origo-logo",
-      "type": "GEOJSON",
+      "name": "bebyggelse",
+      "id": 0,
+      "type": "AGS_FEATURE",
+      "title": "Bebyggelse",
+      "style": "cirkel",
+      "group": "llg",
+      "visible": true,
+      "source": "bebyggelse",
       "attributes": [
-          {
-            "name": "name"
-          }
-      ],
-      "visible": true
+        {
+          "title": "AJOUR_DATUM: ",
+          "name": "AJOUR_DATUM"
+        },
+        {
+          "title": "AJOUR_IP: ",
+          "name": "AJOUR_IP"
+        },
+        {
+          "title": "ANDAMAL: ",
+          "name": "OBJEKTNR"
+        },
+        {
+          "title": "FREE_CODE: ",
+          "name": "FREE_CODE"
+        },
+        {
+          "title": "OBJECTID: ",
+          "name": "OBJECTID"
+        },
+        {
+          "title": "OBJEKTNR: ",
+          "name": "OBJEKTNR"
+        },
+        {
+          "title": "OLDOBJECT_ID: ",
+          "name": "OLDOBJECT_ID"
+        },
+        {
+          "title": "TYPKOD: ",
+          "name": "TYPKOD"
+        },
+        {
+          "LandLord": true
+        }
+      ]
+    },
+  	{
+  	"name": "vasteras_kommun",
+  	"opacity": 0.15,
+  	"title": "Mdk",
+  	"queryable": false,
+  	"source": "/origodata/vasteras.geojson",
+  	"style": "mask",
+  	"type": "GEOJSON",
+  	"visible": true
+  	},
+    {
+     "attribution": "&copy Lantmäteriet Geodatasamverkan",
+     "format": "image/png",
+     "group": "background",
+     "name": "sbf_bakgrund_gra",
+     "source": "basemap",
+     "title": "Karta, grå",
+     "type": "WMTS",
+     "style": "karta_gra",
+     "visible": true
     },
     {
-      "name": "origo-mask",
-      "opacity": 0.25,
-      "title": "origo-mask",
-      "group": "none",
-      "queryable": false,
-      "source": "data/origo-mask-3857.geojson",
-      "style": "mask",
-      "type": "GEOJSON",
-      "visible": true
-    },
-    {
-      "name": "osm",
-      "title": "OpenStreetMap",
-      "group": "background",
-      "queryable": false,
+	  "format": "image/png",
+	  "group": "background",
+	  "name": "sbf_bakgrund_farg",
+      "title": "Karta, färg",
+	  "source": "basemap",
+	  "type": "WMTS",
       "style": "karta_farg",
-      "type": "OSM",
-      "visible": true
-    }
+      "visible": false
+    },
+	{ "format": "image/png",
+	  "group": "background",
+	  "name": "sbf_bakgrund_ortofoto",
+	  "source": "basemap",
+      "title": "Flygfoto",
+	  "type": "WMTS",
+      "style": "orto",
+      "visible": false
+	}
   ],
   "styles": {
       "mask": [
@@ -244,6 +316,20 @@
             }
           }
         ]
+      ],
+      "punkt": [
+        {
+          "circle": {
+            "radius": 6,
+            "stroke": {
+              "color": "rgba(0,0,0,1)",
+              "width": 2
+            },
+            "fill": {
+              "color": "rgb(52,152,219)"
+            }
+          }
+        }
       ]
   }
 }

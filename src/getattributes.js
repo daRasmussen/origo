@@ -2,6 +2,7 @@
 var featureinfotemplates = require('./featureinfotemplates');
 var replacer = require('../src/utils/replacer');
 var geom = require('./geom');
+var ll = require('./landlord');
 
 module.exports = function(feature, layer) {
     var content = '<div><ul>';
@@ -57,6 +58,24 @@ module.exports = function(feature, layer) {
                     helper: geom,
                     helperArg: feature.getGeometry()
                   });
+                } else if(attribute['LandLord']) {
+                  var a = document.createElement("a");
+                  var p = feature.getProperties();
+
+                  ll.set(feature);
+
+                  console.log(p)
+                  console.log(ll.getLL().selection.selected.feature);
+
+                  // console.log(getParams(feature.getProperties()))
+                  // a.setAttribute("onclick", "openLandLord("+getParams(feature.getProperties())+")");
+                  //console.log(typeof feature.getProperties());
+
+                  a.setAttribute("onclick", "alert("+ll.getLL().selection.selected.feature.getProperties().OBJECTID+")");
+
+                  var t = document.createTextNode("Visa i landlord");
+                  a.appendChild(t);
+                  val = a.outerHTML;
                 }
 
                 var cls = ' class="' + attribute['cls'] + '" ' || '';
@@ -73,6 +92,31 @@ module.exports = function(feature, layer) {
     }
     content += li + '</ul></div>';
     return content;
+}
+function getParams(o) {
+  var all = [];
+  for (var k in o) {
+    if(!(o[k] instanceof Object)){
+      all.push(isValid(o[k]));
+    }
+  }
+  return all.join(',');
+}
+/**
+ * [isValid description]
+ * Is a function that returns a valid value, ret is return value that is set to -1 by default.
+ * @param {[type]} value [description]
+ * @param {[type]} ret   [description]
+ * @return {Boolean} [description]
+ */
+function isValid(value, ret) {
+  var r = ret !== undefined ? ret : -1;
+  // console.log(typeof value, typeof value === "string", replaceD(value, '.', '_'))
+  // console.log(replaceD(value, '.', '_'));
+  return value === ' ' || value === null ? r : replaceD(value, '.', '') ;
+}
+function replaceD(v, f, t) {
+  return typeof v === "string" ? v.split(f).join(t) : v;
 }
 function filterObject(obj, excludedKeys) {
     var result = {}, key;

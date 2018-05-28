@@ -93,12 +93,12 @@ function onEnableInteraction(e) {
 
 }
 
-isActive = state ? true : false;
-
+function setActive(state) {
+  return state ? true : false;
 }
 
 function render(target) {
-  
+
   if(lengthTool || areaTool){
     var toolbar = utils.createElement('div', '', {
       id: 'o-measure-toolbar',
@@ -116,7 +116,7 @@ function render(target) {
     });
     $('#o-measure-toolbar').append(mb);
   }
-  
+
   if(lengthTool){
     var lb = utils.createButton({
       id: 'o-measure-line-button',
@@ -300,7 +300,7 @@ function formatLength(line) {
     output = (Math.round(length * 100) / 100) +
       ' ' + 'm';
   }
-  
+
   return output;
 };
 
