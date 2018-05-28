@@ -80,12 +80,10 @@
   },
   "source": {
     "mdk": {
-      "url": "https://www.malardalskartan.se/geoserver/mdk/ows/",
-      "workspace": "mdk"
+      "url": "https://www.malardalskartan.se/geoserver/mdk/ows/"
     },
     "mdk_stat": {
-      "url": "https://www.malardalskartan.se/geoserver/mdk/ows/",
-      "workspace": "mdk_stat"
+      "url": "https://www.malardalskartan.se/geoserver/mdk_stat/ows"
     },
     "basemap": {
       "url": "https://www.malardalskartan.se/geowebcache/service/wmts/"
@@ -141,6 +139,7 @@
       "source": "mdk_stat",
       "style": "simple",
       "type": "WFS",
+      "geometryName": "geom",
       "attributes": [
         {
           "name": "total"
@@ -292,7 +291,6 @@
       "source": "mdk",
       "style": "m0_9s",
       "type": "WFS",
-      "filter": "m0_9 like '%'",
       "cls": "m0_9",
       "attributes": [
         {
