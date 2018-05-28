@@ -11,6 +11,7 @@ var style = require('./style')();
 var styleTypes = require('./style/styletypes');
 var getFeatureInfo = require('./getfeatureinfo');
 var owlCarousel = require('../externs/owlcarousel-browserify');
+
 owlCarousel.loadjQueryPlugin();
 
 var selectionLayer = undefined;
@@ -26,6 +27,7 @@ var identifyTarget;
 var clusterFeatureinfoLevel;
 var overlay;
 var hitTolerance;
+var selectedFeature;
 
 function init(opt_options) {
   map = Viewer.getMap();
@@ -60,9 +62,11 @@ function init(opt_options) {
 
   map.on(clickEvent, onClick);
   $(document).on('enableInteraction', onEnableInteraction);
-
 }
 
+function getSelectedFeature() {
+  return selectedFeature = selectionLayer.getFeatures()[0];
+}
 function getSelectionLayer() {
   return selectionLayer.getFeatureLayer();
 }
@@ -115,6 +119,7 @@ function identify(items, target, coordinate) {
       });
       break;
   }
+  selectedFeature = items[0];
 }
 function onClick(evt) {
   savedPin = undefined;
@@ -194,3 +199,4 @@ module.exports.getSelection = getSelection;
 module.exports.getPin = getPin;
 module.exports.getHitTolerance = getHitTolerance;
 module.exports.identify = identify;
+module.exports.getSelectedFeature = getSelectedFeature;
