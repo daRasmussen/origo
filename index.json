@@ -10,6 +10,7 @@
           }
         },
         "select": ["single", "box"],
+        "fieldNames": ["total"],
         "charts": ["line", "bar", "radar", "pie", "polar", "bubble"],
         "target": "#o-toolbar-maptools",
         "toolName": "stats"
@@ -149,7 +150,7 @@
     {
       "name": "kvinnor_6_ar___15_ar_",
       "id": "bef_alder_kvinnor_6_ar___15_ar_",
-      "visible": true,
+      "visible": false,
       "title": "k6 - 15 år",
       "group": "rut_alder_kvinnor",
       "source": "mdk_stat",
@@ -164,7 +165,7 @@
     {
       "name": "kvinnor_16_ar___15_ar_",
       "id": "bef_alder_kvinnor_16_ar___20_ar_",
-      "visible": true,
+      "visible": false,
       "title": "k16 - 20 år",
       "group": "rut_alder_kvinnor",
       "source": "mdk_stat",
@@ -179,7 +180,7 @@
     {
       "name": "kvinnor_21_ar___64_ar_",
       "id": "bef_alder_kvinnor_21_ar___64_ar_",
-      "visible": true,
+      "visible": false,
       "title": "k21 - 64 år",
       "group": "rut_alder_kvinnor",
       "source": "mdk_stat",
@@ -194,7 +195,7 @@
     {
       "name": "kvinnor_65_ar___117_ar_",
       "id": "bef_alder_kvinnor_65_ar___117_ar_",
-      "visible": true,
+      "visible": false,
       "title": "k65 - 117 år",
       "group": "rut_alder_kvinnor",
       "source": "mdk_stat",
@@ -209,7 +210,7 @@
     {
       "name": "man_0_ar___5_ar_",
       "id": "bef_alder_man_0_ar___5_ar_",
-      "visible": true,
+      "visible": false,
       "title": "m0 - 5 år",
       "group": "rut_alder_man",
       "source": "mdk_stat",
@@ -224,7 +225,7 @@
     {
       "name": "man_6_ar___15_ar_",
       "id": "bef_alder_man_6_ar___15_ar_",
-      "visible": true,
+      "visible": false,
       "title": "m6 - 15 år",
       "group": "rut_alder_man",
       "source": "mdk_stat",
@@ -239,7 +240,7 @@
     {
       "name": "man_16_ar___15_ar_",
       "id": "bef_alder_man_16_ar___20_ar_",
-      "visible": true,
+      "visible": false,
       "title": "m16 - 20 år",
       "group": "rut_alder_man",
       "source": "mdk_stat",
@@ -254,7 +255,7 @@
     {
       "name": "man_21_ar___64_ar_",
       "id": "bef_alder_man_21_ar___64_ar_",
-      "visible": true,
+      "visible": false,
       "title": "m21 - 64 år",
       "group": "rut_alder_man",
       "source": "mdk_stat",
@@ -269,7 +270,7 @@
     {
       "name": "man_65_ar___117_ar_",
       "id": "bef_alder_man_65_ar___117_ar_",
-      "visible": true,
+      "visible": false,
       "title": "m65 - 117 år",
       "group": "rut_alder_man",
       "source": "mdk_stat",
@@ -285,7 +286,7 @@
       "name": "m0_9",
       "id": "flera_joins1_nyko3",
       "legend": true,
-      "visible": true,
+      "visible": false,
       "title": "m0_9",
       "group": "alder_man",
       "source": "mdk",
@@ -302,7 +303,7 @@
       "name": "m10_19",
       "id": "flera_joins1_nyko3",
       "legend": true,
-      "visible": true,
+      "visible": false,
       "title": "m10_19",
       "group": "alder_man",
       "source": "mdk",
@@ -320,7 +321,7 @@
       "name": "m20_29",
       "id": "flera_joins1_nyko3",
       "legend": true,
-      "visible": true,
+      "visible": false,
       "title": "m20_29",
       "group": "alder_man",
       "source": "mdk",
@@ -338,13 +339,12 @@
       "name": "k0_9",
       "id": "flera_joins1_nyko3",
       "legend": true,
-      "visible": true,
+      "visible": false,
       "title": "k0_9",
       "group": "alder_kvinnor",
       "source": "mdk",
       "style": "k0_9s",
       "type": "WFS",
-      "filter": "k0_9 like '%'",
       "cls": "k0_9",
       "attributes": [
         {
@@ -356,7 +356,7 @@
       "name": "k10_19",
       "id": "flera_joins1_nyko3",
       "legend": true,
-      "visible": true,
+      "visible": false,
       "title": "k10_19",
       "group": "alder_kvinnor",
       "source": "mdk",
@@ -374,7 +374,7 @@
       "name": "k20_29",
       "id": "flera_joins1_nyko3",
       "legend": true,
-      "visible": true,
+      "visible": false,
       "title": "k20_29",
       "group": "alder_kvinnor",
       "source": "mdk",

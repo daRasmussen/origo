@@ -20,6 +20,8 @@ var $ = require('jquery');
 var c3 = require('c3');
 var Chart = require('chart.js');
 
+var ocharts = require('./charts/ocharts.js');
+
 var overlayArray = [];
 
 var sketch;
@@ -95,7 +97,8 @@ var settings = {
         'stats': '#o-stats-button',
         'hand': '#o-stats-hand-button',
         'square': '#o-stats-square-button'
-      }
+      },
+      'info': '#o-stats-info'
     },
     'html': {
       'buttons': {
@@ -260,7 +263,9 @@ var select = {
     ]
   }
 };
-
+var ocharts = {
+  'fieldNames': []
+};
 var charts;
 var line = { 'enabled': false };
 var bar = { 'enabled': false };
@@ -626,6 +631,23 @@ function addInteraction2() {
 
     settings.map.addInteraction(select.type.single.interaction);
     select.selected.features = select.type.single.interaction.getFeatures();
+    select.selected.features.on(['add', 'remove'], function (e) {
+      var p = e.element.getProperties();
+      console.log(p);
+      var oc = ocharts.fieldNames;
+      for(var key in p) {
+        for(var name in oc) {
+          if(key === name){
+            console.log(key)
+            console.log(name)
+
+          }
+        }
+        // console.log(key + "-> " + p[key]);
+      }
+
+    });
+    console.log(select.selected.features);
 
         var selectedFeatures = select.type.single.interaction.getFeatures();
         var columns = [];
@@ -636,6 +658,7 @@ function addInteraction2() {
           total = 0;
           navg = 0;
           columns = [];
+          //console.log(selectedFeatures.getProperties())
           selectedFeatures.getArray().forEach(function(f) {
             if(e.element.get("total")) {
               total += parseInt(e.element.get("total"), 10)
@@ -1071,6 +1094,7 @@ module.exports.init = function (optOptions) {
   settings.tool.toolName = inspect(settings.options, 'toolName', ['stats'], settings.options.inspect.show.warn);
   connectNames(select.tools.names, select.tools.list);
 
+  ocharts.fieldNames = inspect(settings.options, 'fieldNames', ['total'], settings.options.inspect.show.warn);
   // TODO :: include more tools by default?
   charts = inspect(settings.options, 'charts', ['circle', 'bar'], settings.options.inspect.show.warn);
   line.enabled = charts.includes('line');
@@ -1079,9 +1103,9 @@ module.exports.init = function (optOptions) {
   pie.enabled = charts.includes('pie');
   polar.enabled = charts.includes('polar');
   bubble.enabled = charts.includes('bubble');
-
   if (hasEnabled(select.tools.list)) {
     initMapTool();
+    $(settings.target.id.info).removeClass(settings.target.class.hidden);
   } else {
     throw Error('Cannot initialize stats tool because no tools are enabled.');
   }
