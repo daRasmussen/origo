@@ -9,10 +9,8 @@ var Utils = require('./utils');
 var round2 = require('./utils/round2');
 var inspect = require('./inspect');
 
-var featureInfo = require('./featureinfo');
-
-
 var ol = require('openlayers');
+
 var $ = require('jquery');
 
 // TODO :: Statistics remove unnecessary modules.
@@ -22,11 +20,8 @@ var Chart = require('chart.js');
 
 var ocharts = require('./charts/ocharts.js');
 
-var overlayArray = [];
-
 var sketch;
 
-var stats;
 var statsTooltip;
 var statsTooltipElement;
 
@@ -631,9 +626,10 @@ function addInteraction2() {
 
     settings.map.addInteraction(select.type.single.interaction);
     select.selected.features = select.type.single.interaction.getFeatures();
+    console.log(getSelectableVisible(settings.map.getLayers(), true));
     select.selected.features.on(['add', 'remove'], function (e) {
       var p = e.element.getProperties();
-      console.log(p);
+      // console.log(p);
       var oc = ocharts.fieldNames;
       for(var key in p) {
         for(var name in oc) {
@@ -647,7 +643,7 @@ function addInteraction2() {
       }
 
     });
-    console.log(select.selected.features);
+    
 
         var selectedFeatures = select.type.single.interaction.getFeatures();
         var columns = [];
