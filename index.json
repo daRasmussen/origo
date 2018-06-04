@@ -116,7 +116,7 @@
   ],
   "source": {
     "bebyggelse": {
-      "url": "http://vst00216s/arcgis/rest/services/int/Bebyggelse/FeatureServer/"
+      "url": "http://vst00216s/arcgis/rest/services/div/bebyggelse/FeatureServer/"
     },
     "local": {
       "url": "http://localhost/geoserver/wms"

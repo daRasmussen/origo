@@ -86,6 +86,9 @@ function getObject() {
 function goTo() {
 
 }
+function zoomTo(id) {
+  getAndamal(id);
+}
 module.exports.init = init;
 module.exports.set = set;
 module.exports.push = push;
@@ -111,3 +114,4 @@ module.exports.getTrustees = getTrustees;
 module.exports.getObjects = getObjects;
 module.exports.getObject = getObject;
 module.exports.goTo = goTo;
+module.exports.zoomTo = zoomTo;

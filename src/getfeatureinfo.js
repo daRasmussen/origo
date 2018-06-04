@@ -121,7 +121,9 @@ function isTainted(pixel, layerFilter) {
             });
         }
         else {
-            map.forEachLayerAtPixel(pixel, function(layer) {});
+            map.forEachLayerAtPixel(pixel, function(layer) {
+              
+            });
         }
         return false;
     }

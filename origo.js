@@ -7,11 +7,14 @@ var $ = require('jquery');
 var Viewer = require('./src/viewer');
 var mapLoader = require('./src/maploader');
 var controlInitialiser = require('./src/controlinitialiser');
+var urlParser = require('./src/urlParser');
 
 var origo = {};
 origo.map = {};
 origo.config = require('./conf/origoConfig');
 origo.controls = require('./conf/origoControls');
+
+console.log(urlParser.getSearch());
 
 origo.map.init = function(options, opt_config) {
   var config = opt_config ? $.extend(origo.config, opt_config) : origo.config;
