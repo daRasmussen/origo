@@ -14,6 +14,8 @@ var getAttributes = require('./getattributes');
 var style = require('./style')();
 var layerCreator = require('./layercreator');
 
+var urlparser = require('./utils/urlparser');
+
 var map;
 var template;
 var settings = {
@@ -122,8 +124,86 @@ function init(el, mapOptions) {
     settings.featureinfoOptions.savedSelection = new ol.Feature({
       geometry: new ol.geom[urlParams.selection.geometryType](urlParams.selection.coordinates)
     });
+    featureinfo.init(settings.featureinfoOptions);
   }
-  featureinfo.init(settings.featureinfoOptions);
+  else if (urlParams.select) {
+    /**
+     * [if description] if keys a specified the search for features will be based on these keys.
+     * else the search for features will be based on layer and id.
+     * @param {[type]} urlParams [description] given in the url #keys=key0/key1
+     * @return {[type]} [description] selected feature.
+     */
+    if(urlParams.keys) {
+      urlParams.select.forEach(function(o){
+        var oldKeys = Object.keys(o);
+        var values = Object.values(o);
+        var newKeys = urlParams.keys;
+        if(oldKeys.length === newKeys.length) {
+          for(var i = 0; i < oldKeys.length; i++){
+            if(oldKeys[i] !== newKeys[i]) {
+              var nk = newKeys[i];
+              var v = values[i];
+              o[nk] = v;
+              // delete o[oldKeys[i]];
+            }
+          }
+        } else {
+          console.error('Number of new keys does not match!');
+        }
+        // find features based on key names.
+        findSelectShow(Object.keys(o)[2], Object.keys(o)[3]);
+      });
+    } else {
+      findSelectShow('name', 'OBJECTID');
+    }
+  }
+}
+// 1346 OBJEKTNR
+// 5489 OBJECTID
+function findSelectShow(layerAttr, featureAttr) {
+  console.log(layerAttr, featureAttr)
+  var features = [];
+  var layers = map.getLayers();
+  layers.forEach(function(l) {
+    urlParams.select.forEach(function(o) {
+      for(var i = 0; i < Object.keys(o).length; i++) {
+        var name = o[i];
+        var id = isNaN(parseInt(Object.values(o)[1])) ? Object.values(o)[1] : parseInt(Object.values(o)[1]);
+        if(o[i] === l.get(layerAttr)) {
+          var source = l.getSource();
+          var listenerKey = source.on('change', function(e) {
+              if (source.getState() == 'ready') {
+                var fs = source.getFeatures();
+                fs.forEach(function(f) {
+                  var properties = f.getProperties();
+                  if(f.get(featureAttr) === id) {
+                    features.push(f);
+                  }
+                });
+                // TODO :: saved selection handle muliple selections?
+                settings.featureinfoOptions.savedSelection = features[0];
+                featureinfo.init(settings.featureinfoOptions);
+
+                if(features[0]) {
+                  // Zoom TO
+                  map.getView().animate({
+                    center: features[0].getGeometry().getCoordinates(),
+                    zoom: 14
+                  }, function(completed) {
+                    if(completed) {
+                      search.showFeatureInfo([features[0]], l.get('title'), getAttributes(features[0], l));
+                    }
+                  });
+                } else {
+                  console.error('Feature not found.')
+                }
+                ol.Observable.unByKey(listenerKey);
+              }
+            });
+        }
+      }
+    })
+  });
 }
 
 function addLayers(layers) {

@@ -49,6 +49,33 @@ module.exports = {
         arrName: "coordinates"}
       );
   },
+  /**
+   * [description] returns a list of keys
+   * @param {[String]} s [description] is a string keys=key0/key1
+   * @return {[Array]} [description] [key0, key1]
+   */
+  keys: function(s) {
+    return s.split('/');
+  },
+  /**
+   * TODO:: this shoudbe renamed to nameANDid=
+   * [description] returns a select list.
+   * @param {[String]} s [description] is a select=layerName0/objectID0,layerName1/iobjectID1
+   * @return {[Array]} [description] [{0: {0: layerName0, 1: objectID0 }, 1: {0: layerName1 ,1: objectID1 }}]
+   */
+  select: function(s) {
+    var a = [];
+    var items = s.split(',');
+    items.forEach(function(i){
+      var r = i.split('/');
+      var o = {};
+      r.forEach(function(l, n){
+        o[n] = l;
+      })
+      a.push(o);
+    });
+    return a;
+  },
   feature: function(featureId) {
     return featureId;
   },

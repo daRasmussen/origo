@@ -103,6 +103,9 @@
   "source": {
     "local": {
       "url": "http://localhost/geoserver/wms"
+    },
+    "bebyggelse": {
+      "url": "http://vst00216s/arcgis/rest/services/div/bebyggelse/FeatureServer/"
     }
   },
   "groups": [
@@ -112,12 +115,61 @@
       "expanded": true
     },
     {
+      "name": "llg",
+      "title": "landlord",
+      "expanded": true
+    },
+    {
       "name": "background",
       "title": "Bakgrundskartor",
       "expanded": true
     }
   ],
   "layers": [
+    {
+      "name": "bebyggelse",
+      "id": 0,
+      "type": "AGS_FEATURE",
+      "title": "Bebyggelse",
+      "style": "cirkel",
+      "group": "llg",
+      "visible": true,
+      "source": "bebyggelse",
+      "attributes": [
+        {
+          "title": "AJOUR_DATUM: ",
+          "name": "AJOUR_DATUM"
+        },
+        {
+          "title": "AJOUR_IP: ",
+          "name": "AJOUR_IP"
+        },
+        {
+          "title": "ANDAMAL: ",
+          "name": "OBJEKTNR"
+        },
+        {
+          "title": "FREE_CODE: ",
+          "name": "FREE_CODE"
+        },
+        {
+          "title": "OBJECTID: ",
+          "name": "OBJECTID"
+        },
+        {
+          "title": "OBJEKTNR: ",
+          "name": "OBJEKTNR"
+        },
+        {
+          "title": "OLDOBJECT_ID: ",
+          "name": "OLDOBJECT_ID"
+        },
+        {
+          "title": "TYPKOD: ",
+          "name": "TYPKOD"
+        }
+      ]
+    },
     {
       "name": "origo-cities",
       "title": "Origokommuner",
