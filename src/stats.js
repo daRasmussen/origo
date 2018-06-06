@@ -10,23 +10,12 @@ var round2 = require('./utils/round2');
 var inspect = require('./inspect');
 
 var ol = require('openlayers');
-
 var $ = require('jquery');
 
 // TODO :: Statistics remove unnecessary modules.
 
-var c3 = require('c3');
-var Chart = require('chart.js');
-
-var ocharts = require('./charts/ocharts.js');
-
-var sketch;
-
-var statsTooltip;
-var statsTooltipElement;
-
-var helpTooltip;
-var helpTooltipElement;
+// Container for multiple charts
+// var ocharts = require('./charts/ocharts.js');
 
 
 // TODO :: Merge settings with tools
@@ -60,22 +49,7 @@ var settings = {
     'toolName': 'stats',
     'active': false,
     'toolTip': 'Mät i kartan2',
-    'events': {
-      'click': function (e) {
-        // settings.map.removeInteraction(select.type.single.interaction);
-        // settings.map.removeInteraction(select.type.box.interaction);
-
-        // featureInfo.setActive(false);
-
-        // settings.map.getInteractions().forEach(function (interaction) {
-        //   if(interaction instanceof ol.interaction.Select) { console.log(interaction); settings.map.removeInteraction(interaction); }
-        // });
-
-        // toogleInteraction(settings.target.class.map, settings.interactions.default, settings.interactions.tool);
-        // $(settings.target.html.buttons.stats).blur();
-        // e.preventDefault();
-      }
-    }
+    'events': {}
   },
   'interactions': {
     'default': 'featureInfo',
@@ -123,7 +97,7 @@ var settings = {
     }
   }
 };
-// var counter = 0; // for debug
+
 var select = {
   'layers': [],
   'type': {
@@ -151,18 +125,6 @@ var select = {
       'names': []
     }
   },
-  // [
-  //   {
-  //     'features': null,
-  //     'length': {
-  //       'group': 0,
-  //       'all': 0
-  //     },
-  //     'layer': {
-  //       'names': []
-  //     }
-  //   }
-  // ],
   'tools': {
     'names': [],
     'list': [
@@ -258,8 +220,38 @@ var select = {
     ]
   }
 };
+
 var ocharts = {
-  'fieldNames': []
+  'fieldNames': [],
+  'names': [],
+  'values': [],
+  'selections': {
+    'total': [],
+    'compare': []
+  },
+  'data': {
+    'sum': 0,
+    'average': 0.0,
+    'stdDev': 0.0,
+    'scale': 2,
+    'precision': 7
+    // https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/
+    // Precision 7, scale 2: 12345.67
+    // Precision 6, scale 2:  1234.56
+    // Precision 4, scale 2: 99.99
+    // Precision 10, scale 0: 9999999999
+    // Precision 8, scale 3: 99999.999
+    // Precision 5, scale -3: 99999000
+  },
+  'enabled': {
+    'line': false,
+    'bar': false,
+    'radar': false,
+    'donought': false,
+    'pie': false,
+    'polar': false,
+    'bubble': false
+  }
 };
 var charts;
 var line = { 'enabled': false };
@@ -268,46 +260,6 @@ var radar = { 'enabled': false };
 var pie = { 'enabled': false };
 var polar = { 'enabled': false };
 var bubble = { 'enabled': false };
-
-var singleSelect;
-var boxSelect;
-var selected;
-var tmpSelect;
-
-var visibleLayers = []; // select Layers
-var data = [];
-var dataJSON = [];
-
-var sum = 0;
-var avg = 0.00;
-
-// Display and move tooltips with pointer
-function pointerMoveHandler(evt) {
-  if (evt.dragging) { return; }
-
-  // Depending on what tool is display diffrent helpMsg
-  var helpMsg = 'Klicka för att börja mäta';
-  var tooltipCoord = evt.coordinate;
-
-  if (sketch) {
-    var output;
-    var geom = (sketch.getGeometry());
-    if (geom instanceof ol.geom.Polygon) {
-      tooltipCoord = geom.getInteriorPoint().getCoordinates();
-    } else if (geom instanceof ol.geom.LineString) {
-      tooltipCoord = geom.getLastCoordinate();
-    }
-
-    statsTooltipElement.innerHTML = output;
-    // label = output;
-    statsTooltip.setPosition(tooltipCoord);
-  }
-
-  if (evt.type === 'pointermove') {
-    helpTooltipElement.innerHTML = helpMsg;
-    helpTooltip.setPosition(evt.coordinate);
-  }
-}
 
 function onEnableInteraction(e) {
   if (e.interaction === settings.interactions.tool) {
@@ -319,21 +271,6 @@ function onEnableInteraction(e) {
     });
     $(settings.target.id.buttons.stats).removeClass(settings.target.class.tooltip);
     settings.tool.active = true;
-    // settings.buttons.default.trigger('click');
-    // console.log(select.type.selected);
-    // $('#o-stats-hand-button > button').on('click', function(e) {
-    //   // var layers = select.type.single.interaction.getLayers();
-    //   // layers.forEach(function(l) {
-    //   //   l.getSource().getFeatures().forEach(function(f) {
-    //   //     l.getSource().removeFeature(f);
-    //   //   });
-    //   // });
-    //   console.log('Show tooltip for single select.');
-    // });
-    // $('#o-stats-square-button > button').on('click', function(e) {
-    //   console.log('Show tooltip for box box.');
-    // });
-
     settings.map.removeInteraction(settings.interactions.default);
   } else {
     // TODO:: Clear selection
@@ -346,11 +283,6 @@ function onEnableInteraction(e) {
     });
     $(settings.target.id.buttons.stats).addClass(settings.target.class.tooltip);
 
-    // settings.map.un('pointermove', pointerMoveHandler);
-    // settings.map.un('click', pointerMoveHandler);
-
-    // settings.map.un('click', errorDector);
-    //
     select.tools.list.forEach(function (t) {
       settings.map.un('pointermove', t.events.pointerMoveHandler);
       settings.map.un('click', t.events.pointerMoveHandler);
@@ -455,113 +387,6 @@ function bindUIActions() {
     }
   });
 }
-function createPieChartLegend(columns) {
-  var chart = c3.generate({
-    bindto: '#circleChart',
-    data: {
-      columns: columns,
-      // columns: [
-      //   ['k0_9'].concat(11),
-      //   ['k10_19'].concat(12),
-      //   ['k20_29'].concat(13),
-      //   ['m0_9'].concat(14),
-      //   ['m10_19'].concat(15),
-      //   ['m20_29'].concat(16)
-      // ],
-      type: 'donut'
-    },
-    donut: {
-      title: 'Procentfördelning'
-    }
-  });
-}
-function testCharts() {
-  var ctx = document.getElementById('myChart');
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255,99,132,1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      }
-    }
-  });
-}
-function barChart(colums) {
-  var chart = c3.generate({
-    bindto: '#barChart',
-    data: {
-      columns: colums,
-      // [
-      //   ['k0_9'].concat(data[0]),
-      //   ['k10_19'].concat(data[1] - 2),
-      //   ['k20_29'].concat(data[2]),
-      //   ['m0_9'].concat(data[3] + 1),
-      //   ['m10_19'].concat(data[4]),
-      //   ['m20_29'].concat(data[5] + 1)
-      // ],
-      type: 'bar'
-    },
-    bar: {
-      width: {
-        ratio: 0.5 // this makes bar width 50% of length between ticks
-      }
-      // or
-      // width: 100 // this makes bar width 100px
-    }
-  });
-}
-function kartesisktChart() {
-  var first = data.slice(0, 3);
-  var last = data.slice(-3);
-  last.forEach(function (part, index, theArray) {
-    theArray[index] = part - 1;
-  });
-  var chart = c3.generate({
-    bindto: '#kartesisktChart',
-    data: {
-      columns: [
-        ['Kvinnors ålder'].concat(first),
-        ['Mäns ålder'].concat(last)
-      ],
-      onclick: function (d, element) {
-        chart.internal.config.tooltip_show = true;
-        chart.internal.showTooltip([d], element);
-        chart.internal.config.tooltip_show = false;
-      }
-    },
-    tooltip: {
-      show: true
-    }
-  });
-}
 function add(accumulator, currentValue) {
   return accumulator + currentValue;
 }
@@ -594,172 +419,84 @@ function getSelectableVisible(a, v) {
   });
   return r;
 }
-function errorDector(e) {
-  alert('error');
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  for (var i = arr1.length; i--;) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
 }
-/**
- * [getRelevantLayers description]
- * @param {[type]} l [description]
- * @return {[type]} [description]
- */
-function addInteraction2() {
+var names = [];
+var values = [];
+var selection = [names, values];
+function addTotal(names, values) {
+  console.log(names, values)
+  var newNames = [];
+  var newValues = [];
+  for (var i = 0; i < names.length; i++) {
+    if (newNames.indexOf(names[i]) === -1) {
+      console.log('create: ', (names[i]))
+      newNames.push(names[i]);
+      console.log('create: ', values[i]);
+      newValues.push(values[i])
+    } else {
+      var nvi = newNames.indexOf(names[i]);
+      console.log(i, newNames, names[i], newNames.indexOf(names[i]), newValues[nvi])
+      console.log('add value', values[i]);
+      newValues[nvi] += values[i];
+    }
+  }
+  console.log(newNames, newValues)
+  return [newNames, newValues];
+}
+
+function addInteraction() {
+  names = [];
+  values = [];
+  selection = [names, values];
   settings.map.removeInteraction(select.type.single.interaction);
   settings.map.removeInteraction(select.type.singleBox.interaction);
   settings.map.removeInteraction(select.type.box.interaction);
 
   if (select.tools.list[getIndex(select.tools.list, 'name', 'single')].active) {
-    // settings.map.on('pointermove', select.tools.list[getIndex(select.tools.list, 'name', 'single')].events.pointerMoveHandler);
-    // settings.map.on('click', select.tools.list[getIndex(select.tools.list, 'name', 'single')].events.click);
     select.type.single.interaction = new ol.interaction.Select({
       condition: ol.events.condition.click,
-      layers: getSelectableVisible(settings.map.getLayers(), true)
-      // , style: new ol.style.Style({
-      //   fill: new ol.style.Fill({
-      //     color: 'rgba(255, 255, 255, 0.6)'
-      //   }),
-      //   stroke: new ol.style.Stroke({
-      //     color: '#30d24a',
-      //     width: 1
-      //   })
-      // })
+      toggleCondition: ol.events.condition.shiftKeyOnly,
+      multi: true,
+      layers: getSelectableVisible(settings.map.getLayers(), false)
     });
 
     settings.map.addInteraction(select.type.single.interaction);
     select.selected.features = select.type.single.interaction.getFeatures();
-    console.log(getSelectableVisible(settings.map.getLayers(), true));
-    select.selected.features.on(['add', 'remove'], function (e) {
-      var p = e.element.getProperties();
-      // console.log(p);
-      var oc = ocharts.fieldNames;
-      for(var key in p) {
-        for(var name in oc) {
-          if(key === name){
-            console.log(key)
-            console.log(name)
 
-          }
-        }
-        // console.log(key + "-> " + p[key]);
-      }
+    select.type.single.interaction.on('select', function (e) {
+      //console.clear();
+      e.selected.forEach(function (f) {
+        var name = f.getId().split('.')[0];
+        var val = parseInt(f.get(ocharts.fieldNames[0]), 10);
+        names.push(name);
+        values.push(val);
+      });
+      e.deselected.forEach(function (f, i) {
+        var name = f.getId().split('.')[0];
+        var val = parseInt(f.get(ocharts.fieldNames[0]), 10);
+        var ni = names.indexOf(name);
+        names.splice(ni, 1);
+        var vi = values.indexOf(val);
+        values.splice(vi, 1);
+      });
+      var tmp = addTotal(names, values);
+      //console.log(names);
+      //console.log(values);
+    }, this);
 
-    });
-    
+    // testCharts("urval 1", names, values);
+    //testCharts("urval 2", ocharts.names[1], ochart.values[1]);
 
-        var selectedFeatures = select.type.single.interaction.getFeatures();
-        var columns = [];
-        var total = 0;
-        var navg = 0;
-        var length = 3;
-        selectedFeatures.on(['add', 'remove'], function (e) {
-          total = 0;
-          navg = 0;
-          columns = [];
-          //console.log(selectedFeatures.getProperties())
-          selectedFeatures.getArray().forEach(function(f) {
-            if(e.element.get("total")) {
-              total += parseInt(e.element.get("total"), 10)
-              document.getElementById('sumVal').innerHTML = total;
-              navg += round2(parseInt(e.element.get("total"), 10)/length, 2);
-              document.getElementById('medVal').innerHTML = navg;
-              columns.push(['total'].concat(total));
-              columns.push(['avg'].concat(navg));
-              createPieChartLegend(columns);
-              barChart(columns);
-            } else if (f.get('m0_9')) {
-              total += isNaN(parseInt(f.get('m0_9'), 10)) ? 0 : parseInt(f.get('m0_9'), 10);
-              document.getElementById('sumVal').innerHTML = total;
-              navg += round2(parseInt(e.element.get("m0_9"), 10)/length, 2);
-              document.getElementById('medVal').innerHTML = navg;
-              columns.push(['m0_9'].concat(isNaN(parseInt(f.get('m0_9'), 10)) ? 0 : parseInt(f.get('m0_9'), 10)));
-            } else if (f.get('m10_19')) {
-              total += isNaN(parseInt(f.get('m10_19'), 10)) ? 0 : parseInt(f.get('m10_19'), 10);
-              document.getElementById('sumVal').innerHTML = total;
-              navg += round2(parseInt(e.element.get("m10_19"), 10)/ length, 2);
-              document.getElementById('medVal').innerHTML = navg;
-              columns.push(['m10_19'].concat(isNaN(parseInt(f.get('m10_19'), 10)) ? 0 : parseInt(f.get('m10_19'), 10)));
-            } else if (f.get('m20_29')) {
-              total += isNaN(parseInt(f.get('m20_29'), 10)) ? 0 : parseInt(f.get('m20_29'), 10);
-              document.getElementById('sumVal').innerHTML = total;
-              navg += round2(parseInt(e.element.get("m20_29"), 10)/length, 2);
-              document.getElementById('medVal').innerHTML = navg;
-            } else if (f.get('k0_9')) {
-              total += isNaN(parseInt(f.get('k0_9'), 10)) ? 0 : parseInt(f.get('k0_9'), 10);
-              document.getElementById('sumVal').innerHTML = total;
-              navg += round2(parseInt(e.element.get("k0_9"), 10)/length, 2);
-              document.getElementById('medVal').innerHTML = navg;
-            } else if (f.get('k10_19')) {
-              total += isNaN(parseInt(f.get('k10_19'), 10)) ? 0 : parseInt(f.get('k10_19'), 10);
-              document.getElementById('sumVal').innerHTML = total;
-              navg += round2(parseInt(e.element.get("k10_19"), 10)/length, 2);
-              document.getElementById('medVal').innerHTML = navg;
-            } else if (f.get('k20_29')) {
-              total += isNaN(parseInt(f.get('k20_29'), 10)) ? 0 : parseInt(f.get('k20_29'), 10);
-              document.getElementById('sumVal').innerHTML = total;
-              navg += round2(parseInt(e.element.get("k20_29"), 10)/length, 2);
-              document.getElementById('medVal').innerHTML = navg;
-            }
-            // console.log(columns);
-            // createPieChartLegend(columns);
-          });
-
-          // data = [];
-
-          // sum = getSum(data);
-          // avg = getAvg(data);
-          // document.getElementById('sumVal').innerHTML = sum;
-          // document.getElementById('medVal').innerHTML = avg;
-          //
-          // // createLinearLegend();
-          // // kartesisktChart();
-          //
-          //createPieChartLegend(columns);
-          // barChart();
-          // testCharts();
-        });
-
-    // select.type.single.interaction.on('select', function (e) {
-    //   select.selected.length.group = e.selected.length;
-    //   select.selected.length.all = select.selected.features.getLength();
-    //   settings.map.getLayers().forEach(function (l) {
-    //     if (l.get('visible')) {
-    //       // console.log(l.get('name'));
-    //     }
-    //   });
-    //   //console.log(select.selected.length.group, select.selected.length.all);
-    //
-    //   // var a = e.selected;
-    //   // var al = a.length;
-    //   // console.log(al);
-    //   // console.log(e); // e.selected.length anger hur många features per select.
-    //   // var b = select.selected.features;
-    //   // var bl = b.getLength();
-    //   // console.log(bl);
-    //   // if (a.length === 0) {
-    //   //   console.log('toolTip');
-    //   // } else if (a.length === 1) {
-    //   //   console.log('remove tooltip'); // clear remove earliery ovs. //default case
-    //   //   console.log('add overlay: Val 1');
-    //   // } else if (a.length === 2) {
-    //   //   console.log('add overlay: Val 2');
-    //   // }
-    //   // console.log(e);
-    //   // console.log('selected');
-    // }, this);
-    // initTips();
-    // unToolTip();
-
-    // counter = 0;
-    // settings.map.getInteractions().forEach(function(iin) {
-    //   // console.log(iin instanceof ol.interaction.Select, iin.get('name'), iin.getActive() );
-    //   if (iin instanceof ol.interaction.Select) {
-    //     counter++;
-    //   }
-    // });
-    // console.log('on addInteraction2 counter: '+counter);
-    // console.log(settings.map.getInteractions().getLength());
-    // console.log(select.type.single.interaction);
-    // console.log(select.type.box.interaction);
-    // console.log(select.type.selected);
   } else if (select.tools.list[getIndex(select.tools.list, 'name', 'box')].active) {
     select.type.singleBox.interaction = new ol.interaction.Select();
     settings.map.addInteraction(select.type.singleBox.interaction);
@@ -777,88 +514,11 @@ function addInteraction2() {
         });
       });
     });
-
-    // settings.map.on('pointermove', select.tools.list[getIndex(select.tools.list, 'name', 'box')].events.pointerMoveHandler);
-    // settings.map.on('click', select.tools.list[getIndex(select.tools.list, 'name', 'box')].events.click);
-
-    //var counter = 0;
-    // settings.map.getInteractions().forEach(function(iin) {
-    //   // console.log(iin instanceof ol.interaction.Select, iin.get('name'), iin.getActive() );
-    //   if (iin instanceof ol.interaction.Select || iin instanceof ol.interaction.DragBox ) {
-    //     counter++;
-    //   }
-    // });
-    // console.log('on addInteraction2 counter: '+counter);
-    // console.log(settings.map.getInteractions().getLength());
-    // console.log(select.type.single.interaction);
-    // console.log(select.type.box.interaction);
-    // console.log(select.type.selected);
-
   } else {
-    // console.log(featureInfo.clear())
-    // select.selected.features = null;
-    // console.log('remove select');
     settings.map.removeInteraction(select.type.single.interaction);
     settings.map.removeInteraction(select.type.singleBox.interaction);
     settings.map.removeInteraction(select.type.box.interaction);
-    // counter = 0;
-    // settings.map.getInteractions().forEach(function(iin) {
-    //   // console.log(iin instanceof ol.interaction.Select, iin.get('name'), iin.getActive() );
-    //   if (iin instanceof ol.interaction.Select) {
-    //     counter++;
-    //   }
-    // });
-    // console.log('on remove'+counter);
   }
-  // if (select.tools.list[getIndex(select.tools.list, 'name', 'box')].active) {
-  //   select.type.singleBox.interaction = new ol.interaction.Select();
-  //   settings.map.addInteraction(select.type.singleBox.interaction);
-  //   select.selected.features = select.type.singleBox.interaction.getFeatures();
-  //   select.type.box.interaction = new ol.interaction.DragBox({
-  //     condition: ol.events.condition.platformModifierKeyOnly
-  //   });
-  //   settings.map.addInteraction(select.type.box.interaction);
-  //
-  //   select.type.box.interaction.on('boxend', function () {
-  //     var extent = select.type.box.interaction.getGeometry().getExtent();
-  //     select.layers.forEach(function (layer) {
-  //       layer.getSource().forEachFeatureIntersectingExtent(extent, function (feature) {
-  //         select.selected.features.push(feature);
-  //       });
-  //     });
-  //   });
-  //
-  //   // select.type.box.interaction.on('boxstart', function() {
-  //   //    select.selected.features.clear();
-  //   //  });
-  //
-  //   // settings.map.on('pointermove', select.tools.list[getIndex(select.tools.list, 'name', 'box')].events.pointerMoveHandler);
-  //   // settings.map.on('click', select.tools.list[getIndex(select.tools.list, 'name', 'box')].events.click);
-  //
-  //   //var counter = 0;
-  //   settings.map.getInteractions().forEach(function(iin) {
-  //     // console.log(iin instanceof ol.interaction.Select, iin.get('name'), iin.getActive() );
-  //     if (iin instanceof ol.interaction.Select || iin instanceof ol.interaction.DragBox ) {
-  //       counter++;
-  //     }
-  //   });
-  //   console.log('on addInteraction2 counter: '+counter);
-  //   // console.log(settings.map.getInteractions().getLength());
-  //   // console.log(select.type.single.interaction);
-  //   // console.log(select.type.box.interaction);
-  //   // console.log(select.type.selected);
-  // } else {
-  //   console.log('remove box select && remove singlebox select');
-  //   settings.map.removeInteraction(select.type.box.interaction);
-  //   settings.map.removeInteraction(select.type.singleBox.interaction);
-  //   // select.selected.features = null;
-  //   // console.log('lenght:'+select.selected.features.getLength())
-  //   // select.selected.features = select.selected.features !== null || select.selected.features !== undefined ? select.selected.features.clear() : null;
-  //   counter--;
-  //   counter--;
-  //   console.log(counter);
-  // }
-  // settings.map.on('click', errorDector);
 }
 /** TODO:: Write Comments
  * [getIndex description]
@@ -870,102 +530,7 @@ function addInteraction2() {
 function getIndex(list, key, value) {
   return JSON.parse(JSON.stringify(list)).map(function (t) { return t[key]; }).indexOf(value);
 }
-// function unToolTip() {
-//   // $(measureTooltipElement).remove();
-//   // measureTooltipElement = null;
-//   // createMeasureTooltip();
-//   // $(helpTooltipElement).removeClass('o-hidden');
-// };
-// function addInteraction() {
-//   function getRelevantLayers(l) {
-//     if (l.get('visible') && l.get('name') !== 'topowebbkartan_nedtonad' && l.get('name') !== 'stats') {
-//       visibleLayers.push(l.get('name'));
-//     }
-//   }
-//   if (selected === 'single') {
-//     singleSelect = new ol.interaction.Select({
-//       condition: ol.events.condition.click,
-//       layers: select.layers
-//       // toggleCondition: ol.events.condition.never
-//     });
-//     settings.map.addInteraction(singleSelect);
-//     // map.addInteraction(stats);
-//
-//     var layers = settings.map.getLayers();
-//     // visibleLayers
-//
-//     var selectedFeatures = singleSelect.getFeatures();
-//     selectedFeatures.on(['add', 'remove'], function () {
-//       data = [];
-//       visibleLayers = [];
-//       layers.forEach(getRelevantLayers);
-//       visibleLayers.forEach( function (l) {
-//         var tmp = selectedFeatures.getArray().map( function (feature) {
-//           return feature.get(l);
-//         });
-//         var oi = isNaN(parseInt(tmp[0], 10)) ? 0 : parseInt(tmp[0], 10);
-//         data.push(oi);
-//         dataJSON.push({'field': l,  'value': oi});
-//         // console.log(dataJSON);
-//       });
-//
-//       sum = getSum(data);
-//       avg = getAvg(data);
-//       document.getElementById('sumVal').innerHTML = sum;
-//       document.getElementById('medVal').innerHTML = avg;
-//
-//       // createLinearLegend();
-//       // kartesisktChart();
-//
-//       createPieChartLegend();
-//       barChart();
-//       testCharts();
-//     });
-//   } else if (selected === 'box') {
-//     tmpSelect = new ol.interaction.Select({
-//       condition: ol.events.condition.click
-//     });
-//     settings.map.addInteraction(tmpSelect);
-//
-//     var sf = tmpSelect.getFeatures();
-//
-//     // var slayers = [];
-//     // var sff = [];
-//
-//     boxSelect = new ol.interaction.DragBox({
-//       condition: ol.events.condition.platformModifierKeyOnly
-//     });
-//     settings.map.addInteraction(boxSelect);
-//
-//     boxSelect.on('boxend', function () {
-//       // features that intersect the box are added to the collection of
-//       // selected features
-//       var extent = boxSelect.getGeometry().getExtent();
-//       var map = settings.map;
-//
-//       map.getLayers().forEach(function (l) {
-//         if (l instanceof ol.layer.Vector && l.get('id') === 'flera_joins1_nyko3') {
-//           // tmpLayers.push(l);
-//           l.getSource().forEachFeatureIntersectingExtent(extent, function (f) {
-//             sf.push(f);
-//             // sff.push(f);
-//           });
-//         }
-//       });
-//     });
-//
-//     // clear selection when drawing a new box and when clicking on the map
-//     boxSelect.on('boxstart', function () {
-//
-//     });
-//   }
-//
-//   // initToolTip();
-//   // initHelp();
-//
-//   settings.map.on('pointermove', pointerMoveHandler);
-//   settings.map.on('click', pointerMoveHandler);
-// }
+
 /** TODO :: Add comments
  * [initTips description]
  * @return {[type]} [description]
@@ -996,8 +561,6 @@ function initTips() {
  * @return {[type]} [description]
  */
 function toogleInteraction(target, featureInfo, statsInfo) {
-  // console.log(target, featureInfo, statsInfo)
-  // console.log(settings.tool.active);
   if (settings.tool.active) {
     $(target).trigger({
       type: 'enableInteraction',
@@ -1012,16 +575,6 @@ function toogleInteraction(target, featureInfo, statsInfo) {
       type: 'enableInteraction',
       interaction: featureInfo
     });
-    // settings.map.removeInteraction(select.type.single.interaction);
-    // select.tools.list[getIndex(select.tools.list, 'name', 'single')].active = false;
-    // toggleType($(settings.target.html.buttons.hand), select.tools.list[getIndex(select.tools.list, 'name', 'single')].active);
-    // settings.map.removeInteraction(select.type.singleBox.interaction);
-    // settings.map.removeInteraction(select.type.box.interaction);
-    // select.tools.list[getIndex(select.tools.list, 'name', 'box')].active = false;
-    // toggleType($(settings.target.html.buttons.square), select.tools.list[getIndex(select.tools.list, 'name', 'box')].active);
-    // select.tools.list.forEach(function(t) {
-    //   t.active = false;
-    // })
   }
 }
 /** TODO :: Add comments
@@ -1036,7 +589,7 @@ function toggleType(button, active) {
   } else {
     button.removeClass(settings.target.class.visible.stats);
   }
-  addInteraction2();
+  addInteraction();
 }
 /** TODO :: Write comments
  * [initMapTool description]
@@ -1093,6 +646,7 @@ module.exports.init = function (optOptions) {
   ocharts.fieldNames = inspect(settings.options, 'fieldNames', ['total'], settings.options.inspect.show.warn);
   // TODO :: include more tools by default?
   charts = inspect(settings.options, 'charts', ['circle', 'bar'], settings.options.inspect.show.warn);
+  // charts variable removed.
   line.enabled = charts.includes('line');
   bar.enabled = charts.includes('bar');
   radar.enabled = charts.includes('radar');
