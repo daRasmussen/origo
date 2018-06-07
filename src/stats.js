@@ -149,13 +149,6 @@ var select = {
               settings.map.removeInteraction(select.type.singleBox.interaction);
               settings.map.removeInteraction(select.type.box.interaction);
             $(settings.target.html.buttons.stats).blur();
-            // settings.map.getInteractions().forEach(function(iin) {
-            //   // console.log(iin instanceof ol.interaction.Select, iin.get('name'), iin.getActive() );
-            //   if (iin instanceof ol.interaction.Select) {
-            //     counter++;
-            //   }
-            // });
-            // console.log(counter);
             e.preventDefault();
           }
         }
@@ -224,9 +217,14 @@ var select = {
 var ocharts = {
   'fieldNames': [],
   'names': [],
+  'ids': [],
   'values': [],
   'selections': {
-    'total': [],
+    'total': {
+      'names': [],
+      'ids': [],
+      'values': []
+    },
     'compare': []
   },
   'data': {
@@ -279,6 +277,7 @@ function onEnableInteraction(e) {
     select.tools.list.forEach(function (tool) {
       if (tool.enabled && tool.name !== 'all') {
         $(tool.target.id).addClass(settings.target.class.hidden);
+        // TODO :: BUG single selection active. console.log(tool.enabled)
       }
     });
     $(settings.target.id.buttons.stats).addClass(settings.target.class.tooltip);
@@ -292,9 +291,7 @@ function onEnableInteraction(e) {
     settings.map.removeInteraction(select.type.single.interaction);
     select.type.single.interaction = null;
     settings.map.removeInteraction(select.type.box.interaction);
-    // Viewer.removeOverlays(overlayArray);
     select.type.selected = null;
-
     settings.tool.active = false;
   }
   e.preventDefault();
@@ -430,34 +427,46 @@ function arraysEqual(arr1, arr2) {
   }
   return true;
 }
-var names = [];
-var values = [];
-var selection = [names, values];
+
+function shrink(names, ids, values, id) {
+  var index = ids.indexOf(id);
+  var nn = names.filter(function(e, i) {  return i !== index; });
+  var ni = ids.filter(function(e, i) {  return i !== index; });
+  var nv = values.filter(function(e, i) {  return i !== index; });
+  // console.log(names, ids, values);;
+  // console.log(names.splice(index, 1), ids.splice(index, 1), values.splice(index, 1), index);
+  return [nn, ni, nv];
+}
 function addTotal(names, values) {
-  console.log(names, values)
+  // console.log(names, values)
   var newNames = [];
   var newValues = [];
   for (var i = 0; i < names.length; i++) {
     if (newNames.indexOf(names[i]) === -1) {
-      console.log('create: ', (names[i]))
+      // console.log('create: ', (names[i]))
       newNames.push(names[i]);
-      console.log('create: ', values[i]);
-      newValues.push(values[i])
+      // console.log('create: ', values[i]);
+      newValues.push(values[i]);
     } else {
       var nvi = newNames.indexOf(names[i]);
-      console.log(i, newNames, names[i], newNames.indexOf(names[i]), newValues[nvi])
-      console.log('add value', values[i]);
+      // console.log(i, newNames, names[i], newNames.indexOf(names[i]), newValues[nvi])
+      // console.log('add value', values[i]);
       newValues[nvi] += values[i];
     }
   }
-  console.log(newNames, newValues)
+  // console.log(newNames, newValues)
   return [newNames, newValues];
 }
 
+
 function addInteraction() {
-  names = [];
-  values = [];
-  selection = [names, values];
+  ocharts.selections.total.names = [];
+  ocharts.selections.total.values = [];
+  ocharts.names = [];
+  ocharts.values = [];
+  ocharts.ids = [];
+
+  // selection = [names, values];
   settings.map.removeInteraction(select.type.single.interaction);
   settings.map.removeInteraction(select.type.singleBox.interaction);
   settings.map.removeInteraction(select.type.box.interaction);
@@ -474,29 +483,37 @@ function addInteraction() {
     select.selected.features = select.type.single.interaction.getFeatures();
 
     select.type.single.interaction.on('select', function (e) {
-      //console.clear();
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
+        var id = f.getId().split('.')[1];
         var val = parseInt(f.get(ocharts.fieldNames[0]), 10);
-        names.push(name);
-        values.push(val);
+        ocharts.selections.total.names.push(name);
+        ocharts.selections.total.values.push(val);
+        ocharts.names.push(name);
+        ocharts.ids.push(id);
+        ocharts.values.push(val);
       });
-      e.deselected.forEach(function (f, i) {
-        var name = f.getId().split('.')[0];
-        var val = parseInt(f.get(ocharts.fieldNames[0]), 10);
-        var ni = names.indexOf(name);
-        names.splice(ni, 1);
-        var vi = values.indexOf(val);
-        values.splice(vi, 1);
+      e.deselected.forEach(function (f) {
+        var id = f.getId().split('.')[1];
+        var res = shrink(ocharts.names, ocharts.ids, ocharts.values, id);
+        ocharts.selections.total.names = res[0];
+        ocharts.selections.total.values = res[2];
+        ocharts.names = res[0];
+        ocharts.ids = res[1];
+        ocharts.values = res[2];
       });
-      var tmp = addTotal(names, values);
-      //console.log(names);
-      //console.log(values);
+
+      var total = addTotal(ocharts.selections.total.names, ocharts.selections.total.values);
+      ocharts.selections.total.names = total[0];
+      ocharts.selections.total.values = total[1];
+      console.clear();
+      console.log(ocharts.selections.total.names, ocharts.selections.total.values);
+      console.log(ocharts.names, ocharts.ids, ocharts.values);
+
     }, this);
 
     // testCharts("urval 1", names, values);
     //testCharts("urval 2", ocharts.names[1], ochart.values[1]);
-
   } else if (select.tools.list[getIndex(select.tools.list, 'name', 'box')].active) {
     select.type.singleBox.interaction = new ol.interaction.Select();
     settings.map.addInteraction(select.type.singleBox.interaction);
@@ -596,8 +613,19 @@ function toggleType(button, active) {
  * @return {[type]} [description]
  */
 function initMapTool() {
-  settings.target.id.mapTools = inspect(settings.options, 'target', '#o-toolbar-maptools', settings.options.inspect.show.warn);
   settings.map = Viewer.getMap();
+  // Add eventlistner on propertychange if layer is visible.
+  settings.map.getLayers().forEach(function (l) {
+    l.on('propertychange', function (e) {
+      if (e.key === 'visible' && e.oldValue === false || e.oldValue === true) {
+        select.selected.features.clear();
+        ocharts.selections.total.names = [];
+        ocharts.selections.total.values = [];
+      }
+    });
+  });
+
+  settings.target.id.mapTools = inspect(settings.options, 'target', '#o-toolbar-maptools', settings.options.inspect.show.warn);
   select.layers = getSelectableVisible(settings.map.getLayers(), false);
 
   $(settings.target.class.map).on('enableInteraction', onEnableInteraction);
@@ -653,6 +681,7 @@ module.exports.init = function (optOptions) {
   pie.enabled = charts.includes('pie');
   polar.enabled = charts.includes('polar');
   bubble.enabled = charts.includes('bubble');
+
   if (hasEnabled(select.tools.list)) {
     initMapTool();
     $(settings.target.id.info).removeClass(settings.target.class.hidden);
