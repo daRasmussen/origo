@@ -225,7 +225,11 @@ var ocharts = {
       'ids': [],
       'values': []
     },
-    'compare': []
+    'compare': {
+      'selected': [],
+      'deselected': [],
+      'results': []
+    }
   },
   'data': {
     'sum': 0,
@@ -356,11 +360,11 @@ function createControl(target, name, toolTip) {
   addButton(target, name, toolTip);
 }
 /** TODO :: Add comments.
- * [render2 description]
+ * [render description]
  * @param {[type]} target [description]
  * @return {[type]} [description]
  */
-function render2(target) {
+function render(target) {
   if (hasEnabled(select.tools.list)) {
     createControl(target, settings.tool.toolName, select.tools.list[getIndex(select.tools.list, 'name', 'all')].toolTip);
   }
@@ -430,11 +434,9 @@ function arraysEqual(arr1, arr2) {
 
 function shrink(names, ids, values, id) {
   var index = ids.indexOf(id);
-  var nn = names.filter(function(e, i) {  return i !== index; });
-  var ni = ids.filter(function(e, i) {  return i !== index; });
-  var nv = values.filter(function(e, i) {  return i !== index; });
-  // console.log(names, ids, values);;
-  // console.log(names.splice(index, 1), ids.splice(index, 1), values.splice(index, 1), index);
+  var nn = names.filter(function (e, i) {  return i !== index; });
+  var ni = ids.filter(function (e, i) {  return i !== index; });
+  var nv = values.filter(function (e, i) {  return i !== index; });
   return [nn, ni, nv];
 }
 function addTotal(names, values) {
@@ -458,15 +460,53 @@ function addTotal(names, values) {
   return [newNames, newValues];
 }
 
-
+// function createSelection(names, ids, values) {
+//   return {
+//     'names': names,
+//     'ids': ids,
+//     'values': values
+//   };
+// }
+// function intersect(a, r) {
+//   return a.filter(function (e) {
+//     r.indexOf(e) > -1;
+//   });
+// }
+// function deselect(s, d) {
+//   var results = {
+//     'names': intersect(s[0].names, d[0].names),
+//     'ids': intersect(s[0].ids, d[0].ids),
+//     'values': intersect(s[0].values, d[0].values)
+//   };
+//   return results;
+// }
+function distribute(s, d) {
+  var r = [];
+  s.forEach(function (se) {
+    // console.log(d.length)
+    // if (d.length !== 0) {
+    //   d.forEach(function (de) {
+    //     if (se[0].getId() !== de[0].getId()) {
+    //       r.push(se);
+    //     }
+    //   });
+    // } else {
+    //   r.push(se);
+    // }
+  });
+  // console.log(s.length, d.length, r.length)
+  return r;
+}
 function addInteraction() {
+  ocharts.selections.compare.selected = [];
+  ocharts.selections.compare.deselected = [];
+  ocharts.selections.compare.results = [];
   ocharts.selections.total.names = [];
   ocharts.selections.total.values = [];
   ocharts.names = [];
   ocharts.values = [];
   ocharts.ids = [];
 
-  // selection = [names, values];
   settings.map.removeInteraction(select.type.single.interaction);
   settings.map.removeInteraction(select.type.singleBox.interaction);
   settings.map.removeInteraction(select.type.box.interaction);
@@ -483,6 +523,18 @@ function addInteraction() {
     select.selected.features = select.type.single.interaction.getFeatures();
 
     select.type.single.interaction.on('select', function (e) {
+      // TODO :: Save selected and deselected in lists.
+      ocharts.selections.compare.selected.push(e.selected);
+      if (e.deselected.length !== 0){
+        ocharts.selections.compare.deselected.push(e.deselected);
+      }
+      ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
+
+      // console.log(e.selected.length);
+      console.log('was selected: ', ocharts.selections.compare.selected.length);
+      // console.log(e.deselected.length);
+      console.log('was deselected: ', ocharts.selections.compare.deselected.length);
+
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
         var id = f.getId().split('.')[1];
@@ -504,11 +556,14 @@ function addInteraction() {
       });
 
       var total = addTotal(ocharts.selections.total.names, ocharts.selections.total.values);
+
       ocharts.selections.total.names = total[0];
       ocharts.selections.total.values = total[1];
-      console.clear();
-      console.log(ocharts.selections.total.names, ocharts.selections.total.values);
-      console.log(ocharts.names, ocharts.ids, ocharts.values);
+
+      // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
+      // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
+      // console.log(ocharts.names, ocharts.ids, ocharts.values);
+      // Add compare, store each selection in a seperate array.
 
     }, this);
 
@@ -618,9 +673,11 @@ function initMapTool() {
   settings.map.getLayers().forEach(function (l) {
     l.on('propertychange', function (e) {
       if (e.key === 'visible' && e.oldValue === false || e.oldValue === true) {
-        select.selected.features.clear();
-        ocharts.selections.total.names = [];
-        ocharts.selections.total.values = [];
+        if(select.selected.features) {
+          select.selected.features.clear();
+          ocharts.selections.total.names = [];
+          ocharts.selections.total.values = [];
+        }
       }
     });
   });
@@ -630,7 +687,7 @@ function initMapTool() {
 
   $(settings.target.class.map).on('enableInteraction', onEnableInteraction);
   // TODO :: Continue clean UP FIX:: ploygon, add Charts, add dynamic legend.
-  render2(settings.target.id.mapTools);
+  render(settings.target.id.mapTools);
   bindUIActions();
   settings.buttons.default = hasEnabled(select.tools.list) ? $(settings.target.html.buttons.hand) : $(settings.target.html.buttons.box);
 }
