@@ -51,6 +51,14 @@
     },
     {
       "name": "scaleLine"
+    },
+    {
+      "name": "editor",
+      "options": {
+        "isActive": true,
+        "autoSave": false,
+        "defaultLayer": "SK_SUMMER_MEET_PKT"
+      }
     }
   ],
   "pageSettings": {
@@ -111,9 +119,22 @@
   "source": {
     "local": {
       "url": "http://localhost/geoserver/wms"
+    },
+    "summer_meet_reader": {
+      "url": "https://kartserver.vasteras.se/geoserver/sk_summer_meet_reader/ows",
+      "workspace": "sk_summer_meet_reader"
+    },
+    "summer_meet_edit": {
+      "url": "https://kartserver.vasteras.se/geoserver/sk_summer_meet_edit/ows",
+      "workspace": "sk_summer_meet_edit"
     }
   },
   "groups": [
+    {
+      "name": "editeringslager",
+      "title": "Editeringslager",
+      "expanded": true
+    },
     {
       "name": "test",
       "title": "Test",
@@ -127,11 +148,81 @@
   ],
   "layers": [
     {
+      "name": "SK_SUMMER_MEET_PKT",
+      "title": "Symboler Editering",
+      "group": "editeringslager",
+      "queryable": true,
+      "source": "summer_meet_edit",
+      "style": "punkt",
+      "geometryType": "Point",
+      "geometryName": "SHAPE",
+      "type": "WFS",
+      "visible": true,
+      "editable": true,
+      "attributes": [
+        {
+          "name": "NAMN",
+          "title": "Namn: ",
+          "type": "text",
+          "maxLength": 50
+        },
+        {
+          "name": "KART_TYP",
+          "title": "Karta: ",
+          "type": "dropdown",
+          "options": [
+            "Boende",
+            "Besokande",
+            "Samverkan",
+            "Boende och Samverkan",
+            "Besokande och Samverkan",
+            "Boende och besokande",
+            "Boende och besokande och samverkan"
+          ]
+        },
+        {
+          "name": "SYMBOL",
+          "title": "Symbol: ",
+          "type": "text",
+          "id": "input-SYMBOL"
+        },
+        {
+          "name": "RESERV_SIFFROR",
+          "title": "Rotation",
+          "type": "rotation"
+        },
+        {
+          "name": "INFORMATION",
+          "title": "Information: ",
+          "type": "textarea",
+          "maxLength": 500
+        },
+        {
+          "name": "LANK",
+          "title": "Länk: ",
+          "type": "text",
+          "maxLength": 254
+        },
+        {
+          "name": "BILD",
+          "title": "Bild: ",
+          "type": "text",
+          "maxLength": 254
+        },
+        {
+          "name": "BILDCW",
+          "title": "Copyright: ",
+          "type": "text",
+          "maxLength": 254
+        }
+      ]
+    },
+    {
       "name": "origo-cities",
       "title": "Origokommuner",
       "group": "test",
       "source": "data/origo-cities-3857.geojson",
-      "style": "origo-logo",
+      "style": "punkt",
       "type": "GEOJSON",
       "attributes": [
           {
@@ -162,6 +253,20 @@
     }
   ],
   "styles": {
+    "punkt": [
+      [
+        {
+          "icon": {
+            "size": [
+              32,
+              32
+            ],
+            "src": "img/png/drop_blue.png"
+          },
+          "rFilter": "RESERV_SIFFROR"
+        }
+      ]
+    ],
       "mask": [
         [
           {

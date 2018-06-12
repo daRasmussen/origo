@@ -78,8 +78,8 @@ function onEnableInteraction(e) {
     };
 
     $('#o-measure-button button').removeClass('o-measure-button-true');
-    if(lengthTool){$('#o-measure-line-button').addClass('o-hidden');}
-    if(areaTool){$('#o-measure-polygon-button').addClass('o-hidden');}
+    if (lengthTool){$('#o-measure-line-button').addClass('o-hidden');}
+    if (areaTool){$('#o-measure-polygon-button').addClass('o-hidden');}
     $('#o-measure-button').addClass('tooltip');
 
     map.un('pointermove', pointerMoveHandler);
@@ -90,15 +90,14 @@ function onEnableInteraction(e) {
     vector.getSource().clear();
     setActive(false);
   }
-
 }
 
-isActive = state ? true : false;
-
+function setActive(state) {
+  return state;
 }
 
 function render(target) {
-  
+
   if(lengthTool || areaTool){
     var toolbar = utils.createElement('div', '', {
       id: 'o-measure-toolbar',
@@ -116,7 +115,7 @@ function render(target) {
     });
     $('#o-measure-toolbar').append(mb);
   }
-  
+
   if(lengthTool){
     var lb = utils.createButton({
       id: 'o-measure-line-button',
@@ -300,7 +299,7 @@ function formatLength(line) {
     output = (Math.round(length * 100) / 100) +
       ' ' + 'm';
   }
-  
+
   return output;
 };
 

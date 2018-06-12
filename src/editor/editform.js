@@ -1,5 +1,5 @@
 "use strict";
-
+var converter = require('../utils/converter');
 module.exports = function createForm(obj) {
   var id = obj.elId.slice(1);
   var cls = obj.cls || '';
@@ -10,7 +10,7 @@ module.exports = function createForm(obj) {
   var type = obj.type;
   var maxLength = obj.maxLength ? ' maxlength="' + obj.maxLength + '" ' : '';
   var dropdownOptions = obj.options || [];
-  var today = new Date(); 
+  var today = new Date();
   var isoDate = new Date(today.getTime() - (today.getTimezoneOffset() * 60000)).toISOString();
   var el;
   var checked;
@@ -18,6 +18,10 @@ module.exports = function createForm(obj) {
   switch (type) {
     case 'text':
       el = '<div><label>' + label + '</label><br><input type="text" id="' + id + '" value="' + val + '"' + maxLength + '></div>';
+      break;
+    case 'rotation':
+      var rad = converter.toRadians(val);
+      el = '<div><label>' + label + '</label><br><label>Grader: '+converter.toDegrees(rad)+'</label><br><label>Ange grader</label><input type="text" id="' + id + '" value="' + rad + '"' + maxLength + '></div>';
       break;
     case 'textarea':
       el = '<div><label>' + label + '</label><br><textarea id="' + id + '"' + maxLength + 'rows="3">' + val + '</textarea></div>';

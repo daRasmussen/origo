@@ -7,6 +7,7 @@ var validateUrl = require('./utils/validateurl');
 var styleFunctions = require('./style/stylefunctions');
 var replacer = require('../src/utils/replacer');
 var mapUtils = require('./maputils');
+var converter = require('../src/utils/converter');
 
 var baseUrl;
 
@@ -81,8 +82,11 @@ function createStyleOptions(styleParams) {
       case 'centerPoint':
         styleOptions.geometry = function(feature) {
           var coordinates = mapUtils.getCenter(feature.getGeometry());
+          var f = feature;
+          styleOptions.feature = f;
+          //console.log(feature);
           return new ol.geom.Point(coordinates);
-        }
+        };
         break;
       case 'endPoint':
         styleOptions.geometry = function(feature) {
@@ -113,6 +117,20 @@ function createStyleOptions(styleParams) {
   if (styleParams.hasOwnProperty('icon')) {
     if (styleParams.icon.hasOwnProperty('src')) {
       styleParams.icon.src = validateUrl(styleParams.icon.src, baseUrl);
+    }
+    if (styleParams.icon.hasOwnProperty('rotation')) {
+      // console.log(styleParams.icon.rotation)
+      if (styleParams.icon.rotation.hasOwnProperty('deg') && Object.keys(styleParams.icon.rotation).length < 2) {
+        // console.log('deg: ', converter.toRadians(styleParams.icon.rotation.deg));
+        styleParams.icon.rotation = converter.toRadians(styleParams.icon.rotation.deg);
+      }
+      if (styleParams.icon.rotation.hasOwnProperty('rad') && Object.keys(styleParams.icon.rotation).length < 2) {
+        // console.log('rad: ', styleParams.icon.rotation.rad)
+        styleParams.icon.rotation = styleParams.icon.rotation.rad;
+      }
+      if (Object.keys(styleParams.icon.rotation).length > 1) {
+        console.warn("Try using only one parameter for rotation deg or rad.");
+      }
     }
     styleOptions.image = new ol.style.Icon(styleParams.icon);
   }
@@ -193,9 +211,8 @@ function createStyleRule(options) {
 }
 
 function styleFunction(styleSettings, styleList, clusterStyleSettings, clusterStyleList) {
-  var s = styleSettings;
   var resolutions = Viewer.getResolutions();
-  var fn = function(feature, resolution) {
+  var fn = function (feature, resolution) {
     var scale = Viewer.getScale(resolution);
     var styleL;
     //If size is larger than, it is a cluster
@@ -238,10 +255,14 @@ function checkOptions(feature, scale, styleSettings, styleList, size) {
           styleList[j][index].getText().setText(replacer.replace(element.text.text, feature.getProperties()));
         }
       });
+      if (s[j][0].hasOwnProperty('rFilter')) {
+        styleList[j][0].getImage().setRotation(feature.get(s[j][0].rFilter))
+      }
       if (s[j][0].hasOwnProperty('filter')) {
         //find attribute vale between [] defined in styles
         var featAttr, expr, featMatch;
         var matches = s[j][0].filter.match(/\[(.*?)\]/);
+
         if (matches) {
           if (feature.get('features')) {
             feature = feature.get('features')[0];
