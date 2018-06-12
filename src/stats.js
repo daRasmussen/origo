@@ -481,21 +481,20 @@ function addTotal(names, values) {
 //   return results;
 // }
 function distribute(s, d) {
-  var r = [];
-  s.forEach(function (se) {
-    // console.log(d.length)
-    // if (d.length !== 0) {
-    //   d.forEach(function (de) {
-    //     if (se[0].getId() !== de[0].getId()) {
-    //       r.push(se);
-    //     }
-    //   });
-    // } else {
-    //   r.push(se);
-    // }
-  });
-  // console.log(s.length, d.length, r.length)
-  return r;
+  
+  if (d.length === 0) {
+    return s;
+  } else {
+    // remove deselected from select.
+    s.forEach(function(f) {
+      d.forEach(function (o) {
+        // console.log('selected: ', f[0].getId(), 'deselected: ', o[0].getId());
+      })
+    });
+  }
+  // console.log(d.length);
+  // console.log(s, d);
+  return;
 }
 function addInteraction() {
   ocharts.selections.compare.selected = [];
@@ -524,16 +523,17 @@ function addInteraction() {
 
     select.type.single.interaction.on('select', function (e) {
       // TODO :: Save selected and deselected in lists.
-      ocharts.selections.compare.selected.push(e.selected);
-      if (e.deselected.length !== 0){
-        ocharts.selections.compare.deselected.push(e.deselected);
-      }
+
+      ocharts.selections.compare.selected.splice(ocharts.selections.compare.selected.length, 0, e.selected);
+      ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
+
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
 
       // console.log(e.selected.length);
-      console.log('was selected: ', ocharts.selections.compare.selected.length);
+      console.log('selected: ', ocharts.selections.compare.selected.length);
       // console.log(e.deselected.length);
-      console.log('was deselected: ', ocharts.selections.compare.deselected.length);
+      console.log('deselected: ', ocharts.selections.compare.deselected.length);
+      // console.log('compare results: ', ocharts.selections.compare.results.length);
 
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
@@ -673,7 +673,7 @@ function initMapTool() {
   settings.map.getLayers().forEach(function (l) {
     l.on('propertychange', function (e) {
       if (e.key === 'visible' && e.oldValue === false || e.oldValue === true) {
-        if(select.selected.features) {
+        if (select.selected.features) {
           select.selected.features.clear();
           ocharts.selections.total.names = [];
           ocharts.selections.total.values = [];
