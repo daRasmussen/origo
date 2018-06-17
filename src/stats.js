@@ -481,20 +481,22 @@ function addTotal(names, values) {
 //   return results;
 // }
 function distribute(s, d) {
-  
+  // console.log(s.length, d.length)
   if (d.length === 0) {
     return s;
   } else {
     // remove deselected from select.
     s.forEach(function(f) {
       d.forEach(function (o) {
-        // console.log('selected: ', f[0].getId(), 'deselected: ', o[0].getId());
+
+         // console.log('selected: ', f[0].getId(), 'deselected: ', o[0].getId());
       })
     });
+    return ;
   }
   // console.log(d.length);
   // console.log(s, d);
-  return;
+  // return;
 }
 function addInteraction() {
   ocharts.selections.compare.selected = [];
@@ -524,15 +526,20 @@ function addInteraction() {
     select.type.single.interaction.on('select', function (e) {
       // TODO :: Save selected and deselected in lists.
 
-      ocharts.selections.compare.selected.splice(ocharts.selections.compare.selected.length, 0, e.selected);
-      ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
+      if (e.selected.length > 0 ) {
+        ocharts.selections.compare.selected.splice(ocharts.selections.compare.selected.length, 0, e.selected);
+      } else {
+        ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
+      }
 
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
 
       // console.log(e.selected.length);
-      console.log('selected: ', ocharts.selections.compare.selected.length);
+      console.log(ocharts.selections.compare.selected);
+      console.log(ocharts.selections.compare.deselected)
+      // console.log('selected: ', ocharts.selections.compare.selected);
       // console.log(e.deselected.length);
-      console.log('deselected: ', ocharts.selections.compare.deselected.length);
+      // console.log('deselected: ', ocharts.selections.compare.deselected.length);
       // console.log('compare results: ', ocharts.selections.compare.results.length);
 
       e.selected.forEach(function (f) {
