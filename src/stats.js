@@ -460,43 +460,31 @@ function addTotal(names, values) {
   return [newNames, newValues];
 }
 
-// function createSelection(names, ids, values) {
-//   return {
-//     'names': names,
-//     'ids': ids,
-//     'values': values
-//   };
-// }
-// function intersect(a, r) {
-//   return a.filter(function (e) {
-//     r.indexOf(e) > -1;
-//   });
-// }
-// function deselect(s, d) {
-//   var results = {
-//     'names': intersect(s[0].names, d[0].names),
-//     'ids': intersect(s[0].ids, d[0].ids),
-//     'values': intersect(s[0].values, d[0].values)
-//   };
-//   return results;
-// }
+/**
+ * This method distribtes what elements are selected;
+ */
 function distribute(s, d) {
-  // console.log(s.length, d.length)
-  if (d.length === 0) {
+  if (s.length === d.length){
+    return [];
+  } else if(d.length === 0 && s.length > 0) {
     return s;
   } else {
-    // remove deselected from select.
-    s.forEach(function(f) {
-      d.forEach(function (o) {
-
-         // console.log('selected: ', f[0].getId(), 'deselected: ', o[0].getId());
-      })
+    var r = [];
+    s.forEach(function(se) {
+      se.forEach(function(sef) {
+        var sf = sef.getId();
+        d.forEach(function(de){
+          de.forEach(function(def) {
+            var df = def.getId();
+            if(sf !== df && !r.includes(sef)){
+              r.push(sef);
+            }
+          })
+        });
+      });
     });
-    return ;
+    return r;
   }
-  // console.log(d.length);
-  // console.log(s, d);
-  // return;
 }
 function addInteraction() {
   ocharts.selections.compare.selected = [];
@@ -535,8 +523,9 @@ function addInteraction() {
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
 
       // console.log(e.selected.length);
-      console.log(ocharts.selections.compare.selected);
-      console.log(ocharts.selections.compare.deselected)
+      console.log('selected: ', ocharts.selections.compare.selected);
+      console.log('deselected: ', ocharts.selections.compare.deselected);
+      console.log('results: ', ocharts.selections.compare.results);
       // console.log('selected: ', ocharts.selections.compare.selected);
       // console.log(e.deselected.length);
       // console.log('deselected: ', ocharts.selections.compare.deselected.length);
