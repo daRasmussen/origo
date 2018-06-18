@@ -464,27 +464,6 @@ function addTotal(names, values) {
   return [newNames, newValues];
 }
 
-function compress(a) {
-  var com = [];
-  var co = a.slice(0);
-  for (var i = 0; i < a.length; i++) {
-    var c = 0;
-    for (var w = 0; w < co.length; w++) {
-      if (a[i] === co[w]) {
-        c++;
-        delete co[w];
-      }
-    }
-    if (c > 0) {
-      var o = Object();
-      o.value = a[i];
-      o.count = c;
-      com.push(o);
-    }
-  }
-  return com;
-}
-
 /**
  * TODO :: Write comments
  * [distribute description] This method distribtes what elements are selected;
@@ -494,29 +473,29 @@ function compress(a) {
  */
 function distribute(s, d) {
   var r = [];
-  if (s.length === d.length) {
+  if (s.length === d.length || d.length > 0) {
     return [];
   } else if (d.length === 0 && s.length > 0) {
     s.forEach(function (se) {
       r.push(se);
     });
     return r;
-  } else {
+  }  else {
     s.forEach(function(se) {
       se.forEach(function(sef) {
         var sf = sef.getId();
-        var sfx = sef.get('geom').xp;
         d.forEach(function(de){
           var sub = [];
           de.forEach(function(def) {
             var df = def.getId();
-            var dfx = def.get('geom').xp;
             // TODO :: SORT CLICK SAME get Count
-            if(sfx !== dfx && sf !== df){
+            if(sf !== df){
+              console.log('adds to result: ', sef);
               sub.push(sef);
+            } else {
+              console.log('removes from result: ', sef);
             }
           });
-          // console.log(sub, dub);
           if (sub.length !== 0) {
             r.push(sub);
           }
@@ -552,37 +531,22 @@ function addInteraction() {
     select.selected.features = select.type.single.interaction.getFeatures();
 
     select.type.single.interaction.on('select', function (e) {
-      // TODO :: Save selected and deselected in lists.
-
       if (e.selected.length > 0 && window.event.shiftKey) {
         ocharts.selections.compare.selected.splice(ocharts.selections.compare.selected.length, 0, e.selected);
       } else if (window.event.shiftKey) {
         ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
       }
-
-      // else if (!window.event.shiftKey || ocharts.selections.compare.selected.length === ocharts.selections.compare.deselected.length) {
-      //   ocharts.selections.compare.selected = [];
-      //   ocharts.selections.compare.deselected = [];
-      //   ocharts.selections.compare.results = [];
-      // }
-
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
       if (ocharts.selections.compare.results.length === 0) {
           ocharts.selections.compare.selected = [];
           ocharts.selections.compare.deselected = [];
+          select.selected.features.clear();
       }
-      // console.log(e.selected.length);
-      // console.log(window.event.shiftKey);
-      // console.log(e.selected);
 
-      console.log('selected: ', ocharts.selections.compare.selected);
-      console.log('deselected: ', ocharts.selections.compare.deselected);
-      console.log('results: ', ocharts.selections.compare.results);
+      console.log('compare selected: ', ocharts.selections.compare.selected);
+      console.log('compare deselected: ', ocharts.selections.compare.deselected);
+      console.log('compare results: ', ocharts.selections.compare.results);
 
-      // console.log('selected: ', ocharts.selections.compare.selected);
-      // console.log(e.deselected.length);
-      // console.log('deselected: ', ocharts.selections.compare.deselected.length);
-      // console.log('compare results: ', ocharts.selections.compare.results.length);
 
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
@@ -712,6 +676,7 @@ function toggleType(button, active) {
   }
   addInteraction();
 }
+
 /** TODO :: Write comments
  * [initMapTool description]
  * @return {[type]} [description]
