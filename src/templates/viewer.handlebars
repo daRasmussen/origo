@@ -4,46 +4,7 @@
     <div id="o-toolbar-maptools" class="o-toolbar-vertical o-toolbar-maptools"></div>
     <div id="o-toolbar-misc" class="o-toolbar-vertical o-toolbar-misc"></div>
   </div>
-  <div id="o-tools-bottom" class="o-tools-bottom" style="width: 1%;">
-    <div id="o-stats-info" class="o-hidden" style="width: 200px; margin-left:40px; margin-bottom:40px;">
-      <div class="tab">
-        <!-- <button class="tablinks" onclick="openDiagram(event, 'innehall')">Symbolförteckning</button> -->
-        <button class="tablinks" onclick="openDiagram(event, 'samfat')">Sammanfattning</button>
-        <button class="tablinks" onclick="openDiagram(event, 'Cirkel')">Cirkel</button>
-        <button class="tablinks" onclick="openDiagram(event, 'Stapel')">Stapel</button>
-        <button class="tablinks" onclick="openDiagram(event, 'innehall')">InneHåll</button>
-        <button class="tablinks" onclick="closeDiagram(event)"> Stäng </button>
-      </div>
-      <div id="innehall" class="tabcontent" style="position: relative; height:600px; width:800px; background-color:white">
-        <canvas id="myChart"></canvas>
-      </div>
-      <div id="samfat" class="tabcontent" style="background-color:white">
-        <!-- <svg class="d3LinearLegend" width="960" height="100"><g transform="translate(360,250)"></svg> -->
-          <table id="statsSamf">
-          <tr>
-            <th>Funktion</th>
-            <th>Värde</th>
-          </tr>
-          <tr>
-            <td>Summa</td>
-            <td id="sumVal">0</td>
-          </tr>
-          <tr>
-            <td>Medelvärde</td>
-            <td id="medVal">0.00</td>
-          </tr>
-        </table>
-      </div>
-      <div id="Cirkel" class="tabcontent" style="background-color:white">
-        <div id="circleChart"></div>
-      </div>
-      <div id="Stapel" class="tabcontent" style="background-color:white">
-        <div id="barChart"></div>
-      </div>
-      <div id="Kartesiskt" class="tabcontent" style="background-color:white">
-        <div id="kartesisktChart"></div>
-      </div>
-    </div>
+  <div id="o-tools-bottom" class="o-tools-bottom" style="width: 100%;">
     <div id="o-progress"></div>
   </div>
   <div id="o-footer" class="o-footer">
