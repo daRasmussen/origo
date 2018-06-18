@@ -521,6 +521,7 @@ function toData(a) {
   });
   return data;
 }
+
 function addInteraction() {
   ocharts.selections.compare.selected = [];
   ocharts.selections.compare.deselected = [];
@@ -564,7 +565,7 @@ function addInteraction() {
       // console.log('compare selected: ', ocharts.selections.compare.selected);
       // console.log('compare deselected: ', ocharts.selections.compare.deselected);
       // console.log('compare results: ', ocharts.selections.compare.results);
-      console.log('compare data: ', ocharts.selections.compare.data);
+      // console.log('compare data: ', ocharts.selections.compare.data);
 
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
@@ -591,7 +592,7 @@ function addInteraction() {
       ocharts.selections.total.names = total[0];
       ocharts.selections.total.values = total[1];
 
-       console.log(ocharts.selections.total.names, ocharts.selections.total.values);
+      // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
       // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
       // console.log(ocharts.names, ocharts.ids, ocharts.values);
       // Add compare, store each selection in a seperate array.
@@ -601,7 +602,21 @@ function addInteraction() {
     // testCharts("urval 1", names, values);
     //testCharts("urval 2", ocharts.names[1], ochart.values[1]);
   } else if (select.tools.list[getIndex(select.tools.list, 'name', 'box')].active) {
-    select.type.singleBox.interaction = new ol.interaction.Select();
+    ocharts.selections.compare.selected = [];
+    ocharts.selections.compare.deselected = [];
+    ocharts.selections.compare.results = [];
+    ocharts.selections.total.names = [];
+    ocharts.selections.total.values = [];
+    ocharts.names = [];
+    ocharts.values = [];
+    ocharts.ids = [];
+
+    select.type.singleBox.interaction = new ol.interaction.Select({
+      condition: ol.events.condition.click,
+      toggleCondition: ol.events.condition.shiftKeyOnly,
+      multi: true,
+      layers: getSelectableVisible(settings.map.getLayers(), false)
+    });
     settings.map.addInteraction(select.type.singleBox.interaction);
     select.selected.features = select.type.singleBox.interaction.getFeatures();
     select.type.box.interaction = new ol.interaction.DragBox({
@@ -609,14 +624,38 @@ function addInteraction() {
     });
     settings.map.addInteraction(select.type.box.interaction);
 
-    select.type.box.interaction.on('boxend', function () {
+
+    select.type.box.interaction.on('boxend', function (e) {
+      console.log(e.add)
       var extent = select.type.box.interaction.getGeometry().getExtent();
       select.layers.forEach(function (layer) {
         layer.getSource().forEachFeatureIntersectingExtent(extent, function (feature) {
           select.selected.features.push(feature);
+
+          var name = feature.getId().split('.')[0];
+          var id = feature.getId().split('.')[1];
+          var val = parseInt(feature.get(ocharts.fieldNames[0]), 10);
+          ocharts.selections.total.names.push(name);
+          ocharts.selections.total.values.push(val);
+          ocharts.names.push(name);
+          ocharts.ids.push(id);
+          ocharts.values.push(val);
+
         });
       });
+      var total = addTotal(ocharts.selections.total.names, ocharts.selections.total.values);
+
+      ocharts.selections.total.names = total[0];
+      ocharts.selections.total.values = total[1];
+
+      console.log(ocharts.selections.total.names, ocharts.selections.total.values);
     });
+
+    select.selected.features.on(['remove'], function() {
+        select.selected.features.clear();
+        // console.log('removes all: ')
+      });
+
   } else {
     settings.map.removeInteraction(select.type.single.interaction);
     settings.map.removeInteraction(select.type.singleBox.interaction);
