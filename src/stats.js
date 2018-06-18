@@ -464,21 +464,27 @@ function addTotal(names, values) {
  * This method distribtes what elements are selected;
  */
 function distribute(s, d) {
-  if (s.length === d.length){
+  var r = [];
+  if (s.length === d.length) {
     return [];
   } else if(d.length === 0 && s.length > 0) {
-    return s;
+    s.forEach(function(se) {
+      r.push(se[0]);
+    });
+    return r;
   } else {
-    var r = [];
     s.forEach(function(se) {
       se.forEach(function(sef) {
         var sf = sef.getId();
         d.forEach(function(de){
           de.forEach(function(def) {
             var df = def.getId();
-            if(sf !== df && !r.includes(sef)){
+            // TODO :: SORT CLICK SAME 
+            if(sf !== df && !r.includes(sef)) {
               r.push(sef);
             }
+
+
           })
         });
       });
@@ -514,18 +520,28 @@ function addInteraction() {
     select.type.single.interaction.on('select', function (e) {
       // TODO :: Save selected and deselected in lists.
 
-      if (e.selected.length > 0 ) {
+      if (e.selected.length > 0 && window.event.shiftKey) {
         ocharts.selections.compare.selected.splice(ocharts.selections.compare.selected.length, 0, e.selected);
-      } else {
+      } else if (window.event.shiftKey) {
         ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
       }
+
+      // else if (!window.event.shiftKey || ocharts.selections.compare.selected.length === ocharts.selections.compare.deselected.length) {
+      //   ocharts.selections.compare.selected = [];
+      //   ocharts.selections.compare.deselected = [];
+      //   ocharts.selections.compare.results = [];
+      // }
 
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
 
       // console.log(e.selected.length);
+      // console.log(window.event.shiftKey);
+      // console.log(e.selected);
+
       console.log('selected: ', ocharts.selections.compare.selected);
       console.log('deselected: ', ocharts.selections.compare.deselected);
       console.log('results: ', ocharts.selections.compare.results);
+
       // console.log('selected: ', ocharts.selections.compare.selected);
       // console.log(e.deselected.length);
       // console.log('deselected: ', ocharts.selections.compare.deselected.length);
