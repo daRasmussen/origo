@@ -143,8 +143,11 @@ var select = {
           'click': function (e) {
             settings.tool.active = settings.tool.active ? false : true;
             toogleInteraction(settings.target.class.map, settings.interactions.default, settings.interactions.tool);
-              toggleType($(settings.target.html.buttons.hand), false);
-              toggleType($(settings.target.html.buttons.square), false);
+              select.tools.list[getIndex(select.tools.list, 'name', 'single')].active = false;
+              toggleType($(settings.target.html.buttons.hand), select.tools.list[getIndex(select.tools.list, 'name', 'single')].active);
+              select.tools.list[getIndex(select.tools.list, 'name', 'box')].active = false;
+              toggleType($(settings.target.html.buttons.square), select.tools.list[getIndex(select.tools.list, 'name', 'box')].active);
+
               settings.map.removeInteraction(select.type.single.interaction);
               settings.map.removeInteraction(select.type.singleBox.interaction);
               settings.map.removeInteraction(select.type.box.interaction);
@@ -562,10 +565,11 @@ function addInteraction() {
           select.selected.features.clear();
       }
 
+      console.log('SINGLE SELECTION')
       // console.log('compare selected: ', ocharts.selections.compare.selected);
       // console.log('compare deselected: ', ocharts.selections.compare.deselected);
       // console.log('compare results: ', ocharts.selections.compare.results);
-      // console.log('compare data: ', ocharts.selections.compare.data);
+      console.log('compare data: ', ocharts.selections.compare.data);
 
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
@@ -592,7 +596,7 @@ function addInteraction() {
       ocharts.selections.total.names = total[0];
       ocharts.selections.total.values = total[1];
 
-      // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
+      console.log(ocharts.selections.total.names, ocharts.selections.total.values);
       // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
       // console.log(ocharts.names, ocharts.ids, ocharts.values);
       // Add compare, store each selection in a seperate array.
@@ -626,12 +630,10 @@ function addInteraction() {
 
 
     select.type.box.interaction.on('boxend', function (e) {
-      console.log(e.add)
       var extent = select.type.box.interaction.getGeometry().getExtent();
       select.layers.forEach(function (layer) {
         layer.getSource().forEachFeatureIntersectingExtent(extent, function (feature) {
           select.selected.features.push(feature);
-
           var name = feature.getId().split('.')[0];
           var id = feature.getId().split('.')[1];
           var val = parseInt(feature.get(ocharts.fieldNames[0]), 10);
@@ -640,7 +642,6 @@ function addInteraction() {
           ocharts.names.push(name);
           ocharts.ids.push(id);
           ocharts.values.push(val);
-
         });
       });
       var total = addTotal(ocharts.selections.total.names, ocharts.selections.total.values);
@@ -648,6 +649,7 @@ function addInteraction() {
       ocharts.selections.total.names = total[0];
       ocharts.selections.total.values = total[1];
 
+      console.log('BOX SELECTION');
       console.log(ocharts.selections.total.names, ocharts.selections.total.values);
     });
 
@@ -725,14 +727,15 @@ function toogleInteraction(target, featureInfo, statsInfo) {
  * @return {[type]} [description]
  */
 function toggleType(button, active) {
-  // console.log(button, active)
   if (active) {
     button.addClass(settings.target.class.visible.stats);
+
   } else {
     button.removeClass(settings.target.class.visible.stats);
   }
   addInteraction();
 }
+
 
 /** TODO :: Write comments
  * [initMapTool description]
