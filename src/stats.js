@@ -554,16 +554,16 @@ function addInteraction() {
       }
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
       ocharts.selections.compare.data = toData(ocharts.selections.compare.results);
-      if (ocharts.selections.compare.results.length === 0) {
+      if (ocharts.selections.compare.results.length === 0 && window.event.shiftKey) {
           ocharts.selections.compare.selected = [];
           ocharts.selections.compare.deselected = [];
           ocharts.selections.compare.data = [];
           select.selected.features.clear();
       }
 
-      console.log('compare selected: ', ocharts.selections.compare.selected);
-      console.log('compare deselected: ', ocharts.selections.compare.deselected);
-      console.log('compare results: ', ocharts.selections.compare.results);
+      // console.log('compare selected: ', ocharts.selections.compare.selected);
+      // console.log('compare deselected: ', ocharts.selections.compare.deselected);
+      // console.log('compare results: ', ocharts.selections.compare.results);
       console.log('compare data: ', ocharts.selections.compare.data);
 
       e.selected.forEach(function (f) {
@@ -591,7 +591,7 @@ function addInteraction() {
       ocharts.selections.total.names = total[0];
       ocharts.selections.total.values = total[1];
 
-      // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
+       console.log(ocharts.selections.total.names, ocharts.selections.total.values);
       // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
       // console.log(ocharts.names, ocharts.ids, ocharts.values);
       // Add compare, store each selection in a seperate array.
