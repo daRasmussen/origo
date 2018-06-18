@@ -62,6 +62,7 @@ var settings = {
   'target': { // More General targets, where to putt default maybee in buttons?
     'id': {
       'mapTools': '#o-toolbar-maptools',
+      'toolLeft': '#o-tools-left',
       'buttons': {
         'stats': '#o-stats-button',
         'hand': '#o-stats-hand-button',
@@ -172,7 +173,8 @@ var select = {
             select.type.selected = 'single';
             select.tools.list[getIndex(select.tools.list, 'name', 'single')].active = select.tools.list[getIndex(select.tools.list, 'name', 'single')].active ? false : true;
             toggleType($(settings.target.html.buttons.hand), select.tools.list[getIndex(select.tools.list, 'name', 'single')].active);
-
+            select.tools.list[getIndex(select.tools.list, 'name', 'box')].active = false;
+            toggleType($(settings.target.html.buttons.square), select.tools.list[getIndex(select.tools.list, 'name', 'box')].active);
             $(settings.target.html.buttons.hand).blur();
             e.preventDefault();
           },
@@ -201,6 +203,8 @@ var select = {
             select.type.selected = 'box';
             select.tools.list[getIndex(select.tools.list, 'name', 'box')].active = select.tools.list[getIndex(select.tools.list, 'name', 'box')].active ? false : true;
             toggleType($(settings.target.html.buttons.square), select.tools.list[getIndex(select.tools.list, 'name', 'box')].active);
+            select.tools.list[getIndex(select.tools.list, 'name', 'single')].active = false;
+            toggleType($(settings.target.html.buttons.hand), select.tools.list[getIndex(select.tools.list, 'name', 'single')].active);
             $(settings.target.html.buttons.square).blur();
             e.preventDefault();
           },
@@ -218,6 +222,27 @@ var select = {
 };
 
 var ocharts = {
+  'tools': [
+    {
+      'name': 'ocharts',
+      'enabled': false,
+      'active': false,
+      'icon': 'ocharts',
+      'toolTip': 'Visa diagram',
+      'tipPlace': '',
+      'target': {
+        'id': '#o-ocharts-button',
+        'html': '#o-ocharts-button button'
+      },
+      'events': {
+        'click': function (e) {
+
+          $(settings.target.html.buttons.stats).blur();
+          e.preventDefault();
+        }
+      }
+    }
+  ],
   'fieldNames': [],
   'names': [],
   'ids': [],
@@ -368,11 +393,9 @@ function createControl(target, name, toolTip) {
  * @param {[type]} target [description]
  * @return {[type]} [description]
  */
-function render(target) {
-  if (hasEnabled(select.tools.list)) {
-    createControl(target, settings.tool.toolName, select.tools.list[getIndex(select.tools.list, 'name', 'all')].toolTip);
-  }
-  select.tools.list.forEach(function (tool) {
+function render(target, tools) {
+  createControl(target, settings.tool.toolName, select.tools.list[getIndex(select.tools.list, 'name', 'all')].toolTip);
+  tools.forEach(function (tool) {
     if (tool.enabled) {
       createTool(settings.tool.toolName, tool.icon, tool.toolTip, tool.tipPlace);
     }
@@ -761,7 +784,8 @@ function initMapTool() {
 
   $(settings.target.class.map).on('enableInteraction', onEnableInteraction);
   // TODO :: Continue clean UP FIX:: ploygon, add Charts, add dynamic legend.
-  render(settings.target.id.mapTools);
+  render(settings.target.id.mapTools, select.tools.list);
+  //render(settings.target.id.toolLeft, ocharts.tools.list);
   bindUIActions();
   settings.buttons.default = hasEnabled(select.tools.list) ? $(settings.target.html.buttons.hand) : $(settings.target.html.buttons.box);
 }
