@@ -86,11 +86,18 @@
     "mdk_stat": {
       "url": "https://www.malardalskartan.se/geoserver/mdk_stat/ows"
     },
+    "mdk_statistik": {
+      "url": "https://www.malardalskartan.se/geoserver/mdk_statistik/ows"
+    },
     "basemap": {
       "url": "https://www.malardalskartan.se/geowebcache/service/wmts/"
     }
   },
   "groups": [
+    {
+      "name": "wmsg",
+      "title": "WMS TEST"
+    },
     {
       "name": "rutor",
       "title": "Rutor",
@@ -131,6 +138,22 @@
     }
   ],
   "layers": [
+    {
+      "name": "aktiebolag",
+      "id": "dagsekt_aktiebolag_ej_offentligt_agda_",
+      "visible": false,
+      "title": "Aktiebolag",
+      "group": "wmsg",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": [
+        {
+          "name": "total"
+        }
+      ]
+    },
     {
       "name": "kvinnor_0_ar___5_ar_",
       "id": "bef_alder_kvinnor_0_ar___5_ar_",

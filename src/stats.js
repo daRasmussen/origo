@@ -413,9 +413,13 @@ function getSelectableVisible(a, v) {
     });
     return r;
   }
+  // TODO:: Add support if layer is instaceof ol.layer.tile
   a.forEach(function (l) {
     if (l instanceof ol.layer.Vector) {
       r.push(l);
+    } else if (l instanceof ol.layer.Tile) {
+      // do something epic.
+      // WMS do request via url, send coordinates and resolution etc..
     }
   });
   return r;
@@ -460,32 +464,62 @@ function addTotal(names, values) {
   return [newNames, newValues];
 }
 
+function compress(a) {
+  var com = [];
+  var co = a.slice(0);
+  for (var i = 0; i < a.length; i++) {
+    var c = 0;
+    for (var w = 0; w < co.length; w++) {
+      if (a[i] === co[w]) {
+        c++;
+        delete co[w];
+      }
+    }
+    if (c > 0) {
+      var o = Object();
+      o.value = a[i];
+      o.count = c;
+      com.push(o);
+    }
+  }
+  return com;
+}
+
 /**
- * This method distribtes what elements are selected;
+ * TODO :: Write comments
+ * [distribute description] This method distribtes what elements are selected;
+ * @param {[type]} s [description]
+ * @param {[type]} d [description]
+ * @return {[type]} [description]
  */
 function distribute(s, d) {
   var r = [];
   if (s.length === d.length) {
     return [];
-  } else if(d.length === 0 && s.length > 0) {
-    s.forEach(function(se) {
-      r.push(se[0]);
+  } else if (d.length === 0 && s.length > 0) {
+    s.forEach(function (se) {
+      r.push(se);
     });
     return r;
   } else {
     s.forEach(function(se) {
       se.forEach(function(sef) {
         var sf = sef.getId();
+        var sfx = sef.get('geom').xp;
         d.forEach(function(de){
+          var sub = [];
           de.forEach(function(def) {
             var df = def.getId();
-            // TODO :: SORT CLICK SAME 
-            if(sf !== df && !r.includes(sef)) {
-              r.push(sef);
+            var dfx = def.get('geom').xp;
+            // TODO :: SORT CLICK SAME get Count
+            if(sfx !== dfx && sf !== df){
+              sub.push(sef);
             }
-
-
-          })
+          });
+          // console.log(sub, dub);
+          if (sub.length !== 0) {
+            r.push(sub);
+          }
         });
       });
     });
@@ -533,7 +567,10 @@ function addInteraction() {
       // }
 
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
-
+      if (ocharts.selections.compare.results.length === 0) {
+          ocharts.selections.compare.selected = [];
+          ocharts.selections.compare.deselected = [];
+      }
       // console.log(e.selected.length);
       // console.log(window.event.shiftKey);
       // console.log(e.selected);
