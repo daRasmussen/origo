@@ -228,7 +228,8 @@ var ocharts = {
     'compare': {
       'selected': [],
       'deselected': [],
-      'results': []
+      'results': [],
+      'data': []
     }
   },
   'data': {
@@ -505,6 +506,21 @@ function distribute(s, d) {
     return r;
   }
 }
+function toData(a) {
+  var data = [];
+  var names, values;
+  a.forEach(function(e){
+    names = []; values = [];
+    e.forEach(function(i) {
+      var name = i.getId().split('.')[0];
+      names.push(name);
+      var val = parseInt(i.get(ocharts.fieldNames[0]), 10);
+      values.push(val);
+    });
+    data.push(names, values);
+  });
+  return data;
+}
 function addInteraction() {
   ocharts.selections.compare.selected = [];
   ocharts.selections.compare.deselected = [];
@@ -537,16 +553,18 @@ function addInteraction() {
         ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
       }
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
+      ocharts.selections.compare.data = toData(ocharts.selections.compare.results);
       if (ocharts.selections.compare.results.length === 0) {
           ocharts.selections.compare.selected = [];
           ocharts.selections.compare.deselected = [];
+          ocharts.selections.compare.data = [];
           select.selected.features.clear();
       }
 
       console.log('compare selected: ', ocharts.selections.compare.selected);
       console.log('compare deselected: ', ocharts.selections.compare.deselected);
       console.log('compare results: ', ocharts.selections.compare.results);
-
+      console.log('compare data: ', ocharts.selections.compare.data);
 
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
