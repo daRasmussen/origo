@@ -150,13 +150,6 @@ var select = {
         },
         'events': {
           'click': function (e) {
-
-            // select.tools.list.forEach(function(tool) {
-            //   if(!tool.control){
-            //     tool.active = false;
-            //     toggleType2($(tool.target.html), tool.active, tool.target.visible);
-            //   }
-            // });
             deactiveTool(select.tools.list);
             var id = '#' + this.id + ' button';
             getControl(select.tools.list).active = getControl(select.tools.list).active ? false : true;
