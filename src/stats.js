@@ -186,7 +186,8 @@ var select = {
         'control': false,
         'target': {
           'id': '#o-stats-hand-button',
-          'html': '#o-stats-hand-button button'
+          'html': '#o-stats-hand-button button',
+          'visible': 'o-stats-hand-button-true'
         },
         'events': {
           'click': function (e) {
@@ -217,7 +218,8 @@ var select = {
         'control': false,
         'target': {
           'id': '#o-stats-square-button',
-          'html': '#o-stats-square-button button'
+          'html': '#o-stats-square-button button',
+          'visible': 'o-stats-square-button-true'
         },
         'events': {
           'click': function (e) {
@@ -319,7 +321,14 @@ function onEnableInteraction(e) {
   if (e.interaction === settings.interactions.tool) {
     console.log('Interaction enabled: ');
     $(getControl(select.tools.list).target.html).addClass(getControl(select.tools.list).target.visible);
-
+    if (getControl(select.tools.list) instanceof Object ) {
+      select.tools.list.forEach(function(tool) {
+        if (tool.enabled && !tool.control) {
+          console.log($(tool.target.id), tool.target.id, tool.target.visible)
+           $(tool.target.id).removeClass(tool.target.visible);
+        }
+      });
+    }
     $(getControl(select.tools.list).target.id).removeClass(settings.target.class.tooltip);
     getControl(select.tools.list).active = true;
 
@@ -381,7 +390,7 @@ function updateInfo(name, helpMsg, coords) {
  * @return {[type]} [description]
  */
 function createTool(toolName, icon, toolTip, tipPlace) {
-  // console.log('creates:  ', '#o-' + toolName + '-toolbar', icon, toolTip, tipPlace)
+  console.log('creates:  ', '#o-' + toolName + '-toolbar', icon, toolTip, tipPlace)
   $('#o-' + toolName + '-toolbar').append(Utils.createButton({
     id: 'o-' + toolName + '-' + icon + '-button',
     cls: 'o-' + toolName + '-type-button',
@@ -433,14 +442,13 @@ function render(target, tools) {
   createControl(target, settings.tool.toolName, select.tools.list[getIndex(select.tools.list, 'name', 'all')].toolTip);
   tools.forEach(function (tool) {
     if (tool.enabled) {
-      createTool(settings.tool.toolName, tool.icon, tool.toolTip, tool.tipPlace);
+      createTool('select', tool.icon, tool.toolTip, tool.tipPlace);
     }
   });
 }
 function render2(target, tools) {
-  tools.forEach(function(tool) {
+  tools.forEach(function (tool) {
     if (tool.enabled && !tool.control) {
-    // console.log(tool)
       createTool(tool.name, tool.icon, tool.toolTip, tool.tipPlace);
     } else {
       createControl(target, tool.name, tool.toolTip);
