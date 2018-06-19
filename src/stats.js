@@ -222,27 +222,29 @@ var select = {
 };
 
 var ocharts = {
-  'tools': [
-    {
-      'name': 'ocharts',
-      'enabled': false,
-      'active': false,
-      'icon': 'ocharts',
-      'toolTip': 'Visa diagram',
-      'tipPlace': '',
-      'target': {
-        'id': '#o-ocharts-button',
-        'html': '#o-ocharts-button button'
-      },
-      'events': {
-        'click': function (e) {
+  'tools': {
+    'list': [
+      {
+        'name': 'ocharts',
+        'enabled': false,
+        'active': false,
+        'icon': 'ocharts-show',
+        'toolTip': 'Visa diagram',
+        'tipPlace': '',
+        'target': {
+          'id': '#o-ocharts-button',
+          'html': '#o-ocharts-button button'
+        },
+        'events': {
+          'click': function (e) {
 
-          $(settings.target.html.buttons.stats).blur();
-          e.preventDefault();
+            $(settings.target.html.buttons.stats).blur();
+            e.preventDefault();
+          }
         }
       }
-    }
-  ],
+    ]
+  },
   'fieldNames': [],
   'names': [],
   'ids': [],
@@ -784,8 +786,11 @@ function initMapTool() {
 
   $(settings.target.class.map).on('enableInteraction', onEnableInteraction);
   // TODO :: Continue clean UP FIX:: ploygon, add Charts, add dynamic legend.
+
   render(settings.target.id.mapTools, select.tools.list);
+  createControl(settings.target.id.toolLeft, 'ocharts')
   //render(settings.target.id.toolLeft, ocharts.tools.list);
+
   bindUIActions();
   settings.buttons.default = hasEnabled(select.tools.list) ? $(settings.target.html.buttons.hand) : $(settings.target.html.buttons.box);
 }
