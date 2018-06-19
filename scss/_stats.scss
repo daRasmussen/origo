@@ -3,7 +3,7 @@
   height: 1.4em;
   width: 1.4em;
 }
-.o-tooltip-stats {
+.o-tooltip-stats, .o-tooltip-select {
   position: relative;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 4px;
@@ -14,7 +14,10 @@
   font: 80% normal, sans-serif;
   pointer-events: none;
 }
-.o-stats-button-true .o-icon-fa-pencil,
+.o-select-button-true .o-icon-steady-select,
+.o-select-button-true .o-icon-minicons-hand-vector,
+.o-select-button-true .o-icon-minicons-square-vector,
+
 .o-stats-button-true .o-icon-steady-stats,
 .o-stats-button-true .o-icon-minicons-hand-vector,
 .o-stats-button-true .o-icon-minicons-square-vector {
