@@ -83,7 +83,7 @@ var settings = {
         'stats': 'o-stats-button-true'
       },
       'hidden': 'o-hidden',
-      'tooltip': 'tooltip'
+      'tooltip': 'o-tooltip'
     }
   },
   'map': null,
@@ -101,6 +101,10 @@ var settings = {
 
 var select = {
   'layers': [],
+  'interactions': {
+    'default': 'featureInfo',
+    'tool': 'statSelect'
+  },
   'type': {
     'single': {
       'interaction': null,
@@ -134,8 +138,10 @@ var select = {
         'enabled': false,
         'active': false,
         'icon': 'select',
+        'group': 'select',
         'toolTip': 'Välj område i kartan',
         'control': true,
+        'default': false,
         'tipPlace': 'east',
         'target': {
           'id': '#o-select-button',
@@ -144,35 +150,19 @@ var select = {
         },
         'events': {
           'click': function (e) {
+
+            // select.tools.list.forEach(function(tool) {
+            //   if(!tool.control){
+            //     tool.active = false;
+            //     toggleType2($(tool.target.html), tool.active, tool.target.visible);
+            //   }
+            // });
+            deactiveTool(select.tools.list);
             var id = '#' + this.id + ' button';
             getControl(select.tools.list).active = getControl(select.tools.list).active ? false : true;
-            console.log('select tool is active: ', select.tools.list[getIndex(select.tools.list, 'name', 'select')].active)
-            toogleInteraction2(settings.target.class.map, select.tools.list[getIndex(select.tools.list, 'name', 'select')].active, settings.interactions.default, settings.interactions.tool);
-
-            // select.tools.list[getIndex(select.tools.list, 'name', 'single')].active = false;
-            // toggleType($(settings.target.html.buttons.hand), select.tools.list[getIndex(select.tools.list, 'name', 'single')].active);
-            // select.tools.list[getIndex(select.tools.list, 'name', 'box')].active = false;
-            // toggleType($(settings.target.html.buttons.square), select.tools.list[getIndex(select.tools.list, 'name', 'box')].active);
-            //
-            // settings.map.removeInteraction(select.type.single.interaction);
-            // settings.map.removeInteraction(select.type.singleBox.interaction);
-            // settings.map.removeInteraction(select.type.box.interaction);
-
+            toogleInteraction2(settings.target.class.map, getControl(select.tools.list).active, select.interactions.default, select.interactions.tool);
             $(id).blur();
             e.preventDefault();
-
-            // settings.tool.active = settings.tool.active ? false : true;
-            // toogleInteraction(settings.target.class.map, settings.interactions.default, settings.interactions.tool);
-            //   select.tools.list[getIndex(select.tools.list, 'name', 'single')].active = false;
-            //   toggleType($(settings.target.html.buttons.hand), select.tools.list[getIndex(select.tools.list, 'name', 'single')].active);
-            //   select.tools.list[getIndex(select.tools.list, 'name', 'box')].active = false;
-            //   toggleType($(settings.target.html.buttons.square), select.tools.list[getIndex(select.tools.list, 'name', 'box')].active);
-            //
-            //   settings.map.removeInteraction(select.type.single.interaction);
-            //   settings.map.removeInteraction(select.type.singleBox.interaction);
-            //   settings.map.removeInteraction(select.type.box.interaction);
-            // $(settings.target.html.buttons.stats).blur();
-            // e.preventDefault();
           }
         }
       },
@@ -184,19 +174,19 @@ var select = {
         'toolTip': 'Enskild',
         'tipPlace': 'north',
         'control': false,
+        'group': 'select',
+        'default': false,
         'target': {
-          'id': '#o-stats-hand-button',
-          'html': '#o-stats-hand-button button',
-          'visible': 'o-stats-hand-button-true'
+          'id': '#o-select-hand-button',
+          'html': '#o-select-hand-button button',
+          'visible': 'o-select-button-true'
         },
         'events': {
           'click': function (e) {
             select.type.selected = 'single';
-            select.tools.list[getIndex(select.tools.list, 'name', 'single')].active = select.tools.list[getIndex(select.tools.list, 'name', 'single')].active ? false : true;
-            toggleType($(settings.target.html.buttons.hand), select.tools.list[getIndex(select.tools.list, 'name', 'single')].active);
-            select.tools.list[getIndex(select.tools.list, 'name', 'box')].active = false;
-            toggleType($(settings.target.html.buttons.square), select.tools.list[getIndex(select.tools.list, 'name', 'box')].active);
-            $(settings.target.html.buttons.hand).blur();
+            var id = '#' + this.id + ' button';
+            activateTool(id, select.tools.list);
+            $(id).blur();
             e.preventDefault();
           },
           'pointerMoveHandler': function (e) {
@@ -216,19 +206,19 @@ var select = {
         'toolTip': 'MultiBox',
         'tipPlace': 'north',
         'control': false,
+        'group': 'select',
+        'default': false,
         'target': {
-          'id': '#o-stats-square-button',
-          'html': '#o-stats-square-button button',
-          'visible': 'o-stats-square-button-true'
+          'id': '#o-select-square-button',
+          'html': '#o-select-square-button button',
+          'visible': 'o-select-button-true'
         },
         'events': {
           'click': function (e) {
             select.type.selected = 'box';
-            select.tools.list[getIndex(select.tools.list, 'name', 'box')].active = select.tools.list[getIndex(select.tools.list, 'name', 'box')].active ? false : true;
-            toggleType($(settings.target.html.buttons.square), select.tools.list[getIndex(select.tools.list, 'name', 'box')].active);
-            select.tools.list[getIndex(select.tools.list, 'name', 'single')].active = false;
-            toggleType($(settings.target.html.buttons.hand), select.tools.list[getIndex(select.tools.list, 'name', 'single')].active);
-            $(settings.target.html.buttons.square).blur();
+            var id = '#' + this.id + ' button';
+            activateTool(id, select.tools.list);
+            $(id).blur();
             e.preventDefault();
           },
           'pointerMoveHandler': function (e) {
@@ -317,18 +307,50 @@ var pie = { 'enabled': false };
 var polar = { 'enabled': false };
 var bubble = { 'enabled': false };
 
-function onEnableInteraction(e) {
-  if (e.interaction === settings.interactions.tool) {
-    console.log('Interaction enabled: ');
-    $(getControl(select.tools.list).target.html).addClass(getControl(select.tools.list).target.visible);
-    if (getControl(select.tools.list) instanceof Object ) {
-      select.tools.list.forEach(function(tool) {
-        if (tool.enabled && !tool.control) {
-          console.log($(tool.target.id), tool.target.id, tool.target.visible)
-           $(tool.target.id).removeClass(tool.target.visible);
-        }
-      });
+function deactiveTool (tools) {
+  tools.forEach(function(tool) {
+    if(!tool.control){
+      tool.active = false;
+      toggleType2($(tool.target.html), tool.active, tool.target.visible);
     }
+  });
+}
+function activateTool (target, tools) {
+  tools.forEach(function(tool) {
+    if (tool.target.html !== target && !tool.control) {
+      tool.active = false;
+    } else {
+      tool.active = tool.active ? false: true;
+    }
+    toggleType2($(tool.target.html), tool.active, tool.target.visible);
+    console.log(tool.name, tool.active)
+  });
+}
+function hide (tools) {
+  tools.forEach(function(tool) {
+    if (tool.enabled && !tool.control) {
+      $(tool.target.id).addClass(settings.target.class.hidden);
+    }
+  });
+}
+function unhide (tools) {
+  tools.forEach(function(tool) {
+    if (tool.enabled && !tool.control) {
+      $(tool.target.id).removeClass(settings.target.class.hidden);
+    }
+  });
+}
+
+function onEnableInteraction(e) {
+  if (e.interaction === select.interactions.tool) {
+    console.log('Select Interaction enabled: ', getControl(select.tools.list).target.html);
+
+    $(getControl(select.tools.list).target.html).addClass(getControl(select.tools.list).target.visible);
+
+    if (getControl(select.tools.list) instanceof Object ) {
+      unhide(select.tools.list);
+    }
+
     $(getControl(select.tools.list).target.id).removeClass(settings.target.class.tooltip);
     getControl(select.tools.list).active = true;
 
@@ -389,17 +411,16 @@ function updateInfo(name, helpMsg, coords) {
  * @param {[type]} tipPlace [description]
  * @return {[type]} [description]
  */
-function createTool(toolName, icon, toolTip, tipPlace) {
-  console.log('creates:  ', '#o-' + toolName + '-toolbar', icon, toolTip, tipPlace)
-  $('#o-' + toolName + '-toolbar').append(Utils.createButton({
-    id: 'o-' + toolName + '-' + icon + '-button',
-    cls: 'o-' + toolName + '-type-button',
+function createTool(toolGroup, toolName, icon, toolTip, tipPlace) {
+  $('#o-' + toolGroup + '-toolbar').append(Utils.createButton({
+    id: 'o-' + toolGroup  + '-' + icon + '-button',
+    cls: 'o-' + toolGroup + '-type-button',
     iconCls: 'o-icon-minicons-' + icon + '-vector',
     src: '#minicons-' + icon + '-vector',
     tooltipText: toolTip,
     tooltipPlacement: tipPlace
   }));
-  $('#o-' + toolName + '-' + icon + '-button').addClass('o-hidden');
+  $('#o-' + toolGroup + '-' + icon + '-button').addClass('o-hidden');
 }
 /**
  * [addButton adds a button to the canvas and appends a toolTip text.]
@@ -433,23 +454,11 @@ function createControl(target, name, toolTip) {
   $(target).append(toolbar);
   addButton(target, name, toolTip);
 }
-/** TODO :: Add comments.
- * [render description]
- * @param {[type]} target [description]
- * @return {[type]} [description]
- */
+
 function render(target, tools) {
-  createControl(target, settings.tool.toolName, select.tools.list[getIndex(select.tools.list, 'name', 'all')].toolTip);
-  tools.forEach(function (tool) {
-    if (tool.enabled) {
-      createTool('select', tool.icon, tool.toolTip, tool.tipPlace);
-    }
-  });
-}
-function render2(target, tools) {
   tools.forEach(function (tool) {
     if (tool.enabled && !tool.control) {
-      createTool(tool.name, tool.icon, tool.toolTip, tool.tipPlace);
+      createTool(tool.group,  tool.name, tool.icon, tool.toolTip, tool.tipPlace);
     } else {
       createControl(target, tool.name, tool.toolTip);
     }
@@ -469,6 +478,14 @@ function bindUIActions() {
     }
   });
 }
+function bindUIActions2(tools) {
+  tools.forEach(function (tool) {
+    if (tool.enabled) {
+      $(tool.target.id).on('click', tool.events.click);
+    }
+  });
+}
+
 function add(accumulator, currentValue) {
   return accumulator + currentValue;
 }
@@ -603,6 +620,7 @@ function toData(a) {
 }
 
 function addInteraction() {
+  console.log('addIntercation: ')
   ocharts.selections.compare.selected = [];
   ocharts.selections.compare.deselected = [];
   ocharts.selections.compare.results = [];
@@ -798,24 +816,24 @@ function toogleInteraction(target, featureInfo, statsInfo) {
     });
   }
 }
-function toogleInteraction2(target, active, featureInfo, statsInfo) {
+function toogleInteraction2(target, active, fi, si) {
   if (active) {
     $(target).trigger({
       type: 'enableInteraction',
-      interaction: statsInfo
+      interaction: si
     });
     $(target).trigger({
       type: 'removeInteraction',
-      interaction: featureInfo
+      interaction: fi
     });
   } else {
     $(target).trigger({
       type: 'enableInteraction',
-      interaction: featureInfo
+      interaction: fi
     });
     $(target).trigger({
       type: 'removeInteraction',
-      interaction: statsInfo
+      interaction: si
     });
   }
 }
@@ -834,7 +852,14 @@ function toggleType(button, active) {
   }
   addInteraction();
 }
-
+function toggleType2(button, active, cls) {
+  if (active) {
+    button.addClass(cls);
+  } else {
+    button.removeClass(cls);
+  }
+  addInteraction();
+}
 
 /** TODO :: Write comments
  * [initMapTool description]
@@ -861,15 +886,12 @@ function initMapTool() {
   $(settings.target.class.map).on('enableInteraction', onEnableInteraction);
   // TODO :: Continue clean UP FIX:: ploygon, add Charts, add dynamic legend.
 
-  //render(settings.target.id.mapTools, select.tools.list);
 
-  render2(settings.target.id.mapTools, select.tools.list);
+  render(settings.target.id.mapTools, select.tools.list);
 
-  // createControl(settings.target.id.toolLeft, 'ocharts');
-  //render(settings.target.id.toolLeft, ocharts.tools.list);
+  bindUIActions2(select.tools.list);
 
-  bindUIActions();
-  settings.buttons.default = hasEnabled(select.tools.list) ? $(settings.target.html.buttons.hand) : $(settings.target.html.buttons.box);
+  //settings.buttons.default = hasEnabled(select.tools.list) ? $(settings.target.html.buttons.hand) : $(settings.target.html.buttons.box);
 }
 /**
  * [hasEnabled takes an array an checks if array has an item that is enabled]
