@@ -265,7 +265,7 @@ var ocharts = {
         'active': false,
         'control': false,
         'default': false,
-        'icon': 'ocharts-show',
+        'icon': 'ochart',
         'toolTip': 'Visa diagram',
         'tipPlace': 'east',
         'group': 'charts',
@@ -457,14 +457,14 @@ function createTool(toolGroup, toolName, icon, toolTip, tipPlace) {
  * @return {[HTML]} [Appends a new toolbar to the map.]
  */
 function addButton(target, name, toolTip) {
-  $('#o-' + name + '-toolbar')
-    .append(Utils.createButton({
-      id: 'o-' + name + '-button',
-      cls: 'o-' + name + '-button o-tooltip',
-      iconCls: 'o-icon-steady-' + name,
-      src: '#steady-' + name,
-      tooltipText: toolTip
-    }));
+  var btn = Utils.createButton({
+    id: 'o-' + name + '-button',
+    cls: 'o-' + name + '-button o-tooltip',
+    iconCls: 'o-icon-steady-' + name,
+    src: '#steady-' + name,
+    tooltipText: toolTip
+  });
+  $('#o-' + name + '-toolbar').append(btn);
 }
 /**
  * [createControl Creates a new div element]
@@ -473,25 +473,32 @@ function addButton(target, name, toolTip) {
  * @param {[String]} toolTip [The text that is displayed on hover aka. tooltip]
  * @return {[HTML]} [Appends a new toolbar to the map.]
  */
-function createControl(target, name, toolTip, prepend) {
+function createControl(target, name, toolTip) {
   var toolbar = Utils.createElement('div', '', {
     id: 'o-' + name + '-toolbar',
     cls: 'o-toolbar-horizontal'
   });
-  if (prepend) {
-    $(target).prepend(toolbar);
-  } else {
-    $(target).append(toolbar);
-  }
+
+  $(target).append(toolbar);
   addButton(target, name, toolTip);
 }
 
-function render(target, tools, prepend) {
+function render(target, tools) {
   tools.forEach(function (tool) {
-    if (tool.enabled && !tool.control) {
-      createTool(tool.group,  tool.name, tool.icon, tool.toolTip, tool.tipPlace);
+    if (tool.enabled && !tool.control && $(tool.target.id).length === 0) {
+      createTool(tool.group, tool.name, tool.icon, tool.toolTip, tool.tipPlace);
     } else if (tool.control) {
-      createControl(target, tool.name, tool.toolTip, prepend);
+      if ($(target).is(':empty')) {
+        console.log(target)
+        createControl(target, tool.name, tool.toolTip);
+      } else {
+        var clone = $(target).clone().empty().attr('id', clone.attr('id') + '-clone');
+        console.log("#"+clone.attr('id'));
+        $(clone).insertAfter(target);
+
+        createControl("#"+clone.attr('id'), tool.name, tool.toolTip);
+        //createTool(tool.group, tool.name, tool.icon, tool.toolTip, tool.tipPlace);
+      }
     }
   });
 }
@@ -920,8 +927,13 @@ function initMapTool() {
   render(settings.target.id.mapTools, select.tools.list);
   bindUIActions2(select.tools.list);
 
-  render(settings.target.id.lastToolBar, ocharts.tools.list, true);
-  bindUIActions2(ocharts.tools.list);
+  render(settings.target.id.mapTools, select.tools.list);
+  // bindUIActions2(select.tools.list);
+
+
+  // render("#o-toolbar-misc", ocharts.tools.list, true);
+  // bindUIActions2(ocharts.tools.list);
+
   //settings.buttons.default = hasEnabled(select.tools.list) ? $(settings.target.html.buttons.hand) : $(settings.target.html.buttons.box);
 }
 /**
