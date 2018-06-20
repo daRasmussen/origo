@@ -14,12 +14,9 @@
   font: 80% normal, sans-serif;
   pointer-events: none;
 }
-
+.o-charts-button-true .o-icon-steady-settings,
 .o-select-button-true .o-icon-steady-select,
 .o-select-button-true .o-icon-minicons-hand-vector,
-.o-select-button-true .o-icon-minicons-square-vector,
-.o-stats-button-true .o-icon-steady-stats,
-.o-stats-button-true .o-icon-minicons-hand-vector,
-.o-stats-button-true .o-icon-minicons-square-vector {
+.o-select-button-true .o-icon-minicons-square-vector {
   fill: $o-btn-active-color;
 }

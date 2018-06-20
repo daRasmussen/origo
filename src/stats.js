@@ -229,6 +229,10 @@ var select = {
 };
 
 var ocharts = {
+  'interactions': {
+    'default': 'featureInfo',
+    'tool': 'showStats'
+  },
   'tools': {
     'names': [],
     'list': [
@@ -238,8 +242,8 @@ var ocharts = {
         'control': true,
         'default': false,
         'enabled': false,
-        'icon': 'ocharts-show',
-        'toolTip': 'Visa diagram',
+        'icon': 'settings',
+        'toolTip': 'Välj diagram',
         'tipPlace': 'east',
         'group': 'charts',
         'target': {
@@ -249,11 +253,10 @@ var ocharts = {
         },
         'events': {
           'click': function (e) {
-            //deactiveTool(ocharts.tools.list);
+            deactiveTool(ocharts.tools.list);
             var id = '#' + this.id + ' button';
-            //getControl(ocharts.tools.list).active = getControl(ocharts.tools.list).active ? false : true;
-            // toogleInteraction2(settings.target.class.map, getControl(charts.tools.list).active, select.interactions.default, select.interactions.tool);
-            console.log(id)
+            getControl(ocharts.tools.list).active = getControl(ocharts.tools.list).active ? false : true;
+            toogleInteraction2(settings.target.class.map, getControl(ocharts.tools.list).active, ocharts.interactions.default, ocharts.interactions.tool);
             $(id).blur();
             e.preventDefault();
           }
@@ -265,7 +268,7 @@ var ocharts = {
         'active': false,
         'control': false,
         'default': false,
-        'icon': 'ochart',
+        'icon': 'stats',
         'toolTip': 'Visa diagram',
         'tipPlace': 'east',
         'group': 'charts',
@@ -367,59 +370,44 @@ function unhide (tools) {
     }
   });
 }
+function enableControl(control, setting) {
+  $(getControl(control.tools.list).target.html).addClass(getControl(control.tools.list).target.visible);
 
+  if (getControl(control.tools.list) instanceof Object ) {
+    unhide(control.tools.list);
+  }
+
+  $(getControl(control.tools.list).target.id).removeClass(setting.target.class.tooltip);
+  getControl(control.tools.list).active = true;
+}
+function disableControl(control, setting) {
+  if (!getControl(control.tools.list).active) {
+    $(getControl(control.tools.list).target.html).removeClass(getControl(control.tools.list).target.visible);
+  }
+  getControl(control.tools.list).active = false;
+
+  if (setting.buttons.active) { setting.buttons.active.removeClass(setting.target.class.visible.stats); }
+  $(setting.target.html.buttons.stats).removeClass(setting.target.class.visible.stats);
+  control.tools.list.forEach(function (tool) {
+    if (tool.enabled && !tool.control) {
+      $(tool.target.id).addClass(setting.target.class.hidden);
+    }
+  });
+  $(getControl(control.tools.list).target.id).addClass(settings.target.class.tooltip);
+}
 function onEnableInteraction(e) {
   if (e.interaction === select.interactions.tool) {
-    console.log('Select Interaction enabled: ', getControl(select.tools.list).target.html);
-
-    $(getControl(select.tools.list).target.html).addClass(getControl(select.tools.list).target.visible);
-
-    if (getControl(select.tools.list) instanceof Object ) {
-      unhide(select.tools.list);
-    }
-
-    $(getControl(select.tools.list).target.id).removeClass(settings.target.class.tooltip);
-    getControl(select.tools.list).active = true;
-
-    // $(settings.target.html.buttons.stats).addClass(settings.target.class.visible.stats);
-    // select.tools.list.forEach(function (tool) {
-    //   if (tool.enabled && !tool.control) {
-    //     $(tool.target.id).removeClass(settings.target.class.hidden);
-    //   }
-    // });
-    // $(settings.target.id.buttons.stats).removeClass(settings.target.class.tooltip);
-    // settings.tool.active = true;
-    // settings.map.removeInteraction(settings.interactions.default);
-
+    console.log('Select Interaction enabled: ', e.interaction);
+    enableControl(select, settings);
+  } else if (e.interaction === ocharts.interactions.tool) {
+    console.log('Select Interaction enabled: ', e.interaction);
+    enableControl(ocharts, settings);
   } else {
-    console.log('Interaction disabled');
-    if (!getControl(select.tools.list).active) {
-      $(getControl(select.tools.list).target.html).removeClass(getControl(select.tools.list).target.visible);
-    }
-    getControl(select.tools.list).active = false;
-    // TODO:: Clear selection
-    if (settings.buttons.active) { settings.buttons.active.removeClass(settings.target.class.visible.stats); }
-    $(settings.target.html.buttons.stats).removeClass(settings.target.class.visible.stats);
-    select.tools.list.forEach(function (tool) {
-      if (tool.enabled && !tool.control) {
-        $(tool.target.id).addClass(settings.target.class.hidden);
-        // TODO :: BUG single selection active. console.log(tool.enabled)
-      }
-    });
-    $(settings.target.id.buttons.stats).addClass(settings.target.class.tooltip);
-
-    select.tools.list.forEach(function (t) {
-      settings.map.un('pointermove', t.events.pointerMoveHandler);
-      settings.map.un('click', t.events.pointerMoveHandler);
-    });
-
-    settings.map.removeInteraction(settings.interactions.tool);
-    settings.map.removeInteraction(select.type.single.interaction);
-    select.type.single.interaction = null;
-    settings.map.removeInteraction(select.type.box.interaction);
-    select.type.selected = null;
-    settings.tool.active = false;
+    console.log('Interaction disabled: ', e.interaction);
+    disableControl(select, settings);
+    disableControl(ocharts, settings);
   }
+
   e.preventDefault();
 }
 function updateInfo(name, helpMsg, coords) {
@@ -456,12 +444,12 @@ function createTool(toolGroup, toolName, icon, toolTip, tipPlace) {
  * @param {[String]} toolTip [The text that is displayed on hover aka. tooltip]
  * @return {[HTML]} [Appends a new toolbar to the map.]
  */
-function addButton(target, name, toolTip) {
+function addButton(target, name, icon, toolTip) {
   var btn = Utils.createButton({
     id: 'o-' + name + '-button',
     cls: 'o-' + name + '-button o-tooltip',
-    iconCls: 'o-icon-steady-' + name,
-    src: '#steady-' + name,
+    iconCls: 'o-icon-steady-' + icon,
+    src: '#steady-' + icon,
     tooltipText: toolTip
   });
   $('#o-' + name + '-toolbar').append(btn);
@@ -473,14 +461,14 @@ function addButton(target, name, toolTip) {
  * @param {[String]} toolTip [The text that is displayed on hover aka. tooltip]
  * @return {[HTML]} [Appends a new toolbar to the map.]
  */
-function createControl(target, name, toolTip) {
+function createControl(target, name, icon, toolTip) {
   var toolbar = Utils.createElement('div', '', {
     id: 'o-' + name + '-toolbar',
     cls: 'o-toolbar-horizontal'
   });
 
   $(target).append(toolbar);
-  addButton(target, name, toolTip);
+  addButton(target, name, icon, toolTip);
 }
 
 function render(target, tools) {
@@ -488,17 +476,7 @@ function render(target, tools) {
     if (tool.enabled && !tool.control && $(tool.target.id).length === 0) {
       createTool(tool.group, tool.name, tool.icon, tool.toolTip, tool.tipPlace);
     } else if (tool.control) {
-      if ($(target).is(':empty')) {
-        console.log(target)
-        createControl(target, tool.name, tool.toolTip);
-      } else {
-        var clone = $(target).clone().empty().attr('id', clone.attr('id') + '-clone');
-        console.log("#"+clone.attr('id'));
-        $(clone).insertAfter(target);
-
-        createControl("#"+clone.attr('id'), tool.name, tool.toolTip);
-        //createTool(tool.group, tool.name, tool.icon, tool.toolTip, tool.tipPlace);
-      }
+      createControl(target, tool.name, tool.icon, tool.toolTip);
     }
   });
 }
@@ -927,8 +905,8 @@ function initMapTool() {
   render(settings.target.id.mapTools, select.tools.list);
   bindUIActions2(select.tools.list);
 
-  render(settings.target.id.mapTools, select.tools.list);
-  // bindUIActions2(select.tools.list);
+  render(settings.target.id.mapTools, ocharts.tools.list);
+  bindUIActions2(ocharts.tools.list);
 
 
   // render("#o-toolbar-misc", ocharts.tools.list, true);
@@ -979,21 +957,22 @@ function connectNames(names, list) {
 module.exports.init = function (optOptions) {
   settings.options = optOptions || settings.options;
   settings.options.inspect.show.warn = inspect(settings.options.inspect.show, 'warn', true, true);
-  select.tools.names = inspect(settings.options, 'select', ['single'], settings.options.inspect.show.warn);
   settings.tool.toolName = inspect(settings.options, 'toolName', ['stats'], settings.options.inspect.show.warn);
+  select.tools.names = inspect(settings.options, 'select', ['single'], settings.options.inspect.show.warn);
   connectNames(select.tools.names, select.tools.list);
-  // TODO:: Connect if names enabled etc..
-
   ocharts.fieldNames = inspect(settings.options, 'fieldNames', ['total'], settings.options.inspect.show.warn);
-  // TODO :: include more tools by default?
-  charts = inspect(settings.options, 'charts', ['circle', 'bar'], settings.options.inspect.show.warn);
-  // charts variable removed.
-  line.enabled = charts.includes('line');
-  bar.enabled = charts.includes('bar');
-  radar.enabled = charts.includes('radar');
-  pie.enabled = charts.includes('pie');
-  polar.enabled = charts.includes('polar');
-  bubble.enabled = charts.includes('bubble');
+  ocharts.tools.names = inspect(settings.options, 'charts', ['bar', 'circle'], settings.options.inspect.show.warn);
+  connectNames(ocharts.tools.names, ocharts.tools.list);
+
+  // // TODO :: include more tools by default?
+  // charts = inspect(settings.options, 'charts', ['circle', 'bar'], settings.options.inspect.show.warn);
+  // // charts variable removed.
+  // line.enabled = charts.includes('line');
+  // bar.enabled = charts.includes('bar');
+  // radar.enabled = charts.includes('radar');
+  // pie.enabled = charts.includes('pie');
+  // polar.enabled = charts.includes('polar');
+  // bubble.enabled = charts.includes('bubble');
 
   if (hasEnabled(select.tools.list)) {
     initMapTool();
