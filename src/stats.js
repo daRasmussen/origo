@@ -631,7 +631,67 @@ var save = {
   }
 };
 var summary = {
-
+  'interactions': {
+    'default': 'featureInfo',
+    'tool': 'summaryStats'
+  },
+  'tools':{
+    'names': [],
+    'list': [
+      {
+        'name': 'summary',
+        'active': false,
+        'control': true,
+        'default': false,
+        'enabled': false,
+        'icon': 'summary',
+        'toolTip': 'Sammanfattning',
+        'tipPlace': 'east',
+        'group': 'summary',
+        'target': {
+          'id': '#o-summary-button',
+          'html': '#o-summary-button button',
+          'visible': 'o-summary-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            deactiveTool(summary.tools.list);
+            var id = '#' + this.id + ' button';
+            getControl(summary.tools.list).active = getControl(summary.tools.list).active ? false : true;
+            toogleInteraction2(settings.target.class.map, getControl(summary.tools.list).active, summary.interactions.default, summary.interactions.tool);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'table',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'table',
+        'toolTip': 'Tabell',
+        'tipPlace': 'north',
+        'group': 'summary',
+        'target': {
+          'id': '#o-summary-table-button',
+          'html': '#o-summary-table-button button',
+          'visible': 'o-summary-table-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, summary.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      }
+    ]
+  }
 };
 function deactiveTool (tools) {
   tools.forEach(function(tool) {
@@ -706,12 +766,16 @@ function onEnableInteraction(e) {
   } else if (e.interaction === save.interactions.tool) {
     console.log('Select Interaction enabled: ', e.interaction);
     enableControl(save, settings);
+  } else if (e.interaction === summary.interactions.tool) {
+    console.log('Select Interaction enabled: ', e.interaction);
+    enableControl(summary, settings);
   } else {
     console.log('Interaction disabled: ', e.interaction);
     disableControl(select, settings);
     disableControl(ocharts, settings);
     disableControl(download, settings);
     disableControl(save, settings);
+    disableControl(summary, settings);
   }
   e.preventDefault();
 }
@@ -1220,6 +1284,9 @@ function initMapTool() {
 
   render(settings.target.id.mapTools, save.tools.list);
   bindUIActions2(save.tools.list);
+
+  render(settings.target.id.mapTools, summary.tools.list);
+  bindUIActions2(summary.tools.list);
 }
 /**
  * [hasEnabled takes an array an checks if array has an item that is enabled]
@@ -1274,6 +1341,8 @@ module.exports.init = function (optOptions) {
   connectNames(download.tools.names, download.tools.list);
   save.tools.names = inspect(settings.options, 'save', ['layers', 'clear'], settings.options.inspect.show.warn);
   connectNames(save.tools.names, save.tools.list);
+  summary.tools.names = inspect(settings.options, 'summary', ['table'], settings.options.inspect.show.warn);
+  connectNames(summary.tools.names, summary.tools.list);
 
   if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
     initMapTool();
