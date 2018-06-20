@@ -11,7 +11,7 @@
         },
         "select": ["single", "box"],
         "fieldNames": ["total"],
-        "charts": ["line", "bar", "radar", "pie", "polar", "bubble"],
+        "charts": ["linjar", "bar", "radar", "doughnut", "circle", "polar", "bubble"],
         "target": "#o-toolbar-maptools",
         "toolName": "stats"
       }

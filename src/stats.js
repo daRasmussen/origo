@@ -263,23 +263,183 @@ var ocharts = {
         }
       },
       {
-        'name': 'line',
+        'name': 'linjar',
         'enabled': false,
         'active': false,
         'control': false,
         'default': false,
-        'icon': 'stats',
-        'toolTip': 'Visa diagram',
-        'tipPlace': 'east',
+        'icon': 'linjar',
+        'toolTip': 'Visa linjär',
+        'tipPlace': 'north',
         'group': 'charts',
         'target': {
-          'id': '#o-charts-line-button',
-          'html': '#o-charts-line-button button',
-          'visible': 'o-charts-line-button-true'
+          'id': '#o-charts-linjar-button',
+          'html': '#o-charts-linjar-button button',
+          'visible': 'o-charts-linjar-button-true'
         },
         'events': {
           'click': function (e) {
-
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, ocharts.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'bar',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'bar',
+        'toolTip': 'Visa stapel',
+        'tipPlace': 'north',
+        'group': 'charts',
+        'target': {
+          'id': '#o-charts-bar-button',
+          'html': '#o-charts-bar-button button',
+          'visible': 'o-charts-bar-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, ocharts.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'radar',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'radar',
+        'toolTip': 'Visa radar',
+        'tipPlace': 'north',
+        'group': 'charts',
+        'target': {
+          'id': '#o-charts-radar-button',
+          'html': '#o-charts-radar-button button',
+          'visible': 'o-charts-radar-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, ocharts.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'doughnut',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'doughnut',
+        'toolTip': 'Visa doughnut',
+        'tipPlace': 'north',
+        'group': 'charts',
+        'target': {
+          'id': '#o-charts-doughnut-button',
+          'html': '#o-charts-doughnut-button button',
+          'visible': 'o-charts-doughnut-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, ocharts.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'circle',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'circle',
+        'toolTip': 'Visa cirkel',
+        'tipPlace': 'north',
+        'group': 'charts',
+        'target': {
+          'id': '#o-charts-circle-button',
+          'html': '#o-charts-circle-button button',
+          'visible': 'o-charts-circle-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, ocharts.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'polar',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'polar',
+        'toolTip': 'Visa polar area',
+        'tipPlace': 'north',
+        'group': 'charts',
+        'target': {
+          'id': '#o-charts-polar-button',
+          'html': '#o-charts-polar-button button',
+          'visible': 'o-charts-polar-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, ocharts.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'bubble',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'bubble',
+        'toolTip': 'Visa bubble',
+        'tipPlace': 'north',
+        'group': 'charts',
+        'target': {
+          'id': '#o-charts-bubble-button',
+          'html': '#o-charts-bubble-button button',
+          'visible': 'o-charts-bubble-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, ocharts.tools.list);
+            $(id).blur();
             e.preventDefault();
           }
         }
@@ -407,7 +567,6 @@ function onEnableInteraction(e) {
     disableControl(select, settings);
     disableControl(ocharts, settings);
   }
-
   e.preventDefault();
 }
 function updateInfo(name, helpMsg, coords) {
@@ -435,6 +594,7 @@ function createTool(toolGroup, toolName, icon, toolTip, tipPlace) {
     tooltipText: toolTip,
     tooltipPlacement: tipPlace
   }));
+  console.log('#o-' + toolGroup + '-' + icon + '-button');
   $('#o-' + toolGroup + '-' + icon + '-button').addClass('o-hidden');
 }
 /**
@@ -473,7 +633,7 @@ function createControl(target, name, icon, toolTip) {
 
 function render(target, tools) {
   tools.forEach(function (tool) {
-    if (tool.enabled && !tool.control && $(tool.target.id).length === 0) {
+    if (tool.enabled && !tool.control) {
       createTool(tool.group, tool.name, tool.icon, tool.toolTip, tool.tipPlace);
     } else if (tool.control) {
       createControl(target, tool.name, tool.icon, tool.toolTip);
@@ -964,17 +1124,7 @@ module.exports.init = function (optOptions) {
   ocharts.tools.names = inspect(settings.options, 'charts', ['bar', 'circle'], settings.options.inspect.show.warn);
   connectNames(ocharts.tools.names, ocharts.tools.list);
 
-  // // TODO :: include more tools by default?
-  // charts = inspect(settings.options, 'charts', ['circle', 'bar'], settings.options.inspect.show.warn);
-  // // charts variable removed.
-  // line.enabled = charts.includes('line');
-  // bar.enabled = charts.includes('bar');
-  // radar.enabled = charts.includes('radar');
-  // pie.enabled = charts.includes('pie');
-  // polar.enabled = charts.includes('polar');
-  // bubble.enabled = charts.includes('bubble');
-
-  if (hasEnabled(select.tools.list)) {
+  if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
     initMapTool();
     $(settings.target.id.info).removeClass(settings.target.class.hidden);
   } else {
