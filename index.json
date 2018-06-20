@@ -15,7 +15,8 @@
         "target": "#o-toolbar-maptools",
         "toolName": "stats",
         "download": ["pdf"],
-        "save": ["local", "clear"]
+        "save": ["layers", "clear"],
+        "summary": ["table"]
       }
     },
     {

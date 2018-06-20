@@ -492,7 +492,7 @@ var download = {
         'default': false,
         'enabled': false,
         'icon': 'download',
-        'toolTip': 'Hämta lagringsalternativ',
+        'toolTip': 'Exportera',
         'tipPlace': 'east',
         'group': 'download',
         'target': {
@@ -518,7 +518,7 @@ var download = {
         'control': false,
         'default': false,
         'icon': 'pdf',
-        'toolTip': 'Hämta som PDF',
+        'toolTip': 'PDF',
         'tipPlace': 'north',
         'group': 'download',
         'target': {
@@ -576,19 +576,19 @@ var save = {
         }
       },
       {
-        'name': 'local',
+        'name': 'layers',
         'enabled': false,
         'active': false,
         'control': false,
         'default': false,
-        'icon': 'local',
-        'toolTip': 'Spara lokalt',
+        'icon': 'layers',
+        'toolTip': 'Lager',
         'tipPlace': 'north',
         'group': 'save',
         'target': {
-          'id': '#o-save-local-button',
-          'html': '#o-save-local-button button',
-          'visible': 'o-save-local-button-true'
+          'id': '#o-save-layers-button',
+          'html': '#o-save-layers-button button',
+          'visible': 'o-save-layers-button-true'
         },
         'events': {
           'click': function (e) {
@@ -608,13 +608,13 @@ var save = {
         'control': false,
         'default': false,
         'icon': 'clear',
-        'toolTip': 'Rensa lokalt',
+        'toolTip': 'Rensa',
         'tipPlace': 'north',
         'group': 'save',
         'target': {
-          'id': '#o-save-local-button',
-          'html': '#o-save-local-button button',
-          'visible': 'o-save-local-button-true'
+          'id': '#o-save-clear-button',
+          'html': '#o-save-clear-button button',
+          'visible': 'o-save-clear-button-true'
         },
         'events': {
           'click': function (e) {
@@ -629,6 +629,9 @@ var save = {
       }
     ]
   }
+};
+var summary = {
+
 };
 function deactiveTool (tools) {
   tools.forEach(function(tool) {
@@ -700,11 +703,15 @@ function onEnableInteraction(e) {
   } else if (e.interaction === download.interactions.tool) {
     console.log('Select Interaction enabled: ', e.interaction);
     enableControl(download, settings);
+  } else if (e.interaction === save.interactions.tool) {
+    console.log('Select Interaction enabled: ', e.interaction);
+    enableControl(save, settings);
   } else {
     console.log('Interaction disabled: ', e.interaction);
     disableControl(select, settings);
     disableControl(ocharts, settings);
     disableControl(download, settings);
+    disableControl(save, settings);
   }
   e.preventDefault();
 }
@@ -1211,11 +1218,8 @@ function initMapTool() {
   render(settings.target.id.mapTools, download.tools.list);
   bindUIActions2(download.tools.list);
 
-
-  // render("#o-toolbar-misc", ocharts.tools.list, true);
-  // bindUIActions2(ocharts.tools.list);
-
-  //settings.buttons.default = hasEnabled(select.tools.list) ? $(settings.target.html.buttons.hand) : $(settings.target.html.buttons.box);
+  render(settings.target.id.mapTools, save.tools.list);
+  bindUIActions2(save.tools.list);
 }
 /**
  * [hasEnabled takes an array an checks if array has an item that is enabled]
@@ -1268,6 +1272,8 @@ module.exports.init = function (optOptions) {
   connectNames(ocharts.tools.names, ocharts.tools.list);
   download.tools.names = inspect(settings.options, 'download', ['pdf'], settings.options.inspect.show.warn);
   connectNames(download.tools.names, download.tools.list);
+  save.tools.names = inspect(settings.options, 'save', ['layers', 'clear'], settings.options.inspect.show.warn);
+  connectNames(save.tools.names, save.tools.list);
 
   if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
     initMapTool();
