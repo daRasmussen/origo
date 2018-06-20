@@ -452,7 +452,7 @@ function render(target, tools) {
   tools.forEach(function (tool) {
     if (tool.enabled && !tool.control) {
       createTool(tool.group,  tool.name, tool.icon, tool.toolTip, tool.tipPlace);
-    } else {
+    } else if (tool.control) {
       createControl(target, tool.name, tool.toolTip);
     }
   });
@@ -915,7 +915,9 @@ function getControl(a) {
 function connectNames(names, list) {
   names.forEach(function (name) {
     list.forEach(function (tool) {
-      tool.enabled = tool.enabled === null ? name === tool.name : true;
+      if (name === tool.name || tool.control) {
+        tool.enabled = tool.enabled === null ? name === tool.name : true;
+      }
     });
   });
 }
@@ -930,6 +932,7 @@ module.exports.init = function (optOptions) {
   select.tools.names = inspect(settings.options, 'select', ['single'], settings.options.inspect.show.warn);
   settings.tool.toolName = inspect(settings.options, 'toolName', ['stats'], settings.options.inspect.show.warn);
   connectNames(select.tools.names, select.tools.list);
+  console.log(select.tools.names, select.tools.list)
   // TODO:: Connect if names enabled etc..
 
   ocharts.fieldNames = inspect(settings.options, 'fieldNames', ['total'], settings.options.inspect.show.warn);

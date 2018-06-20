@@ -9,7 +9,7 @@
             "warn": true
           }
         },
-        "select": ["single", "box"],
+        "select": ["box"],
         "fieldNames": ["total"],
         "charts": ["line", "bar", "radar", "pie", "polar", "bubble"],
         "target": "#o-toolbar-maptools",
