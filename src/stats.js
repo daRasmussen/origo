@@ -139,7 +139,7 @@ var select = {
         'active': false,
         'icon': 'select',
         'group': 'select',
-        'toolTip': 'Välj område i kartan',
+        'toolTip': 'Välj selektionsverktyg',
         'control': true,
         'default': false,
         'tipPlace': 'east',
@@ -302,9 +302,11 @@ var bubble = { 'enabled': false };
 
 function deactiveTool (tools) {
   tools.forEach(function(tool) {
-    if(!tool.control){
+    if (!tool.control){
       tool.active = false;
       toggleType2($(tool.target.html), tool.active, tool.target.visible);
+    } else if(tool.control) {
+      $(tool.target.id).addClass('o-tooltip')
     }
   });
 }
@@ -426,7 +428,7 @@ function addButton(target, name, toolTip) {
   $('#o-' + name + '-toolbar')
     .append(Utils.createButton({
       id: 'o-' + name + '-button',
-      cls: 'o-' + name + '-button',
+      cls: 'o-' + name + '-button o-tooltip',
       iconCls: 'o-icon-steady-' + name,
       src: '#steady-' + name,
       tooltipText: toolTip
@@ -932,7 +934,6 @@ module.exports.init = function (optOptions) {
   select.tools.names = inspect(settings.options, 'select', ['single'], settings.options.inspect.show.warn);
   settings.tool.toolName = inspect(settings.options, 'toolName', ['stats'], settings.options.inspect.show.warn);
   connectNames(select.tools.names, select.tools.list);
-  console.log(select.tools.names, select.tools.list)
   // TODO:: Connect if names enabled etc..
 
   ocharts.fieldNames = inspect(settings.options, 'fieldNames', ['total'], settings.options.inspect.show.warn);
