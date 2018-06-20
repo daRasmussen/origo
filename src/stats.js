@@ -63,6 +63,7 @@ var settings = {
     'id': {
       'mapTools': '#o-toolbar-maptools',
       'toolLeft': '#o-tools-left',
+      'lastToolBar': '#o-toolbar-misc',
       'buttons': {
         'stats': '#o-stats-button',
         'hand': '#o-stats-hand-button',
@@ -135,13 +136,13 @@ var select = {
     'list': [
       {
         'name': 'select',
-        'enabled': false,
         'active': false,
+        'control': true,
+        'default': false,
+        'enabled': false,
         'icon': 'select',
         'group': 'select',
         'toolTip': 'Välj selektionsverktyg',
-        'control': true,
-        'default': false,
         'tipPlace': 'east',
         'target': {
           'id': '#o-select-button',
@@ -161,14 +162,14 @@ var select = {
       },
       {
         'name': 'single',
-        'enabled': false,
         'active': false,
+        'control': false,
+        'default': false,
+        'enabled': false,
         'icon': 'hand',
         'toolTip': 'Enskild',
         'tipPlace': 'north',
-        'control': false,
         'group': 'select',
-        'default': false,
         'target': {
           'id': '#o-select-hand-button',
           'html': '#o-select-hand-button button',
@@ -193,14 +194,14 @@ var select = {
       },
       {
         'name': 'box',
-        'enabled': false,
         'active': false,
+        'control': false,
+        'default': false,
+        'enabled': false,
         'icon': 'square',
         'toolTip': 'MultiBox',
         'tipPlace': 'north',
-        'control': false,
         'group': 'select',
-        'default': false,
         'target': {
           'id': '#o-select-square-button',
           'html': '#o-select-square-button button',
@@ -229,22 +230,53 @@ var select = {
 
 var ocharts = {
   'tools': {
+    'names': [],
     'list': [
       {
-        'name': 'ocharts',
-        'enabled': false,
+        'name': 'charts',
         'active': false,
+        'control': true,
+        'default': false,
+        'enabled': false,
         'icon': 'ocharts-show',
         'toolTip': 'Visa diagram',
-        'tipPlace': '',
+        'tipPlace': 'east',
+        'group': 'charts',
         'target': {
-          'id': '#o-ocharts-button',
-          'html': '#o-ocharts-button button'
+          'id': '#o-charts-button',
+          'html': '#o-charts-button button',
+          'visible': 'o-charts-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            //deactiveTool(ocharts.tools.list);
+            var id = '#' + this.id + ' button';
+            //getControl(ocharts.tools.list).active = getControl(ocharts.tools.list).active ? false : true;
+            // toogleInteraction2(settings.target.class.map, getControl(charts.tools.list).active, select.interactions.default, select.interactions.tool);
+            console.log(id)
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'line',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'ocharts-show',
+        'toolTip': 'Visa diagram',
+        'tipPlace': 'east',
+        'group': 'charts',
+        'target': {
+          'id': '#o-charts-line-button',
+          'html': '#o-charts-line-button button',
+          'visible': 'o-charts-line-button-true'
         },
         'events': {
           'click': function (e) {
 
-            $(settings.target.html.buttons.stats).blur();
             e.preventDefault();
           }
         }
@@ -441,21 +473,25 @@ function addButton(target, name, toolTip) {
  * @param {[String]} toolTip [The text that is displayed on hover aka. tooltip]
  * @return {[HTML]} [Appends a new toolbar to the map.]
  */
-function createControl(target, name, toolTip) {
+function createControl(target, name, toolTip, prepend) {
   var toolbar = Utils.createElement('div', '', {
     id: 'o-' + name + '-toolbar',
     cls: 'o-toolbar-horizontal'
   });
-  $(target).append(toolbar);
+  if (prepend) {
+    $(target).prepend(toolbar);
+  } else {
+    $(target).append(toolbar);
+  }
   addButton(target, name, toolTip);
 }
 
-function render(target, tools) {
+function render(target, tools, prepend) {
   tools.forEach(function (tool) {
     if (tool.enabled && !tool.control) {
       createTool(tool.group,  tool.name, tool.icon, tool.toolTip, tool.tipPlace);
     } else if (tool.control) {
-      createControl(target, tool.name, tool.toolTip);
+      createControl(target, tool.name, tool.toolTip, prepend);
     }
   });
 }
@@ -881,11 +917,11 @@ function initMapTool() {
   $(settings.target.class.map).on('enableInteraction', onEnableInteraction);
   // TODO :: Continue clean UP FIX:: ploygon, add Charts, add dynamic legend.
 
-
   render(settings.target.id.mapTools, select.tools.list);
-
   bindUIActions2(select.tools.list);
 
+  render(settings.target.id.lastToolBar, ocharts.tools.list, true);
+  bindUIActions2(ocharts.tools.list);
   //settings.buttons.default = hasEnabled(select.tools.list) ? $(settings.target.html.buttons.hand) : $(settings.target.html.buttons.box);
 }
 /**
