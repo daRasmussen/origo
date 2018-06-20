@@ -17,7 +17,6 @@ var $ = require('jquery');
 // Container for multiple charts
 // var ocharts = require('./charts/ocharts.js');
 
-
 // TODO :: Merge settings with tools
 // TODO :: Add stats buttons to settings.
 var settings = {
@@ -120,8 +119,7 @@ var select = {
     },
     'selected': null
   },
-  'selected':
-  {
+  'selected': {
     'features': null,
     'length': {
       'group': 0,
@@ -476,25 +474,162 @@ var ocharts = {
     // Precision 10, scale 0: 9999999999
     // Precision 8, scale 3: 99999.999
     // Precision 5, scale -3: 99999000
-  },
-  'enabled': {
-    'line': false,
-    'bar': false,
-    'radar': false,
-    'donought': false,
-    'pie': false,
-    'polar': false,
-    'bubble': false
   }
 };
-var charts;
-var line = { 'enabled': false };
-var bar = { 'enabled': false };
-var radar = { 'enabled': false };
-var pie = { 'enabled': false };
-var polar = { 'enabled': false };
-var bubble = { 'enabled': false };
 
+var download = {
+  'interactions': {
+    'default': 'featureInfo',
+    'tool': 'downloadStats'
+  },
+  'tools':{
+    'names': [],
+    'list': [
+      {
+        'name': 'download',
+        'active': false,
+        'control': true,
+        'default': false,
+        'enabled': false,
+        'icon': 'download',
+        'toolTip': 'Hämta lagringsalternativ',
+        'tipPlace': 'east',
+        'group': 'download',
+        'target': {
+          'id': '#o-download-button',
+          'html': '#o-download-button button',
+          'visible': 'o-download-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            deactiveTool(download.tools.list);
+            var id = '#' + this.id + ' button';
+            getControl(download.tools.list).active = getControl(download.tools.list).active ? false : true;
+            toogleInteraction2(settings.target.class.map, getControl(download.tools.list).active, download.interactions.default, download.interactions.tool);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'pdf',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'pdf',
+        'toolTip': 'Hämta som PDF',
+        'tipPlace': 'north',
+        'group': 'download',
+        'target': {
+          'id': '#o-download-pdf-button',
+          'html': '#o-download-pdf-button button',
+          'visible': 'o-download-pdf-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, download.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      }
+    ]
+  }
+};
+
+var save = {
+  'interactions': {
+    'default': 'featureInfo',
+    'tool': 'saveStats'
+  },
+  'tools':{
+    'names': [],
+    'list': [
+      {
+        'name': 'save',
+        'active': false,
+        'control': true,
+        'default': false,
+        'enabled': false,
+        'icon': 'save',
+        'toolTip': 'Spara',
+        'tipPlace': 'east',
+        'group': 'save',
+        'target': {
+          'id': '#o-save-button',
+          'html': '#o-save-button button',
+          'visible': 'o-save-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            deactiveTool(save.tools.list);
+            var id = '#' + this.id + ' button';
+            getControl(save.tools.list).active = getControl(save.tools.list).active ? false : true;
+            toogleInteraction2(settings.target.class.map, getControl(save.tools.list).active, save.interactions.default, save.interactions.tool);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'local',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'local',
+        'toolTip': 'Spara lokalt',
+        'tipPlace': 'north',
+        'group': 'save',
+        'target': {
+          'id': '#o-save-local-button',
+          'html': '#o-save-local-button button',
+          'visible': 'o-save-local-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, save.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      },
+      {
+        'name': 'clear',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'clear',
+        'toolTip': 'Rensa lokalt',
+        'tipPlace': 'north',
+        'group': 'save',
+        'target': {
+          'id': '#o-save-local-button',
+          'html': '#o-save-local-button button',
+          'visible': 'o-save-local-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, save.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
+      }
+    ]
+  }
+};
 function deactiveTool (tools) {
   tools.forEach(function(tool) {
     if (!tool.control){
@@ -562,10 +697,14 @@ function onEnableInteraction(e) {
   } else if (e.interaction === ocharts.interactions.tool) {
     console.log('Select Interaction enabled: ', e.interaction);
     enableControl(ocharts, settings);
+  } else if (e.interaction === download.interactions.tool) {
+    console.log('Select Interaction enabled: ', e.interaction);
+    enableControl(download, settings);
   } else {
     console.log('Interaction disabled: ', e.interaction);
     disableControl(select, settings);
     disableControl(ocharts, settings);
+    disableControl(download, settings);
   }
   e.preventDefault();
 }
@@ -594,7 +733,7 @@ function createTool(toolGroup, toolName, icon, toolTip, tipPlace) {
     tooltipText: toolTip,
     tooltipPlacement: tipPlace
   }));
-  console.log('#o-' + toolGroup + '-' + icon + '-button');
+  console.log('createdTool: ','#o-' + toolGroup + '-' + icon + '-button');
   $('#o-' + toolGroup + '-' + icon + '-button').addClass('o-hidden');
 }
 /**
@@ -613,6 +752,7 @@ function addButton(target, name, icon, toolTip) {
     tooltipText: toolTip
   });
   $('#o-' + name + '-toolbar').append(btn);
+  console.log('Created toolbar: ', '#o-' + name + '-toolbar');
 }
 /**
  * [createControl Creates a new div element]
@@ -1068,6 +1208,9 @@ function initMapTool() {
   render(settings.target.id.mapTools, ocharts.tools.list);
   bindUIActions2(ocharts.tools.list);
 
+  render(settings.target.id.mapTools, download.tools.list);
+  bindUIActions2(download.tools.list);
+
 
   // render("#o-toolbar-misc", ocharts.tools.list, true);
   // bindUIActions2(ocharts.tools.list);
@@ -1123,10 +1266,11 @@ module.exports.init = function (optOptions) {
   ocharts.fieldNames = inspect(settings.options, 'fieldNames', ['total'], settings.options.inspect.show.warn);
   ocharts.tools.names = inspect(settings.options, 'charts', ['bar', 'circle'], settings.options.inspect.show.warn);
   connectNames(ocharts.tools.names, ocharts.tools.list);
+  download.tools.names = inspect(settings.options, 'download', ['pdf'], settings.options.inspect.show.warn);
+  connectNames(download.tools.names, download.tools.list);
 
   if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
     initMapTool();
-    $(settings.target.id.info).removeClass(settings.target.class.hidden);
   } else {
     throw Error('Cannot initialize stats tool because no tools are enabled.');
   }

@@ -13,7 +13,9 @@
         "fieldNames": ["total"],
         "charts": ["linjar", "bar", "radar", "doughnut", "circle", "polar", "bubble"],
         "target": "#o-toolbar-maptools",
-        "toolName": "stats"
+        "toolName": "stats",
+        "download": ["pdf"],
+        "save": ["local", "clear"]
       }
     },
     {

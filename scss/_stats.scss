@@ -14,6 +14,10 @@
   font: 80% normal, sans-serif;
   pointer-events: none;
 }
+
+.o-download-button-true .o-icon-steady-download,
+.o-download-pdf-button-true .o-icon-minicons-pdf-vector,
+
 .o-charts-button-true .o-icon-steady-settings,
 .o-charts-linjar-button-true .o-icon-minicons-linjar-vector,
 .o-charts-bar-button-true .o-icon-minicons-bar-vector,
@@ -22,6 +26,7 @@
 .o-charts-circle-button-true .o-icon-minicons-circle-vector,
 .o-charts-polar-button-true .o-icon-minicons-polar-vector,
 .o-charts-bubble-button-true .o-icon-minicons-bubble-vector,
+
 .o-select-button-true .o-icon-steady-select,
 .o-select-button-true .o-icon-minicons-hand-vector,
 .o-select-button-true .o-icon-minicons-square-vector {
