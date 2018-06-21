@@ -689,6 +689,32 @@ var summary = {
             e.preventDefault();
           }
         }
+      },
+      {
+        'name': 'legend',
+        'enabled': false,
+        'active': false,
+        'control': false,
+        'default': false,
+        'icon': 'legend',
+        'toolTip': 'Innehållsförteckning',
+        'tipPlace': 'north',
+        'group': 'summary',
+        'target': {
+          'id': '#o-summary-legend-button',
+          'html': '#o-summary-legend-button button',
+          'visible': 'o-summary-legend-button-true'
+        },
+        'events': {
+          'click': function (e) {
+            // TODO:: Send data or something.
+            // ocharts.type.selected = 'line';
+            var id = '#' + this.id + ' button';
+            activateTool(id, summary.tools.list);
+            $(id).blur();
+            e.preventDefault();
+          }
+        }
       }
     ]
   }
@@ -1341,7 +1367,7 @@ module.exports.init = function (optOptions) {
   connectNames(download.tools.names, download.tools.list);
   save.tools.names = inspect(settings.options, 'save', ['layers', 'clear'], settings.options.inspect.show.warn);
   connectNames(save.tools.names, save.tools.list);
-  summary.tools.names = inspect(settings.options, 'summary', ['table'], settings.options.inspect.show.warn);
+  summary.tools.names = inspect(settings.options, 'summary', ['table', 'legend'], settings.options.inspect.show.warn);
   connectNames(summary.tools.names, summary.tools.list);
 
   if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {

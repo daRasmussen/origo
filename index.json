@@ -11,12 +11,13 @@
         },
         "select": ["single", "box"],
         "fieldNames": ["total"],
+        "service": ["WFS", "WMS"],
         "charts": ["linjar", "bar", "radar", "doughnut", "circle", "polar", "bubble"],
         "target": "#o-toolbar-maptools",
         "toolName": "stats",
         "download": ["pdf"],
         "save": ["layers", "clear"],
-        "summary": ["table"]
+        "summary": ["table", "legend"]
       }
     },
     {
