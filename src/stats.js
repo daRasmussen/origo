@@ -12,6 +12,8 @@ var inspect = require('./inspect');
 var ol = require('openlayers');
 var $ = require('jquery');
 
+var drsw = require('./drsw');
+
 // TODO :: Statistics remove unnecessary modules.
 
 // Container for multiple charts
@@ -1370,9 +1372,12 @@ module.exports.init = function (optOptions) {
   summary.tools.names = inspect(settings.options, 'summary', ['table', 'legend'], settings.options.inspect.show.warn);
   connectNames(summary.tools.names, summary.tools.list);
 
+  
+
   if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
     initMapTool();
   } else {
     throw Error('Cannot initialize stats tool because no tools are enabled.');
   }
+
 };

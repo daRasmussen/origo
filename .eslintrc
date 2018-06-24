@@ -2,6 +2,6 @@
   "extends": "eslint-config-airbnb-es5",
   "rules": {
     "no-console": ["error", { allow: ["warn", "error"] }],
-    func-names: ["error", "never"]
+    "func-names": ["error", "never"]
   }
 }
