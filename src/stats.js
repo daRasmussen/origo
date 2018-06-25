@@ -16,6 +16,8 @@ var Chart = require('chart.js');
 
 var drsw = require('./drsw');
 
+var c;
+
 // TODO :: Statistics remove unnecessary modules.
 
 // Container for multiple charts
@@ -486,7 +488,7 @@ var download = {
     'default': 'featureInfo',
     'tool': 'downloadStats'
   },
-  'tools':{
+  'tools': {
     'names': [],
     'list': [
       {
@@ -1071,10 +1073,10 @@ function addInteraction() {
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
       ocharts.selections.compare.data = toData(ocharts.selections.compare.results);
       if (ocharts.selections.compare.results.length === 0 && window.event.shiftKey) {
-          ocharts.selections.compare.selected = [];
-          ocharts.selections.compare.deselected = [];
-          ocharts.selections.compare.data = [];
-          select.selected.features.clear();
+        ocharts.selections.compare.selected = [];
+        ocharts.selections.compare.deselected = [];
+        ocharts.selections.compare.data = [];
+        select.selected.features.clear();
       }
 
       console.log('SINGLE SELECTION')
@@ -1082,6 +1084,18 @@ function addInteraction() {
       // console.log('compare deselected: ', ocharts.selections.compare.deselected);
       // console.log('compare results: ', ocharts.selections.compare.results);
       console.log('compare data: ', ocharts.selections.compare.data);
+
+      console.log(ocharts.selections.compare.data[0], ocharts.selections.compare.data[1]);
+
+      c.data.datasets[1].data = ocharts.selections.compare.data[1];
+      c.data.labels = ocharts.selections.compare.data[0];
+      c.update();
+
+      c.data.datasets[2].data = ocharts.selections.compare.data[3];
+      c.data.labels = ocharts.selections.compare.data[1];
+      c.update();
+
+
 
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
@@ -1109,6 +1123,12 @@ function addInteraction() {
       ocharts.selections.total.values = total[1];
 
       console.log(ocharts.selections.total.names, ocharts.selections.total.values);
+
+      // Update chart.
+      c.data.datasets[0].data = ocharts.selections.total.values;
+      c.data.labels = ocharts.selections.total.names;
+      c.update();
+
       // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
       // console.log(ocharts.names, ocharts.ids, ocharts.values);
       // Add compare, store each selection in a seperate array.
@@ -1163,6 +1183,12 @@ function addInteraction() {
 
       console.log('BOX SELECTION');
       console.log(ocharts.selections.total.names, ocharts.selections.total.values);
+
+      // Update chart.
+      c.data.datasets[0].data = ocharts.selections.total.values;
+      c.data.labels = ocharts.selections.total.names;
+      c.update();
+
     });
 
     select.selected.features.on(['remove'], function() {
@@ -1374,20 +1400,39 @@ module.exports.init = function (optOptions) {
   summary.tools.names = inspect(settings.options, 'summary', ['table', 'legend'], settings.options.inspect.show.warn);
   connectNames(summary.tools.names, summary.tools.list);
 
+  // Enables charts window
   var footer = document.getElementById('o-footer');
   // console.log(footer);
-
   drsw.init({'target': footer});
   var data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    //labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    labels: [],
     datasets: [{
-      label: 'Dataset #1',
+      label: 'Total',
       backgroundColor: 'rgba(255,99,132,0.2)',
       borderColor: 'rgba(255,99,132,1)',
       borderWidth: 2,
       hoverBackgroundColor: 'rgba(255,99,132,0.4)',
       hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [65, 59, 20, 81, 56, 55, 40]
+      data:[]
+    },
+    {
+      label: 'Urval 1',
+      backgroundColor: 'rgba(255, 253, 99, 0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 2,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      data: []
+    },
+    {
+      label: 'Urval 2',
+      backgroundColor: 'rgba(99, 255, 115, 0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 2,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      data: []
     }]
   };
 
@@ -1396,7 +1441,7 @@ module.exports.init = function (optOptions) {
     responsive: true,
     scales: {
       yAxes: [{
-        stacked: true,
+        stacked: false,
         gridLines: {
           display: true,
           color: 'rgba(255,99,132,0.2)'
@@ -1417,7 +1462,7 @@ module.exports.init = function (optOptions) {
     }
   };
 
-  Chart.Bar('chart', {
+  c = Chart.Bar('chart', {
     options: options,
     data: data
   });
