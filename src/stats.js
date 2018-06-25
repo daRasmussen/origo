@@ -552,7 +552,7 @@ var save = {
     'default': 'featureInfo',
     'tool': 'saveStats'
   },
-  'tools':{
+  'tools': {
     'names': [],
     'list': [
       {
@@ -641,7 +641,7 @@ var summary = {
     'default': 'featureInfo',
     'tool': 'summaryStats'
   },
-  'tools':{
+  'tools': {
     'names': [],
     'list': [
       {
@@ -725,36 +725,36 @@ var summary = {
     ]
   }
 };
-function deactiveTool (tools) {
-  tools.forEach(function(tool) {
-    if (!tool.control){
+function deactiveTool(tools) {
+  tools.forEach(function (tool) {
+    if (!tool.control) {
       tool.active = false;
       toggleType2($(tool.target.html), tool.active, tool.target.visible);
-    } else if(tool.control) {
-      $(tool.target.id).addClass('o-tooltip')
+    } else if (tool.control) {
+      $(tool.target.id).addClass('o-tooltip');
     }
   });
 }
-function activateTool (target, tools) {
-  tools.forEach(function(tool) {
+function activateTool(target, tools) {
+  tools.forEach(function (tool) {
     if (tool.target.html !== target && !tool.control) {
       tool.active = false;
     } else {
-      tool.active = tool.active ? false: true;
+      tool.active = tool.active ? false : true;
     }
     toggleType2($(tool.target.html), tool.active, tool.target.visible);
-    console.log(tool.name, tool.active)
+    console.log(tool.name, tool.active);
   });
 }
-function hide (tools) {
-  tools.forEach(function(tool) {
+function hide(tools) {
+  tools.forEach(function (tool) {
     if (tool.enabled && !tool.control) {
       $(tool.target.id).addClass(settings.target.class.hidden);
     }
   });
 }
-function unhide (tools) {
-  tools.forEach(function(tool) {
+function unhide(tools) {
+  tools.forEach(function (tool) {
     if (tool.enabled && !tool.control) {
       $(tool.target.id).removeClass(settings.target.class.hidden);
     }
@@ -836,7 +836,7 @@ function createTool(toolGroup, toolName, icon, toolTip, tipPlace) {
     tooltipText: toolTip,
     tooltipPlacement: tipPlace
   }));
-  console.log('createdTool: ','#o-' + toolGroup + '-' + icon + '-button');
+  console.log('createdTool: ', '#o-' + toolGroup + '-' + icon + '-button');
   $('#o-' + toolGroup + '-' + icon + '-button').addClass('o-hidden');
 }
 /**
@@ -997,37 +997,36 @@ function distribute(s, d) {
       r.push(se);
     });
     return r;
-  }  else {
-    s.forEach(function(se) {
-      se.forEach(function(sef) {
-        var sf = sef.getId();
-        d.forEach(function(de){
-          var sub = [];
-          de.forEach(function(def) {
-            var df = def.getId();
-            // TODO :: SORT CLICK SAME get Count
-            if(sf !== df){
-              console.log('adds to result: ', sef);
-              sub.push(sef);
-            } else {
-              console.log('removes from result: ', sef);
-            }
-          });
-          if (sub.length !== 0) {
-            r.push(sub);
+  }
+  s.forEach(function (se) {
+    se.forEach(function (sef) {
+      var sf = sef.getId();
+      d.forEach(function (de) {
+        var sub = [];
+        de.forEach(function (def) {
+          var df = def.getId();
+          // TODO :: SORT CLICK SAME get Count
+          if (sf !== df) {
+            console.log('adds to result: ', sef);
+            sub.push(sef);
+          } else {
+            console.log('removes from result: ', sef);
           }
         });
+        if (sub.length !== 0) {
+          r.push(sub);
+        }
       });
     });
-    return r;
-  }
+  });
+  return r;
 }
 function toData(a) {
   var data = [];
   var names, values;
-  a.forEach(function(e){
+  a.forEach(function (e) {
     names = []; values = [];
-    e.forEach(function(i) {
+    e.forEach(function (i) {
       var name = i.getId().split('.')[0];
       names.push(name);
       var val = parseInt(i.get(ocharts.fieldNames[0]), 10);
@@ -1051,7 +1050,7 @@ function createDataSet(name, color, data) {
 var colors = ['11,146,185', '45,236,69', '104,82,141', '130,79,1', '48,27,222', '130,82,192 '];
 var globalCompareCounter = 0;
 function addInteraction() {
-  console.log('addIntercation: ')
+  console.log('addIntercation: ');
   ocharts.selections.compare.selected = [];
   ocharts.selections.compare.deselected = [];
   ocharts.selections.compare.results = [];
@@ -1075,46 +1074,7 @@ function addInteraction() {
       condition: ol.events.condition.click,
       toggleCondition: ol.events.condition.shiftKeyOnly,
       multi: true,
-      layers: getSelectableVisible(settings.map.getLayers(), false),
-      style: function(feature) {
-        if (globalCompareCounter === 1) {
-          var style = new ol.style.Style({
-            fill: new ol.style.Fill({
-              color: '#0b92b9',
-              opacity: 0.4
-            }),
-            stroke: new ol.style.Stroke({
-              color: '#444',
-              width: 1
-            })
-          });
-          return style;
-        } else if (globalCompareCounter === 2) {
-          var style = new ol.style.Style({
-            fill: new ol.style.Fill({
-              color: '#0b92b9',
-              opacity: 0.4
-            }),
-            stroke: new ol.style.Stroke({
-              color: '#444',
-              width: 1
-            })
-          });
-          return style;
-        } else {
-          var style = new ol.style.Style({
-            fill: new ol.style.Fill({
-              color: '#ff6384',
-              opacity: 0.4
-            }),
-            stroke: new ol.style.Stroke({
-              color: '#444',
-              width: 1
-            })
-          });
-          return style;
-        }
-      }
+      layers: getSelectableVisible(settings.map.getLayers(), false)
     });
 
     settings.map.addInteraction(select.type.single.interaction);
@@ -1136,10 +1096,93 @@ function addInteraction() {
         globalCompareCounter = 0;
       }
 
-      console.log('SINGLE SELECTION')
+      console.log('SINGLE SELECTION');
       // console.log('compare selected: ', ocharts.selections.compare.selected);
       // console.log('compare deselected: ', ocharts.selections.compare.deselected);
-      // console.log('compare results: ', ocharts.selections.compare.results);
+      console.log('compare results: ', ocharts.selections.compare.results);
+      if (ocharts.selections.compare.results.length === 1) {
+        ocharts.selections.compare.results[0][0].setStyle(new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: '#0b92b9',
+            opacity: 0.4
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#444',
+            width: 1
+          })
+        }));
+      } else if (ocharts.selections.compare.results.length === 2) {
+        ocharts.selections.compare.results[1][0].setStyle(new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: '#2dec45',
+            opacity: 0.4
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#444',
+            width: 1
+          })
+        }));
+      } else if (ocharts.selections.compare.results.length === 3) {
+        ocharts.selections.compare.results[2][0].setStyle(new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: '#68528d',
+            opacity: 0.4
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#444',
+            width: 1
+          })
+        }));
+      }
+      // else {
+      //   select.type.single.interaction.setStyle(new ol.style.Style({
+      //     fill: new ol.style.Fill({
+      //       color: '#ff6384',
+      //       opacity: 0.4
+      //     }),
+      //     stroke: new ol.style.Stroke({
+      //       color: '#444',
+      //       width: 1
+      //     })
+      //   }));
+      // }
+      // ocharts.selections.compare.results.forEach(function (f) {
+      //   if (globalCompareCounter === 1) {
+      //     f[0].setStyle(new ol.style.Style({
+      //       fill: new ol.style.Fill({
+      //         color: '#0b92b9',
+      //         opacity: 0.4
+      //       }),
+      //       stroke: new ol.style.Stroke({
+      //         color: '#444',
+      //         width: 1
+      //       })
+      //     }));
+      //   } else if (globalCompareCounter === 2) {
+      //     f[0].setStyle(new ol.style.Style({
+      //       fill: new ol.style.Fill({
+      //         color: '#2dec45',
+      //         opacity: 0.4
+      //       }),
+      //       stroke: new ol.style.Stroke({
+      //         color: '#444',
+      //         width: 1
+      //       })
+      //     }));
+      //   } else if (globalCompareCounter === 3) {
+      //     f[0].setStyle(new ol.style.Style({
+      //       fill: new ol.style.Fill({
+      //         color: '#68528d',
+      //         opacity: 0.4
+      //       }),
+      //       stroke: new ol.style.Stroke({
+      //         color: '#444',
+      //         width: 1
+      //       })
+      //     }));
+      //   }
+      // });
+
       // console.log('compare data: ', ocharts.selections.compare.data);
       // static update.
 
@@ -1147,13 +1190,13 @@ function addInteraction() {
       globalCompareCounter = ocharts.selections.compare.data.length / 2;
       if (c.data.datasets[globalCompareCounter] === void 0) {
         console.log(c.data.datasets);
-        c.data.datasets[globalCompareCounter] = createDataSet('Urval '+globalCompareCounter, colors[globalCompareCounter-1], ocharts.selections.compare.data[(globalCompareCounter * 2) - 1]);
+        c.data.datasets[globalCompareCounter] = createDataSet('Urval ' + globalCompareCounter, colors[globalCompareCounter - 1], ocharts.selections.compare.data[(globalCompareCounter * 2) - 1]);
         c.data.labels = ocharts.selections.compare.data[(globalCompareCounter * 2) - 2];
       }
       if (ocharts.selections.compare.data.length === 0) {
         c.data.datasets.splice(1);
         c.data.labels.splice(1);
-        console.log(c.data.datasets)
+        console.log(c.data.datasets);
       }
 
       e.selected.forEach(function (f) {
@@ -1191,9 +1234,7 @@ function addInteraction() {
       // console.log(ocharts.selections.total.names, ocharts.selections.total.values);
       // console.log(ocharts.names, ocharts.ids, ocharts.values);
       // Add compare, store each selection in a seperate array.
-
     }, this);
-
   } else if (select.tools.list[getIndex(select.tools.list, 'name', 'box')].active) {
     ocharts.selections.compare.selected = [];
     ocharts.selections.compare.deselected = [];
@@ -1249,14 +1290,12 @@ function addInteraction() {
       c.data.datasets[0].data = ocharts.selections.total.values;
       c.data.labels = ocharts.selections.total.names;
       c.update();
-
     });
 
-    select.selected.features.on(['remove'], function() {
-        select.selected.features.clear();
-        // console.log('removes all: ')
-      });
-
+    select.selected.features.on(['remove'], function () {
+      select.selected.features.clear();
+      // console.log('removes all: ')
+    });
   } else {
     settings.map.removeInteraction(select.type.single.interaction);
     settings.map.removeInteraction(select.type.singleBox.interaction);
@@ -1279,10 +1318,9 @@ function getIndex(list, key, value) {
  * @return {[type]} [description]
  */
 function initTips() {
-  settings.tooltip.tips.forEach(function(t){
+  settings.tooltip.tips.forEach(function (t) {
     $(t.element).remove();
     t.element = null;
-
   });
   settings.tooltip.tips.forEach(function (t) {
     t.element = document.createElement('div');
@@ -1350,7 +1388,6 @@ function toogleInteraction2(target, active, fi, si) {
 function toggleType(button, active) {
   if (active) {
     button.addClass(settings.target.class.visible.stats);
-
   } else {
     button.removeClass(settings.target.class.visible.stats);
   }
