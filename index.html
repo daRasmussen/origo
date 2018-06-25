@@ -1,50 +1,18 @@
 <!DOCTYPE html>
 <html lang="sv">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1">
-	<title>Origo exempel</title>
-	<link href="css/style.css" rel="stylesheet">
-	<style media="screen">
-		img.expanded {
-			max-width: max-content;
-			flex: 1;
-				max-width: 50%;
-		}
-		input[type$="date"] {
-			width: 100%;
-		}
-		.o-legend-item-img {
-			padding-left: 1px;
-			padding-right: 4px;
-		}
-		.o-map #o-menutools li:first-child {
-				height: .7em;
-		}
-		/* #o-group-cloakedGrp {
-			display:none;
-		}; */
-	</style>
-</head>
-<body>
-	<test>
-		<div id="panea" class="pane">
-			<div class="content">
-				<div class="chart-container">
-					<canvas id="chart"></canvas>
-				</div>
-			</div>
-		</div>
-	</test>
-
-		<div id="app-wrapper">
-
-		</div>
-<script src="js/origo.js"></script>
-<script type="text/javascript">
-	//Init origo
-  origo.map.init('index.json');
-</script>
-</body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1">
+		<title>Origo exempel</title>
+		<link href="css/style.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="app-wrapper"></div>
+		<script src="js/origo.js"></script>
+		<script type="text/javascript">
+			//Init origo
+	  	origo.map.init('index.json');
+		</script>
+	</body>
 </html>

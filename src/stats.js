@@ -12,6 +12,8 @@ var inspect = require('./inspect');
 var ol = require('openlayers');
 var $ = require('jquery');
 
+var Chart = require('chart.js');
+
 var drsw = require('./drsw');
 
 // TODO :: Statistics remove unnecessary modules.
@@ -1372,12 +1374,57 @@ module.exports.init = function (optOptions) {
   summary.tools.names = inspect(settings.options, 'summary', ['table', 'legend'], settings.options.inspect.show.warn);
   connectNames(summary.tools.names, summary.tools.list);
 
-  
+  var footer = document.getElementById('o-footer');
+  // console.log(footer);
+
+  drsw.init({'target': footer});
+  var data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    datasets: [{
+      label: 'Dataset #1',
+      backgroundColor: 'rgba(255,99,132,0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 2,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      data: [65, 59, 20, 81, 56, 55, 40]
+    }]
+  };
+
+  var options = {
+    maintainAspectRatio: false,
+    responsive: true,
+    scales: {
+      yAxes: [{
+        stacked: true,
+        gridLines: {
+          display: true,
+          color: 'rgba(255,99,132,0.2)'
+        }
+      }],
+      xAxes: [{
+        gridLines: {
+          display: false
+        }
+      }]
+    },
+    legend: {
+      labels: {
+        fontColor: 'red',
+        defaultFontSize: 30,
+        defaultFontFamily: 'Helvetica Neue'
+      }
+    }
+  };
+
+  Chart.Bar('chart', {
+    options: options,
+    data: data
+  });
 
   if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
     initMapTool();
   } else {
     throw Error('Cannot initialize stats tool because no tools are enabled.');
   }
-
 };

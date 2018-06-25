@@ -1,9 +1,8 @@
-var Chart = require('chart.js');
+'use strict';
 var core = core || {};
 core.util = core.util || {};
 core.util.DRS = (function () {
   var makeDRS = function (pane, handle, options) {
-    'use strict';
 
     options = options || {};
 
@@ -80,7 +79,7 @@ core.util.DRS = (function () {
     // core functions
 
     function setBounds(element, x, y, w, h) {
-      if (x === undefined) {
+      if (x === void 0) {
         b = b || pane.getBoundingClientRect();
         x = b.left;
         y = b.top;
@@ -96,26 +95,27 @@ core.util.DRS = (function () {
 
     function getBounds() {
       var winW = window.innerWidth;
-	    var winH = window.innerHeight;
+      var winH = window.innerHeight;
       var bounds = [];
       if (b.top < SNAP_FS_MARGINS || b.left < SNAP_FS_MARGINS ||
 			b.right > winW - SNAP_FS_MARGINS || b.bottom > winH - SNAP_FS_MARGINS) {
-		  bounds = [0, 0, winW, winH];
+        bounds = [0, 0, winW, winH];
       } else if (leftScreenEdge) {
-		  bounds = [0, 0, winW / 2, winH];
+        bounds = [0, 0, winW / 2, winH];
       } else if (rightScreenEdge) {
-		  bounds = [winW / 2, 0, winW / 2, winH];
+        bounds = [winW / 2, 0, winW / 2, winH];
       } else if (topScreenEdge) {
-		  bounds = [0, 0, winW, winH / 2];
+        bounds = [0, 0, winW, winH / 2];
       } else if (bottomScreenEdge) {
-		  bounds = [0, winH / 2, winW, winH / 2];
+        bounds = [0, winH / 2, winW, winH / 2];
       }
       return bounds;
     }
 
     function convertUnits(w, h) {
       if (!_usePercent) {return [w + 'px', h + 'px'];}
-      var pH, pW;
+      var pH;
+      var pW;
       // use docWidth to take scroll bars into account!
       var docWidth = document.documentElement.clientWidth || document.body.clientWidth;
       pH = h / window.innerHeight * 100;
@@ -126,7 +126,7 @@ core.util.DRS = (function () {
     }
 
     function togglePercent(state) {
-      _usePercent = state !== undefined ? state : !_usePercent;
+      _usePercent = state !== void 0 ? state : !_usePercent;
       setBounds(pane);
     }
 
@@ -143,8 +143,8 @@ core.util.DRS = (function () {
     }
 
     function hintHide() {
-	  setBounds(ghostpane, b.left, b.top, b.width, b.height);
-	  ghostpane.style.opacity = 0;
+      setBounds(ghostpane, b.left, b.top, b.width, b.height);
+      ghostpane.style.opacity = 0;
     }
 
     // Mouse events
@@ -158,23 +158,23 @@ core.util.DRS = (function () {
     document.addEventListener('touchend', onTouchEnd);
 
     function onTouchDown(e) {
-	  onDown(e.touches[0]);
+      onDown(e.touches[0]);
     }
 
     function onTouchMove(e) {
-	  onMove(e.touches[0]);
-	  if (clicked && (clicked.isMoving || clicked.isResizing)) {
-		  e.preventDefault();
-		  e.stopPropagation();
-	  }
+      onMove(e.touches[0]);
+      if (clicked && (clicked.isMoving || clicked.isResizing)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }
 
     function onTouchEnd(e) {
-	  if (e.touches.length == 0) onUp(e.changedTouches[0]);
+      if (e.touches.length === 0) onUp(e.changedTouches[0]);
     }
 
     function onMouseDown(e) {
-	  onDown(e);
+      onDown(e);
     }
 
     function onDown(e) {
@@ -465,51 +465,26 @@ core.util.DRS = (function () {
   return {makeDRS: makeDRS};
 }());
 
-// implimentation
-var panea = document.getElementById('panea');
-var drsa = core.util.DRS.makeDRS(panea, 'top');
-var data = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-  datasets: [{
-    label: "Dataset #1",
-    backgroundColor: "rgba(255,99,132,0.2)",
-    borderColor: "rgba(255,99,132,1)",
-    borderWidth: 2,
-    hoverBackgroundColor: "rgba(255,99,132,0.4)",
-    hoverBorderColor: "rgba(255,99,132,1)",
-    data: [65, 59, 20, 81, 56, 55, 40],
-  }]
-};
+module.exports.init = function (o) {
+  var t = o.target;
+  // console.log(t)
+  // create drsw
+  var nPanea = document.createElement('div');
+  nPanea.id = 'panea';
+  nPanea.className  = 'pane';
+  var nContent = document.createElement('div');
+  nContent.className  = 'content';
+  var nChartContainer = document.createElement('div');
+  nChartContainer.className  = 'chart-container';
+  var nChartCanvas = document.createElement('canvas');
+  nChartCanvas.id = 'chart';
+  nChartCanvas.innerHTML = " ";
+  nChartContainer.appendChild(nChartCanvas);
+  nContent.appendChild(nChartContainer);
+  nPanea.appendChild(nContent);
+  t.appendChild(nPanea);
 
-var options = {
-  maintainAspectRatio: false,
-  responsive: true,
-  scales: {
-    yAxes: [{
-      stacked: true,
-      gridLines: {
-        display: true,
-        color: "rgba(255,99,132,0.2)"
-      }
-    }],
-    xAxes: [{
-      gridLines: {
-        display: false
-      }
-    }]
-  },
-  legend: {
-    labels: {
-      fontColor: 'red',
-      defaultFontSize: 30,
-      defaultFontFamily: "Helvetica Neue"
-    }
-  }
-};
-
-Chart.Bar('chart', {
-  options: options,
-  data: data
-});
-
-module.exports.drsa = drsa;
+  var panea = document.getElementById('panea');
+  // console.log(panea)
+  core.util.DRS.makeDRS(panea, 'top');
+}
