@@ -1048,6 +1048,7 @@ function createDataSet(name, color, data) {
     data: data
   };
 }
+var colors = ['11,146,185', '45,236,69', '104,82,141', '130,79,1', '48,27,222', '130,82,192 '];
 var globalCompareCounter = 0;
 function addInteraction() {
   console.log('addIntercation: ')
@@ -1060,6 +1061,10 @@ function addInteraction() {
   ocharts.values = [];
   ocharts.ids = [];
   globalCompareCounter = 0;
+  c.data.datasets.splice(1);
+  c.data.datasets[0].data = [];
+  c.data.labels.splice(1);
+  c.update();
 
   settings.map.removeInteraction(select.type.single.interaction);
   settings.map.removeInteraction(select.type.singleBox.interaction);
@@ -1079,6 +1084,7 @@ function addInteraction() {
     select.type.single.interaction.on('select', function (e) {
       if (e.selected.length > 0 && window.event.shiftKey) {
         ocharts.selections.compare.selected.splice(ocharts.selections.compare.selected.length, 0, e.selected);
+
       } else if (window.event.shiftKey) {
         ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
       }
@@ -1103,7 +1109,7 @@ function addInteraction() {
       globalCompareCounter = ocharts.selections.compare.data.length / 2;
       if (c.data.datasets[globalCompareCounter] === void 0) {
         console.log(c.data.datasets);
-        c.data.datasets[globalCompareCounter] = createDataSet('Urval '+globalCompareCounter, '255, 253, 99', ocharts.selections.compare.data[(globalCompareCounter * 2) - 1]);
+        c.data.datasets[globalCompareCounter] = createDataSet('Urval '+globalCompareCounter, colors[globalCompareCounter-1], ocharts.selections.compare.data[(globalCompareCounter * 2) - 1]);
         c.data.labels = ocharts.selections.compare.data[(globalCompareCounter * 2) - 2];
       }
       if (ocharts.selections.compare.data.length === 0) {
@@ -1159,6 +1165,10 @@ function addInteraction() {
     ocharts.names = [];
     ocharts.values = [];
     ocharts.ids = [];
+    c.data.datasets.splice(1);
+    c.data.datasets[0].data = [];
+    c.data.labels.splice(1);
+    c.update();
 
     select.type.singleBox.interaction = new ol.interaction.Select({
       condition: ol.events.condition.click,
@@ -1418,7 +1428,6 @@ module.exports.init = function (optOptions) {
   // console.log(footer);
   drsw.init({'target': footer});
   var data = {
-    //labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
     labels: [],
     datasets: [{
       label: 'Total',
@@ -1428,27 +1437,7 @@ module.exports.init = function (optOptions) {
       hoverBackgroundColor: 'rgba(255,99,132,0.4)',
       hoverBorderColor: 'rgba(255,99,132,1)',
       data: []
-    }
-    // ,
-    // {
-    //   label: 'Urval 1',
-    //   backgroundColor: 'rgba(255, 253, 99, 0.2)',
-    //   borderColor: 'rgba(255, 253, 99,1)',
-    //   borderWidth: 2,
-    //   hoverBackgroundColor: 'rgba(255, 253, 99, 0.4)',
-    //   hoverBorderColor: 'rgba(255, 253, 99, ,1)',
-    //   data: []
-    // },
-    // {
-    //   label: 'Urval 2',
-    //   backgroundColor: 'rgba(99, 255, 115, 0.2)',
-    //   borderColor: 'rgba(99, 255, 115, 1)',
-    //   borderWidth: 2,
-    //   hoverBackgroundColor: 'rgba(99, 255, 115, 0.4)',
-    //   hoverBorderColor: 'rgba(99, 255, 115, 1)',
-    //   data: []
-    // }
-  ]
+    }]
   };
 
   var options = {
@@ -1460,6 +1449,9 @@ module.exports.init = function (optOptions) {
         gridLines: {
           display: true,
           color: 'rgba(255,99,132,0.2)'
+        },
+        ticks: {
+          beginAtZero: true
         }
       }],
       xAxes: [{
@@ -1470,7 +1462,7 @@ module.exports.init = function (optOptions) {
     },
     legend: {
       labels: {
-        fontColor: 'red',
+        fontColor: 'black',
         defaultFontSize: 30,
         defaultFontFamily: 'Helvetica Neue'
       }
@@ -1481,6 +1473,8 @@ module.exports.init = function (optOptions) {
     options: options,
     data: data
   });
+
+  console.log(ol);
 
   if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
     initMapTool();
