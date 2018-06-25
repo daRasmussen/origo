@@ -1075,7 +1075,46 @@ function addInteraction() {
       condition: ol.events.condition.click,
       toggleCondition: ol.events.condition.shiftKeyOnly,
       multi: true,
-      layers: getSelectableVisible(settings.map.getLayers(), false)
+      layers: getSelectableVisible(settings.map.getLayers(), false),
+      style: function(feature) {
+        if (globalCompareCounter === 1) {
+          var style = new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#0b92b9',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          });
+          return style;
+        } else if (globalCompareCounter === 2) {
+          var style = new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#0b92b9',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          });
+          return style;
+        } else {
+          var style = new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#ff6384',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          });
+          return style;
+        }
+      }
     });
 
     settings.map.addInteraction(select.type.single.interaction);
@@ -1084,7 +1123,6 @@ function addInteraction() {
     select.type.single.interaction.on('select', function (e) {
       if (e.selected.length > 0 && window.event.shiftKey) {
         ocharts.selections.compare.selected.splice(ocharts.selections.compare.selected.length, 0, e.selected);
-
       } else if (window.event.shiftKey) {
         ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
       }
