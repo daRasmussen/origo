@@ -1037,7 +1037,18 @@ function toData(a) {
   });
   return data;
 }
-
+function createDataSet(name, color, data) {
+  return {
+    label: name,
+    backgroundColor: 'rgba(' + color + ', 0.2)',
+    borderColor: 'rgba(' + color + ', 1)',
+    borderWidth: 2,
+    hoverBackgroundColor: 'rgba(' + color + ', 0.4)',
+    hoverBorderColor: 'rgba(' + color + ', ,1)',
+    data: data
+  };
+}
+var globalCompareCounter = 0;
 function addInteraction() {
   console.log('addIntercation: ')
   ocharts.selections.compare.selected = [];
@@ -1048,6 +1059,7 @@ function addInteraction() {
   ocharts.names = [];
   ocharts.values = [];
   ocharts.ids = [];
+  globalCompareCounter = 0;
 
   settings.map.removeInteraction(select.type.single.interaction);
   settings.map.removeInteraction(select.type.singleBox.interaction);
@@ -1077,25 +1089,28 @@ function addInteraction() {
         ocharts.selections.compare.deselected = [];
         ocharts.selections.compare.data = [];
         select.selected.features.clear();
+        globalCompareCounter = 0;
       }
 
       console.log('SINGLE SELECTION')
       // console.log('compare selected: ', ocharts.selections.compare.selected);
       // console.log('compare deselected: ', ocharts.selections.compare.deselected);
       // console.log('compare results: ', ocharts.selections.compare.results);
-      console.log('compare data: ', ocharts.selections.compare.data);
-
-      console.log(ocharts.selections.compare.data[0], ocharts.selections.compare.data[1]);
-
-      c.data.datasets[1].data = ocharts.selections.compare.data[1];
-      c.data.labels = ocharts.selections.compare.data[0];
-      c.update();
-
-      c.data.datasets[2].data = ocharts.selections.compare.data[3];
-      c.data.labels = ocharts.selections.compare.data[1];
-      c.update();
+      // console.log('compare data: ', ocharts.selections.compare.data);
+      // static update.
 
 
+      globalCompareCounter = ocharts.selections.compare.data.length / 2;
+      if (c.data.datasets[globalCompareCounter] === void 0) {
+        console.log(c.data.datasets);
+        c.data.datasets[globalCompareCounter] = createDataSet('Urval '+globalCompareCounter, '255, 253, 99', ocharts.selections.compare.data[(globalCompareCounter * 2) - 1]);
+        c.data.labels = ocharts.selections.compare.data[(globalCompareCounter * 2) - 2];
+      }
+      if (ocharts.selections.compare.data.length === 0) {
+        c.data.datasets.splice(1);
+        c.data.labels.splice(1);
+        console.log(c.data.datasets)
+      }
 
       e.selected.forEach(function (f) {
         var name = f.getId().split('.')[0];
@@ -1124,7 +1139,7 @@ function addInteraction() {
 
       console.log(ocharts.selections.total.names, ocharts.selections.total.values);
 
-      // Update chart.
+      // Update total in chart.
       c.data.datasets[0].data = ocharts.selections.total.values;
       c.data.labels = ocharts.selections.total.names;
       c.update();
@@ -1135,8 +1150,6 @@ function addInteraction() {
 
     }, this);
 
-    // testCharts("urval 1", names, values);
-    //testCharts("urval 2", ocharts.names[1], ochart.values[1]);
   } else if (select.tools.list[getIndex(select.tools.list, 'name', 'box')].active) {
     ocharts.selections.compare.selected = [];
     ocharts.selections.compare.deselected = [];
@@ -1184,7 +1197,7 @@ function addInteraction() {
       console.log('BOX SELECTION');
       console.log(ocharts.selections.total.names, ocharts.selections.total.values);
 
-      // Update chart.
+      // Update total in chart.
       c.data.datasets[0].data = ocharts.selections.total.values;
       c.data.labels = ocharts.selections.total.names;
       c.update();
@@ -1414,26 +1427,28 @@ module.exports.init = function (optOptions) {
       borderWidth: 2,
       hoverBackgroundColor: 'rgba(255,99,132,0.4)',
       hoverBorderColor: 'rgba(255,99,132,1)',
-      data:[]
-    },
-    {
-      label: 'Urval 1',
-      backgroundColor: 'rgba(255, 253, 99, 0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      borderWidth: 2,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
       data: []
-    },
-    {
-      label: 'Urval 2',
-      backgroundColor: 'rgba(99, 255, 115, 0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      borderWidth: 2,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: []
-    }]
+    }
+    // ,
+    // {
+    //   label: 'Urval 1',
+    //   backgroundColor: 'rgba(255, 253, 99, 0.2)',
+    //   borderColor: 'rgba(255, 253, 99,1)',
+    //   borderWidth: 2,
+    //   hoverBackgroundColor: 'rgba(255, 253, 99, 0.4)',
+    //   hoverBorderColor: 'rgba(255, 253, 99, ,1)',
+    //   data: []
+    // },
+    // {
+    //   label: 'Urval 2',
+    //   backgroundColor: 'rgba(99, 255, 115, 0.2)',
+    //   borderColor: 'rgba(99, 255, 115, 1)',
+    //   borderWidth: 2,
+    //   hoverBackgroundColor: 'rgba(99, 255, 115, 0.4)',
+    //   hoverBorderColor: 'rgba(99, 255, 115, 1)',
+    //   data: []
+    // }
+  ]
   };
 
   var options = {
