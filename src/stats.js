@@ -13,7 +13,7 @@ var ol = require('openlayers');
 var $ = require('jquery');
 
 var Chart = require('chart.js');
-
+var datalabels = require('chartjs-plugin-datalabels');
 var drsw = require('./drsw');
 
 var c;
@@ -1543,6 +1543,17 @@ module.exports.init = function (optOptions) {
         fontColor: 'black',
         defaultFontSize: 30,
         defaultFontFamily: 'Helvetica Neue'
+      }
+    },
+    plugins: {
+      datalabels: {
+        color: 'black',
+        display: function (c) {
+          return c.dataset.data[c.dataIndex] > 15;
+        },
+        font: {
+          weight: 'bold'
+        }
       }
     }
   };
