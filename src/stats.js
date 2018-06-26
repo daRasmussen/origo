@@ -13,10 +13,11 @@ var ol = require('openlayers');
 var $ = require('jquery');
 
 var Chart = require('chart.js');
-var datalabels = require('chartjs-plugin-datalabels');
+var datalabes = require('chartjs-plugin-datalabels');
 var drsw = require('./drsw');
 
 var c;
+var hasPrint = false;
 
 // TODO :: Statistics remove unnecessary modules.
 
@@ -538,6 +539,13 @@ var download = {
             // ocharts.type.selected = 'line';
             var id = '#' + this.id + ' button';
             activateTool(id, download.tools.list);
+            if (!hasPrint) {
+              window.print();
+              hasPrint = true;
+            } else {
+              hasPrint = false;
+            }
+
             $(id).blur();
             e.preventDefault();
           }
