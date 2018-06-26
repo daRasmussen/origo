@@ -950,18 +950,6 @@ function getSelectableVisible(a, v) {
   });
   return r;
 }
-function arraysEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-  for (var i = arr1.length; i--;) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
 function shrink(names, ids, values, id) {
   var index = ids.indexOf(id);
   var nn = names.filter(function (e, i) {  return i !== index; });
@@ -1032,7 +1020,8 @@ function distribute(s, d) {
 }
 function toData(a) {
   var data = [];
-  var names, values;
+  var names;
+  var values;
   a.forEach(function (e) {
     names = []; values = [];
     e.forEach(function (i) {
@@ -1071,8 +1060,8 @@ function addInteraction() {
   console.log('addIntercation: ');
   ocharts.selections.compare.selected = [];
   ocharts.selections.compare.deselected = [];
-  ocharts.selections.compare.results.forEach(function(a){
-    a.forEach(function(f){
+  ocharts.selections.compare.results.forEach(function (a) {
+    a.forEach(function (f) {
       f.setStyle(defaultStyle);
     });
   });
@@ -1234,7 +1223,6 @@ function addInteraction() {
           }));
         });
       }
-
 
       globalCompareCounter = ocharts.selections.compare.data.length / 2;
       if (c.data.datasets[globalCompareCounter] === void 0) {
@@ -1476,8 +1464,8 @@ function initMapTool() {
           ocharts.selections.total.values = [];
           ocharts.selections.compare.selected = [];
           ocharts.selections.compare.deselected = [];
-          ocharts.selections.compare.results.forEach(function(a){
-            a.forEach(function(f){
+          ocharts.selections.compare.results.forEach(function (a) {
+            a.forEach(function (f) {
               f.setStyle(defaultStyle);
             });
           });
