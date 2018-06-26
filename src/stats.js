@@ -13,14 +13,13 @@ var ol = require('openlayers');
 var $ = require('jquery');
 
 var Chart = require('chart.js');
-var datalabes = require('chartjs-plugin-datalabels');
+var datalabes = require('chartjs-plugin-datalabels'); // Workaround to show labels.
 var drsw = require('./drsw');
 
 var c;
 var hasPrint = false;
 
 // TODO :: Statistics remove unnecessary modules.
-
 // Container for multiple charts
 // var ocharts = require('./charts/ocharts.js');
 
@@ -1486,8 +1485,8 @@ function initMapTool() {
   render(settings.target.id.mapTools, select.tools.list);
   bindUIActions2(select.tools.list);
 
-  render(settings.target.id.mapTools, ocharts.tools.list);
-  bindUIActions2(ocharts.tools.list);
+  // render(settings.target.id.mapTools, ocharts.tools.list);
+  // bindUIActions2(ocharts.tools.list);
   //
   // render(settings.target.id.mapTools, download.tools.list);
   // bindUIActions2(download.tools.list);
@@ -1548,8 +1547,8 @@ module.exports.init = function (optOptions) {
   ocharts.fieldNames = inspect(settings.options, 'fieldNames', ['total'], settings.options.inspect.show.warn);
   ocharts.tools.names = inspect(settings.options, 'charts', ['bar', 'circle'], settings.options.inspect.show.warn);
   connectNames(ocharts.tools.names, ocharts.tools.list);
-  download.tools.names = inspect(settings.options, 'download', ['pdf'], settings.options.inspect.show.warn);
-  connectNames(download.tools.names, download.tools.list);
+  // download.tools.names = inspect(settings.options, 'download', ['pdf'], settings.options.inspect.show.warn);
+  // connectNames(download.tools.names, download.tools.list);
 
   // save.tools.names = inspect(settings.options, 'save', ['layers', 'clear'], settings.options.inspect.show.warn);
   // connectNames(save.tools.names, save.tools.list);
@@ -1613,10 +1612,55 @@ module.exports.init = function (optOptions) {
     }
   };
 
-  c = Chart.Bar('chart', {
+  c = new Chart('chart', {
+    type: 'bar',
     options: options,
     data: data
   });
+
+  // TODO: Different sturctures on lables and data. For pie etc...
+  // var TESTdata = {
+  //   labels: ['Total', 'bef0', 'bef1'],
+  //   datasets: [{
+  //     backgroundColor: 'rgba(255,99,132,0.2)',
+  //     borderColor: 'rgba(255,99,132,1)',
+  //     borderWidth: 2,
+  //     hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+  //     hoverBorderColor: 'rgba(255,99,132,1)',
+  //     data: [10, 20, 30]
+  //   }]
+  // };
+  //
+  // var TESToptions = {
+  //   maintainAspectRatio: false,
+  //   responsive: true,
+  //
+  //   legend: {
+  //     labels: {
+  //       fontColor: 'black',
+  //       defaultFontSize: 30,
+  //       defaultFontFamily: 'Helvetica Neue'
+  //     }
+  //   },
+  //   plugins: {
+  //     datalabels: {
+  //       color: 'black',
+  //       display: function (context) {
+  //         return context.chart.isDatasetVisible(context.datasetIndex) && context.dataset.data[context.dataIndex] > 0;
+  //       },
+  //       font: {
+  //         weight: 'bold'
+  //       }
+  //     }
+  //   }
+  // };
+  //
+  // c = new Chart('chart', {
+  //   type: 'pie',
+  //   options: TESToptions,
+  //   data: TESTdata
+  // });
+
 
   // console.log('ol build: ', ol);
 
