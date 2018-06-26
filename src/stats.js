@@ -800,6 +800,7 @@ function onEnableInteraction(e) {
   } else if (e.interaction === ocharts.interactions.tool) {
     console.log('Select Interaction enabled: ', e.interaction);
     enableControl(ocharts, settings);
+    console.log(ocharts.selections)
   } else if (e.interaction === download.interactions.tool) {
     console.log('Select Interaction enabled: ', e.interaction);
     enableControl(download, settings);
@@ -1057,11 +1058,24 @@ function createDataSet(name, color, data) {
 }
 var colors = ['11,146,185', '45,236,69', '104,82,141', '130,79,1', '48,27,222', '130,82,192'];
 var globalCompareCounter = 0;
-
+var defaultStyle = new ol.style.Style({
+  fill: new ol.style.Fill({
+    color: 'rgba(0, 0, 0, 0.1)'
+  }),
+  stroke: new ol.style.Stroke({
+    color: 'rgba(0,0,0,1.0)',
+    width: 1
+  })
+});
 function addInteraction() {
   console.log('addIntercation: ');
   ocharts.selections.compare.selected = [];
   ocharts.selections.compare.deselected = [];
+  ocharts.selections.compare.results.forEach(function(a){
+    a.forEach(function(f){
+      f.setStyle(defaultStyle);
+    });
+  });
   ocharts.selections.compare.results = [];
   ocharts.selections.total.names = [];
   ocharts.selections.total.values = [];
@@ -1094,6 +1108,24 @@ function addInteraction() {
         ocharts.selections.compare.selected.splice(ocharts.selections.compare.selected.length, 0, e.selected);
       } else if (window.event.shiftKey) {
         ocharts.selections.compare.deselected.splice(ocharts.selections.compare.deselected.length, 0, e.deselected);
+        ocharts.selections.compare.selected = [];
+        ocharts.selections.compare.deselected = [];
+        ocharts.selections.compare.results.forEach(function(a){
+          a.forEach(function(f){
+            f.setStyle(defaultStyle);
+          });
+        });
+        ocharts.selections.compare.results = [];
+        ocharts.selections.total.names = [];
+        ocharts.selections.total.values = [];
+        ocharts.names = [];
+        ocharts.values = [];
+        ocharts.ids = [];
+        globalCompareCounter = 0;
+        c.data.datasets.splice(1);
+        c.data.datasets[0].data = [];
+        c.data.labels.splice(1);
+        c.update();
       }
       ocharts.selections.compare.results = distribute(ocharts.selections.compare.selected, ocharts.selections.compare.deselected);
       ocharts.selections.compare.data = toData(ocharts.selections.compare.results);
@@ -1110,83 +1142,97 @@ function addInteraction() {
       // console.log('compare deselected: ', ocharts.selections.compare.deselected);
       console.log('compare results: ', ocharts.selections.compare.results);
       if (ocharts.selections.compare.results.length === 1) {
-
-        ocharts.selections.compare.results[0][0].setStyle(new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: '#0b92b9',
-            opacity: 0.4
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#444',
-            width: 1
-          })
-        }));
+        // TODO :: For each
+        ocharts.selections.compare.results[0].forEach(function (f) {
+          f.setStyle(new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#0b92b9',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          }));
+        });
       } else if (ocharts.selections.compare.results.length === 2) {
-        ocharts.selections.compare.results[1][0].setStyle(new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: '#2dec45',
-            opacity: 0.4
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#444',
-            width: 1
-          })
-        }));
+        ocharts.selections.compare.results[1].forEach(function (f) {
+          f.setStyle(new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#2dec45',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          }));
+        });
       } else if (ocharts.selections.compare.results.length === 3) {
-        ocharts.selections.compare.results[2][0].setStyle(new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: '#68528d',
-            opacity: 0.4
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#444',
-            width: 1
-          })
-        }));
+        ocharts.selections.compare.results[2].forEach(function (f) {
+          f.setStyle(new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#68528d',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          }));
+        });
       } else if (ocharts.selections.compare.results.length === 4) {
-        ocharts.selections.compare.results[3][0].setStyle(new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: '#824f01',
-            opacity: 0.4
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#444',
-            width: 1
-          })
-        }));
+        ocharts.selections.compare.results[3].forEach(function (f) {
+          f.setStyle(new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#824f01',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          }));
+        });
       } else if (ocharts.selections.compare.results.length === 5) {
-        ocharts.selections.compare.results[4][0].setStyle(new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: '#301bde',
-            opacity: 0.4
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#444',
-            width: 1
-          })
-        }));
+        ocharts.selections.compare.results[4].forEach(function (f) {
+          f.setStyle(new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#301bde',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          }));
+        });
       } else if (ocharts.selections.compare.results.length === 6) {
-        ocharts.selections.compare.results[5][0].setStyle(new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: '#8252c0',
-            opacity: 0.4
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#444',
-            width: 1
-          })
-        }));
+        ocharts.selections.compare.results[5].forEach(function (f) {
+          f.setStyle(new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#8252c0',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          }));
+        });
       } else if (ocharts.selections.compare.results.length > 6) {
-        ocharts.selections.compare.results[ocharts.selections.compare.results.length - 1][0].setStyle(new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: '#000',
-            opacity: 0.4
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#444',
-            width: 1
-          })
-        }));
+        ocharts.selections.compare.results[ocharts.selections.compare.results.length - 1].forEach(function (f) {
+          f.setStyle(new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: '#000',
+              opacity: 0.4
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#444',
+              width: 1
+            })
+          }));
+        });
       }
 
 
@@ -1241,6 +1287,12 @@ function addInteraction() {
   } else if (select.tools.list[getIndex(select.tools.list, 'name', 'box')].active) {
     ocharts.selections.compare.selected = [];
     ocharts.selections.compare.deselected = [];
+    // RESET STYLES
+    ocharts.selections.compare.results.forEach(function(a){
+      a.forEach(function(f){
+        f.setStyle(defaultStyle);
+      });
+    });
     ocharts.selections.compare.results = [];
     ocharts.selections.total.names = [];
     ocharts.selections.total.values = [];
@@ -1424,6 +1476,11 @@ function initMapTool() {
           ocharts.selections.total.values = [];
           ocharts.selections.compare.selected = [];
           ocharts.selections.compare.deselected = [];
+          ocharts.selections.compare.results.forEach(function(a){
+            a.forEach(function(f){
+              f.setStyle(defaultStyle);
+            });
+          });
           ocharts.selections.compare.results = [];
           ocharts.selections.total.names = [];
           ocharts.selections.total.values = [];
@@ -1437,21 +1494,21 @@ function initMapTool() {
 
   $(settings.target.class.map).on('enableInteraction', onEnableInteraction);
   // TODO :: Continue clean UP FIX:: ploygon, add Charts, add dynamic legend.
-
+  // TODO :: IF tools is enabled in init.
   render(settings.target.id.mapTools, select.tools.list);
   bindUIActions2(select.tools.list);
 
   render(settings.target.id.mapTools, ocharts.tools.list);
   bindUIActions2(ocharts.tools.list);
-
-  render(settings.target.id.mapTools, download.tools.list);
-  bindUIActions2(download.tools.list);
-
-  render(settings.target.id.mapTools, save.tools.list);
-  bindUIActions2(save.tools.list);
-
-  render(settings.target.id.mapTools, summary.tools.list);
-  bindUIActions2(summary.tools.list);
+  //
+  // render(settings.target.id.mapTools, download.tools.list);
+  // bindUIActions2(download.tools.list);
+  //
+  // render(settings.target.id.mapTools, save.tools.list);
+  // bindUIActions2(save.tools.list);
+  //
+  // render(settings.target.id.mapTools, summary.tools.list);
+  // bindUIActions2(summary.tools.list);
 }
 /**
  * [hasEnabled takes an array an checks if array has an item that is enabled]
@@ -1499,15 +1556,17 @@ module.exports.init = function (optOptions) {
   settings.tool.toolName = inspect(settings.options, 'toolName', ['stats'], settings.options.inspect.show.warn);
   select.tools.names = inspect(settings.options, 'select', ['single'], settings.options.inspect.show.warn);
   connectNames(select.tools.names, select.tools.list);
+
   ocharts.fieldNames = inspect(settings.options, 'fieldNames', ['total'], settings.options.inspect.show.warn);
   ocharts.tools.names = inspect(settings.options, 'charts', ['bar', 'circle'], settings.options.inspect.show.warn);
   connectNames(ocharts.tools.names, ocharts.tools.list);
   download.tools.names = inspect(settings.options, 'download', ['pdf'], settings.options.inspect.show.warn);
   connectNames(download.tools.names, download.tools.list);
-  save.tools.names = inspect(settings.options, 'save', ['layers', 'clear'], settings.options.inspect.show.warn);
-  connectNames(save.tools.names, save.tools.list);
-  summary.tools.names = inspect(settings.options, 'summary', ['table', 'legend'], settings.options.inspect.show.warn);
-  connectNames(summary.tools.names, summary.tools.list);
+
+  // save.tools.names = inspect(settings.options, 'save', ['layers', 'clear'], settings.options.inspect.show.warn);
+  // connectNames(save.tools.names, save.tools.list);
+  // summary.tools.names = inspect(settings.options, 'summary', ['table', 'legend'], settings.options.inspect.show.warn);
+  // connectNames(summary.tools.names, summary.tools.list);
 
   // Enables charts window
   var footer = document.getElementById('o-footer');
@@ -1556,8 +1615,8 @@ module.exports.init = function (optOptions) {
     plugins: {
       datalabels: {
         color: 'black',
-        display: function (c) {
-          return c.dataset.data[c.dataIndex] > 15;
+        display: function (context) {
+          return context.chart.isDatasetVisible(context.datasetIndex) && context.dataset.data[context.dataIndex] > 0;
         },
         font: {
           weight: 'bold'
@@ -1571,9 +1630,9 @@ module.exports.init = function (optOptions) {
     data: data
   });
 
-  console.log('ol build: ', ol);
+  // console.log('ol build: ', ol);
 
-  if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
+  if (hasEnabled(select.tools.list)) {
     initMapTool();
   } else {
     throw Error('Cannot initialize stats tool because no tools are enabled.');
