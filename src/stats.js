@@ -1047,8 +1047,9 @@ function createDataSet(name, color, data) {
     data: data
   };
 }
-var colors = ['11,146,185', '45,236,69', '104,82,141', '130,79,1', '48,27,222', '130,82,192 '];
+var colors = ['11,146,185', '45,236,69', '104,82,141', '130,79,1', '48,27,222', '130,82,192'];
 var globalCompareCounter = 0;
+
 function addInteraction() {
   console.log('addIntercation: ');
   ocharts.selections.compare.selected = [];
@@ -1101,6 +1102,7 @@ function addInteraction() {
       // console.log('compare deselected: ', ocharts.selections.compare.deselected);
       console.log('compare results: ', ocharts.selections.compare.results);
       if (ocharts.selections.compare.results.length === 1) {
+
         ocharts.selections.compare.results[0][0].setStyle(new ol.style.Style({
           fill: new ol.style.Fill({
             color: '#0b92b9',
@@ -1133,58 +1135,51 @@ function addInteraction() {
             width: 1
           })
         }));
+      } else if (ocharts.selections.compare.results.length === 4) {
+        ocharts.selections.compare.results[3][0].setStyle(new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: '#824f01',
+            opacity: 0.4
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#444',
+            width: 1
+          })
+        }));
+      } else if (ocharts.selections.compare.results.length === 5) {
+        ocharts.selections.compare.results[4][0].setStyle(new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: '#301bde',
+            opacity: 0.4
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#444',
+            width: 1
+          })
+        }));
+      } else if (ocharts.selections.compare.results.length === 6) {
+        ocharts.selections.compare.results[5][0].setStyle(new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: '#8252c0',
+            opacity: 0.4
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#444',
+            width: 1
+          })
+        }));
+      } else if (ocharts.selections.compare.results.length > 6) {
+        ocharts.selections.compare.results[ocharts.selections.compare.results.length - 1][0].setStyle(new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: '#000',
+            opacity: 0.4
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#444',
+            width: 1
+          })
+        }));
       }
-      // else {
-      //   select.type.single.interaction.setStyle(new ol.style.Style({
-      //     fill: new ol.style.Fill({
-      //       color: '#ff6384',
-      //       opacity: 0.4
-      //     }),
-      //     stroke: new ol.style.Stroke({
-      //       color: '#444',
-      //       width: 1
-      //     })
-      //   }));
-      // }
-      // ocharts.selections.compare.results.forEach(function (f) {
-      //   if (globalCompareCounter === 1) {
-      //     f[0].setStyle(new ol.style.Style({
-      //       fill: new ol.style.Fill({
-      //         color: '#0b92b9',
-      //         opacity: 0.4
-      //       }),
-      //       stroke: new ol.style.Stroke({
-      //         color: '#444',
-      //         width: 1
-      //       })
-      //     }));
-      //   } else if (globalCompareCounter === 2) {
-      //     f[0].setStyle(new ol.style.Style({
-      //       fill: new ol.style.Fill({
-      //         color: '#2dec45',
-      //         opacity: 0.4
-      //       }),
-      //       stroke: new ol.style.Stroke({
-      //         color: '#444',
-      //         width: 1
-      //       })
-      //     }));
-      //   } else if (globalCompareCounter === 3) {
-      //     f[0].setStyle(new ol.style.Style({
-      //       fill: new ol.style.Fill({
-      //         color: '#68528d',
-      //         opacity: 0.4
-      //       }),
-      //       stroke: new ol.style.Stroke({
-      //         color: '#444',
-      //         width: 1
-      //       })
-      //     }));
-      //   }
-      // });
-
-      // console.log('compare data: ', ocharts.selections.compare.data);
-      // static update.
 
 
       globalCompareCounter = ocharts.selections.compare.data.length / 2;
@@ -1258,25 +1253,27 @@ function addInteraction() {
     settings.map.addInteraction(select.type.singleBox.interaction);
     select.selected.features = select.type.singleBox.interaction.getFeatures();
     select.type.box.interaction = new ol.interaction.DragBox({
-      condition: ol.events.condition.platformModifierKeyOnly
+      condition: ol.events.condition.platformModifierKeyOnly,
+      layers: getSelectableVisible(settings.map.getLayers(), false)
     });
     settings.map.addInteraction(select.type.box.interaction);
-
 
     select.type.box.interaction.on('boxend', function (e) {
       var extent = select.type.box.interaction.getGeometry().getExtent();
       select.layers.forEach(function (layer) {
-        layer.getSource().forEachFeatureIntersectingExtent(extent, function (feature) {
-          select.selected.features.push(feature);
-          var name = feature.getId().split('.')[0];
-          var id = feature.getId().split('.')[1];
-          var val = parseInt(feature.get(ocharts.fieldNames[0]), 10);
-          ocharts.selections.total.names.push(name);
-          ocharts.selections.total.values.push(val);
-          ocharts.names.push(name);
-          ocharts.ids.push(id);
-          ocharts.values.push(val);
-        });
+        if (layer.getVisible()) {
+          layer.getSource().forEachFeatureIntersectingExtent(extent, function (feature) {
+            select.selected.features.push(feature);
+            var name = feature.getId().split('.')[0];
+            var id = feature.getId().split('.')[1];
+            var val = parseInt(feature.get(ocharts.fieldNames[0]), 10);
+            ocharts.selections.total.names.push(name);
+            ocharts.selections.total.values.push(val);
+            ocharts.names.push(name);
+            ocharts.ids.push(id);
+            ocharts.values.push(val);
+          });
+        }
       });
       var total = addTotal(ocharts.selections.total.names, ocharts.selections.total.values);
 
@@ -1406,6 +1403,7 @@ function toggleType2(button, active, cls) {
  * [initMapTool description]
  * @return {[type]} [description]
  */
+
 function initMapTool() {
   settings.map = Viewer.getMap();
   // Add eventlistner on propertychange if layer is visible.
@@ -1414,6 +1412,11 @@ function initMapTool() {
       if (e.key === 'visible' && e.oldValue === false || e.oldValue === true) {
         if (select.selected.features) {
           select.selected.features.clear();
+          ocharts.selections.total.names = [];
+          ocharts.selections.total.values = [];
+          ocharts.selections.compare.selected = [];
+          ocharts.selections.compare.deselected = [];
+          ocharts.selections.compare.results = [];
           ocharts.selections.total.names = [];
           ocharts.selections.total.values = [];
         }
@@ -1549,7 +1552,7 @@ module.exports.init = function (optOptions) {
     data: data
   });
 
-  console.log(ol);
+  console.log('ol build: ', ol);
 
   if (hasEnabled(select.tools.list) && hasEnabled(ocharts.tools.list)) {
     initMapTool();

@@ -3,14 +3,14 @@
   height:30%;
   left:35%;
   top:55%;
-  background-color: rgba(230, 235, 235, 0.7);
+  background-color: rgba(230, 235, 235, 1);
   position:fixed;
-  border: 2px solid rgba(80, 82, 88, 0.7);
+  border: 2px solid rgba(80, 82, 88, 1);
   text-align: center;
   overflow:hidden;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: rgba(80, 82, 88, 0.7);
-  box-shadow: 5px 5px 5px rgba(0,0,0,.5);
+  box-shadow: 5px 5px 5px rgba(0,0,0, 0.5);
 }
 
 .content {
