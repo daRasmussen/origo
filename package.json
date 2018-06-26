@@ -25,13 +25,8 @@
   "dependencies": {
     "awesomplete": "^1.1.2",
     "browserify": "11.0.1",
-    "c3": "^0.5.4",
     "chart.js": "^2.7.2",
     "convert-units": "^2.3.4",
-    "d3": "^5.1.0",
-    "d3-dsv": "^1.0.8",
-    "d3-scale": "^2.0.0",
-    "d3-shape": "^1.2.0",
     "jquery": "2.1.4",
     "localforage": "1.5.0",
     "openlayers": "^4.6.5",
