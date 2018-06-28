@@ -9,15 +9,35 @@
             "warn": true
           }
         },
-        "select": ["single", "box"],
-        "fieldNames": ["total"],
-        "service": ["WFS", "WMS"],
-        "charts": ["bar", "circle", "bubble"],
+        "select": [
+          "single",
+          "box"
+        ],
+        "fieldNames": [
+          "total"
+        ],
+        "service": [
+          "WFS",
+          "WMS"
+        ],
+        "charts": [
+          "bar",
+          "circle",
+          "bubble"
+        ],
         "target": "#o-toolbar-maptools",
         "toolName": "stats",
-        "download": ["pdf"],
-        "save": ["layers", "clear"],
-        "summary": ["table", "legend"]
+        "download": [
+          "pdf"
+        ],
+        "save": [
+          "layers",
+          "clear"
+        ],
+        "summary": [
+          "table",
+          "legend"
+        ]
       }
     },
     {
@@ -79,17 +99,11 @@
     152667,
     6610405
   ],
-  "zoom": 4,
+  "zoom": 3,
   "resolutions": {
     "level": 14
   },
   "source": {
-    "mdk": {
-      "url": "https://www.malardalskartan.se/geoserver/mdk/ows/"
-    },
-    "mdk_stat": {
-      "url": "https://www.malardalskartan.se/geoserver/mdk_stat/ows"
-    },
     "mdk_statistik": {
       "url": "https://www.malardalskartan.se/geoserver/mdk_statistik/ows"
     },
@@ -99,39 +113,79 @@
   },
   "groups": [
     {
-      "name": "wmsg",
-      "title": "WMS TEST"
-    },
-    {
-      "name": "rutor",
-      "title": "Rutor",
+      "name": "befalder",
+      "title": "Befolkning",
       "groups": [
         {
-          "name": "rut_alder",
-          "title": "Ålder",
-          "groups":[
-            {
-             "name": "rut_alder_kvinnor",
-             "title": "Kvinnor"
-           },
-           {
-             "name": "rut_alder_man",
-             "title": "Män"
-           }
-          ]
+          "name": "befalder_kvinnor",
+          "title": "Kvinnor"
+        },
+        {
+          "name": "befalder_man",
+          "title": "Män"
         }
       ]
     },
     {
-      "name": "alder",
-      "title": "Ålder",
+      "name": "bilinnehav",
+      "title": "Bilinnehav"
+    },
+    {
+      "name": "dagsekt",
+      "title": "Dagsekt"
+    },
+    {
+      "name": "dagsyss",
+      "title": "Dagssysselsättning",
       "groups": [
         {
-          "name": "alder_kvinnor",
+          "name": "dagsyss_kvinnor",
           "title": "Kvinnor"
         },
         {
-          "name": "alder_man",
+          "name": "dagsyss_man",
+          "title": "Män"
+        }
+      ]
+    },
+    {
+      "name": "inkomst",
+      "title": "Inkomster",
+      "groups": [
+        {
+          "name": "inkomst_individ",
+          "title": "Individ"
+        },
+        {
+          "name": "inkomst_person",
+          "title": "Person"
+        }
+      ]
+    },
+    {
+      "name": "nattb",
+      "title": "Nattbefolkning",
+      "groups": [
+        {
+          "name": "nattb_kvinnor",
+          "title": "Kvinnor"
+        },
+        {
+          "name": "nattb_man",
+          "title": "Män"
+        }
+      ]
+    },
+    {
+      "name": "utbild",
+      "title": "Utbildning",
+      "groups": [
+        {
+          "name": "utbild_kvinnor",
+          "title": "Kvinnor"
+        },
+        {
+          "name": "utbild_man",
           "title": "Män"
         }
       ]
@@ -143,277 +197,748 @@
   ],
   "layers": [
     {
-      "name": "aktiebolag",
-      "id": "dagsekt_aktiebolag_ej_offentligt_agda_",
+      "name": "befalder_kvinnor_0_ar___5_ar_",
+      "id": "befalder_kvinnor_0_ar___5_ar_",
       "visible": false,
-      "title": "Aktiebolag",
-      "group": "wmsg",
+      "title": "0 ar   5 ar ",
+      "group": "befalder_kvinnor",
       "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
       "geometryName": "geom",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "kvinnor_0_ar___5_ar_",
-      "id": "bef_alder_kvinnor_0_ar___5_ar_",
-      "visible": true,
-      "title": "k0 - 5 år",
-      "group": "rut_alder_kvinnor",
-      "source": "mdk_stat",
+      "name": "befalder_kvinnor_16_ar___20_ar_",
+      "id": "befalder_kvinnor_16_ar___20_ar_",
+      "visible": false,
+      "title": "16 ar   20 ar ",
+      "group": "befalder_kvinnor",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
       "geometryName": "geom",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "kvinnor_6_ar___15_ar_",
-      "id": "bef_alder_kvinnor_6_ar___15_ar_",
+      "name": "befalder_kvinnor_21_ar___64_ar_",
+      "id": "befalder_kvinnor_21_ar___64_ar_",
       "visible": false,
-      "title": "k6 - 15 år",
-      "group": "rut_alder_kvinnor",
-      "source": "mdk_stat",
+      "title": "21 ar   64 ar ",
+      "group": "befalder_kvinnor",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "kvinnor_16_ar___15_ar_",
-      "id": "bef_alder_kvinnor_16_ar___20_ar_",
+      "name": "befalder_kvinnor_65_ar_plus_",
+      "id": "befalder_kvinnor_65_ar_plus_",
       "visible": false,
-      "title": "k16 - 20 år",
-      "group": "rut_alder_kvinnor",
-      "source": "mdk_stat",
+      "title": "65 ar plus ",
+      "group": "befalder_kvinnor",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "kvinnor_21_ar___64_ar_",
-      "id": "bef_alder_kvinnor_21_ar___64_ar_",
+      "name": "befalder_kvinnor_6_ar___15_ar_",
+      "id": "befalder_kvinnor_6_ar___15_ar_",
       "visible": false,
-      "title": "k21 - 64 år",
-      "group": "rut_alder_kvinnor",
-      "source": "mdk_stat",
+      "title": "6 ar   15 ar ",
+      "group": "befalder_kvinnor",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "kvinnor_65_ar___117_ar_",
-      "id": "bef_alder_kvinnor_65_ar___117_ar_",
+      "name": "befalder_man_0_ar___5_ar_",
+      "id": "befalder_man_0_ar___5_ar_",
       "visible": false,
-      "title": "k65 - 117 år",
-      "group": "rut_alder_kvinnor",
-      "source": "mdk_stat",
+      "title": "0 ar   5 ar ",
+      "group": "befalder_man",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "man_0_ar___5_ar_",
-      "id": "bef_alder_man_0_ar___5_ar_",
+      "name": "befalder_man_16_ar___20_ar_",
+      "id": "befalder_man_16_ar___20_ar_",
       "visible": false,
-      "title": "m0 - 5 år",
-      "group": "rut_alder_man",
-      "source": "mdk_stat",
+      "title": "16 ar   20 ar ",
+      "group": "befalder_man",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "man_6_ar___15_ar_",
-      "id": "bef_alder_man_6_ar___15_ar_",
+      "name": "befalder_man_21_ar___64_ar_",
+      "id": "befalder_man_21_ar___64_ar_",
       "visible": false,
-      "title": "m6 - 15 år",
-      "group": "rut_alder_man",
-      "source": "mdk_stat",
+      "title": "21 ar   64 ar ",
+      "group": "befalder_man",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "man_16_ar___15_ar_",
-      "id": "bef_alder_man_16_ar___20_ar_",
+      "name": "befalder_man_65_ar_plus_",
+      "id": "befalder_man_65_ar_plus_",
       "visible": false,
-      "title": "m16 - 20 år",
-      "group": "rut_alder_man",
-      "source": "mdk_stat",
+      "title": "65 ar plus ",
+      "group": "befalder_man",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "man_21_ar___64_ar_",
-      "id": "bef_alder_man_21_ar___64_ar_",
+      "name": "befalder_man_6_ar___15_ar_",
+      "id": "befalder_man_6_ar___15_ar_",
       "visible": false,
-      "title": "m21 - 64 år",
-      "group": "rut_alder_man",
-      "source": "mdk_stat",
+      "title": "6 ar   15 ar ",
+      "group": "befalder_man",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "man_65_ar___117_ar_",
-      "id": "bef_alder_man_65_ar___117_ar_",
+      "name": "bilinnehav_har_1_personbil_i_trafik_",
+      "id": "bilinnehav_har_1_personbil_i_trafik_",
       "visible": false,
-      "title": "m65 - 117 år",
-      "group": "rut_alder_man",
-      "source": "mdk_stat",
+      "title": "har 1 personbil i trafik ",
+      "group": "bilinnehav",
+      "source": "mdk_statistik",
       "style": "simple",
       "type": "WFS",
-      "attributes": [
-        {
-          "name": "total"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "m0_9",
-      "id": "flera_joins1_nyko3",
-      "legend": true,
+      "name": "bilinnehav_har_2_personbilar_i_trafik_",
+      "id": "bilinnehav_har_2_personbilar_i_trafik_",
       "visible": false,
-      "title": "m0_9",
-      "group": "alder_man",
-      "source": "mdk",
-      "style": "m0_9s",
+      "title": "har 2 personbilar i trafik ",
+      "group": "bilinnehav",
+      "source": "mdk_statistik",
+      "style": "simple",
       "type": "WFS",
-      "cls": "m0_9",
-      "attributes": [
-        {
-          "name": "m0_9"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "m10_19",
-      "id": "flera_joins1_nyko3",
-      "legend": true,
+      "name": "bilinnehav_har_3_personbilar_i_trafik_",
+      "id": "bilinnehav_har_3_personbilar_i_trafik_",
       "visible": false,
-      "title": "m10_19",
-      "group": "alder_man",
-      "source": "mdk",
-      "style": "m10_19s",
+      "title": "har 3 personbilar i trafik ",
+      "group": "bilinnehav",
+      "source": "mdk_statistik",
+      "style": "simple",
       "type": "WFS",
-      "filter": "m10_19 like '%'",
-      "cls": "m10_19",
-      "attributes": [
-        {
-          "name": "m10_19"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "m20_29",
-      "id": "flera_joins1_nyko3",
-      "legend": true,
+      "name": "bilinnehav_har_4_9_personbilar_i_trafik_",
+      "id": "bilinnehav_har_4_9_personbilar_i_trafik_",
       "visible": false,
-      "title": "m20_29",
-      "group": "alder_man",
-      "source": "mdk",
-      "style": "m20_29s",
+      "title": "har 4 9 personbilar i trafik ",
+      "group": "bilinnehav",
+      "source": "mdk_statistik",
+      "style": "simple",
       "type": "WFS",
-      "filter": "m20_29 like '%'",
-      "cls": "m20_29",
-      "attributes": [
-        {
-          "name": "m20_29"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "k0_9",
-      "id": "flera_joins1_nyko3",
-      "legend": true,
+      "name": "bilinnehav_har_ej_personbil_i_trafik_",
+      "id": "bilinnehav_har_ej_personbil_i_trafik_",
       "visible": false,
-      "title": "k0_9",
-      "group": "alder_kvinnor",
-      "source": "mdk",
-      "style": "k0_9s",
+      "title": "har ej personbil i trafik ",
+      "group": "bilinnehav",
+      "source": "mdk_statistik",
+      "style": "simple",
       "type": "WFS",
-      "cls": "k0_9",
-      "attributes": [
-        {
-          "name": "k0_9"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "k10_19",
-      "id": "flera_joins1_nyko3",
-      "legend": true,
+      "name": "dagsekt_aktiebolag_ej_offentligt_agda_",
+      "id": "dagsekt_aktiebolag_ej_offentligt_agda_",
       "visible": false,
-      "title": "k10_19",
-      "group": "alder_kvinnor",
-      "source": "mdk",
-      "style": "k10_19s",
+      "title": "aktiebolag ej offentligt agda ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
       "type": "WFS",
-      "filter": "k10_19 like '%'",
-      "cls": "k10_19",
-      "attributes": [
-        {
-          "name": "k10_19"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
-      "name": "k20_29",
-      "id": "flera_joins1_nyko3",
-      "legend": true,
+      "name": "dagsekt_kommunalt_agda_foretag_och_organisationer_",
+      "id": "dagsekt_kommunalt_agda_foretag_och_organisationer_",
       "visible": false,
-      "title": "k20_29",
-      "group": "alder_kvinnor",
-      "source": "mdk",
-      "style": "k20_29s",
+      "title": "kommunalt agda foretag och organisationer ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
       "type": "WFS",
-      "filter": "k20_29 like '%'",
-      "cls": "k20_29",
-      "attributes": [
-        {
-          "name": "k20_29"
-        }
-      ]
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsekt_landsting_",
+      "id": "dagsekt_landsting_",
+      "visible": false,
+      "title": "landsting ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsekt_ovriga_foretag_ej_offentligt_agda_",
+      "id": "dagsekt_ovriga_foretag_ej_offentligt_agda_",
+      "visible": false,
+      "title": "ovriga foretag ej offentligt agda ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsekt_ovriga_organisationer_",
+      "id": "dagsekt_ovriga_organisationer_",
+      "visible": false,
+      "title": "ovriga organisationer ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsekt_primarkommunal_forvaltning_",
+      "id": "dagsekt_primarkommunal_forvaltning_",
+      "visible": false,
+      "title": "primarkommunal forvaltning ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsekt_statlig_forvaltning_",
+      "id": "dagsekt_statlig_forvaltning_",
+      "visible": false,
+      "title": "statlig forvaltning ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsekt_statliga_affarsverk_",
+      "id": "dagsekt_statliga_affarsverk_",
+      "visible": false,
+      "title": "statliga affarsverk ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsekt_statligt_agda_foretag_och_organisationer_",
+      "id": "dagsekt_statligt_agda_foretag_och_organisationer_",
+      "visible": false,
+      "title": "statligt agda foretag och organisationer ",
+      "group": "dagsekt",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsyss_kvinnor_16_ar___19_ar_",
+      "id": "dagsyss_kvinnor_16_ar___19_ar_",
+      "visible": false,
+      "title": "16 ar   19 ar ",
+      "group": "dagsyss_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsyss_kvinnor_20_ar___24_ar_",
+      "id": "dagsyss_kvinnor_20_ar___24_ar_",
+      "visible": false,
+      "title": "20 ar   24 ar ",
+      "group": "dagsyss_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsyss_kvinnor_25_ar___64_ar_",
+      "id": "dagsyss_kvinnor_25_ar___64_ar_",
+      "visible": false,
+      "title": "25 ar   64 ar ",
+      "group": "dagsyss_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsyss_kvinnor_65_ar___74_ar_",
+      "id": "dagsyss_kvinnor_65_ar___74_ar_",
+      "visible": false,
+      "title": "65 ar   74 ar ",
+      "group": "dagsyss_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsyss_man_16_ar___19_ar_",
+      "id": "dagsyss_man_16_ar___19_ar_",
+      "visible": false,
+      "title": "16 ar   19 ar ",
+      "group": "dagsyss_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsyss_man_20_ar___24_ar_",
+      "id": "dagsyss_man_20_ar___24_ar_",
+      "visible": false,
+      "title": "20 ar   24 ar ",
+      "group": "dagsyss_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsyss_man_25_ar___64_ar_",
+      "id": "dagsyss_man_25_ar___64_ar_",
+      "visible": false,
+      "title": "25 ar   64 ar ",
+      "group": "dagsyss_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "dagsyss_man_65_ar___74_ar_",
+      "id": "dagsyss_man_65_ar___74_ar_",
+      "visible": false,
+      "title": "65 ar   74 ar ",
+      "group": "dagsyss_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "inkomst_individ_0_ar___19_ar_",
+      "id": "inkomst_individ_0_ar___19_ar_",
+      "visible": false,
+      "title": "individ 0 ar   19 ar ",
+      "group": "inkomst_individ",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "inkomst_individ_20_ar___64_ar_",
+      "id": "inkomst_individ_20_ar___64_ar_",
+      "visible": false,
+      "title": "individ 20 ar   64 ar ",
+      "group": "inkomst_individ",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "inkomst_individ_65_ar_plus_",
+      "id": "inkomst_individ_65_ar_plus_",
+      "visible": false,
+      "title": "individ 65 ar plus ",
+      "group": "inkomst_individ",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "inkomst_individ_total_",
+      "id": "inkomst_individ_total_",
+      "visible": false,
+      "title": "individ total ",
+      "group": "inkomst_individ",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "inkomst_personer_0_ar___19_ar_",
+      "id": "inkomst_personer_0_ar___19_ar_",
+      "visible": false,
+      "title": "personer 0 ar   19 ar ",
+      "group": "inkomst_person",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "inkomst_personer_20_ar___64_ar_",
+      "id": "inkomst_personer_20_ar___64_ar_",
+      "visible": false,
+      "title": "personer 20 ar   64 ar ",
+      "group": "inkomst_person",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "inkomst_personer_65_ar_plus_",
+      "id": "inkomst_personer_65_ar_plus_",
+      "visible": false,
+      "title": "personer 65 ar plus ",
+      "group": "inkomst_person",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "inkomst_personer_total_",
+      "id": "inkomst_personer_total_",
+      "visible": false,
+      "title": "personer total ",
+      "group": "inkomst_person",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_kvinnor_20_ar___29_ar_",
+      "id": "nattb_kvinnor_20_ar___29_ar_",
+      "visible": false,
+      "title": "20 ar   29 ar ",
+      "group": "nattb_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_kvinnor_30_ar___39_ar_",
+      "id": "nattb_kvinnor_30_ar___39_ar_",
+      "visible": false,
+      "title": "30 ar   39 ar ",
+      "group": "nattb_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_kvinnor_40_ar___49_ar_",
+      "id": "nattb_kvinnor_40_ar___49_ar_",
+      "visible": false,
+      "title": "40 ar   49 ar ",
+      "group": "nattb_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_kvinnor_50_ar___59_ar_",
+      "id": "nattb_kvinnor_50_ar___59_ar_",
+      "visible": false,
+      "title": "50 ar   59 ar ",
+      "group": "nattb_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_kvinnor_60_ar___69_ar_",
+      "id": "nattb_kvinnor_60_ar___69_ar_",
+      "visible": false,
+      "title": "60 ar   69 ar ",
+      "group": "nattb_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_kvinnor_70_ar___74_ar_",
+      "id": "nattb_kvinnor_70_ar___74_ar_",
+      "visible": false,
+      "title": "70 ar   74 ar ",
+      "group": "nattb_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_man_20_ar___29_ar_",
+      "id": "nattb_man_20_ar___29_ar_",
+      "visible": false,
+      "title": "20 ar   29 ar ",
+      "group": "nattb_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_man_30_ar___39_ar_",
+      "id": "nattb_man_30_ar___39_ar_",
+      "visible": false,
+      "title": "30 ar   39 ar ",
+      "group": "nattb_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_man_40_ar___49_ar_",
+      "id": "nattb_man_40_ar___49_ar_",
+      "visible": false,
+      "title": "40 ar   49 ar ",
+      "group": "nattb_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_man_50_ar___59_ar_",
+      "id": "nattb_man_50_ar___59_ar_",
+      "visible": false,
+      "title": "50 ar   59 ar ",
+      "group": "nattb_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_man_60_ar___69_ar_",
+      "id": "nattb_man_60_ar___69_ar_",
+      "visible": false,
+      "title": "60 ar   69 ar ",
+      "group": "nattb_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "nattb_man_70_ar___74_ar_",
+      "id": "nattb_man_70_ar___74_ar_",
+      "visible": false,
+      "title": "70 ar   74 ar ",
+      "group": "nattb_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_kvinnor_eftergymnasial_3__ar___forskarutbildning_",
+      "id": "utbild_kvinnor_eftergymnasial_3__ar___forskarutbildning_",
+      "visible": false,
+      "title": "eftergymnasial 3  ar   forskarutbildning ",
+      "group": "utbild_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_kvinnor_eftergymnasial_mindre_an3_ar_",
+      "id": "utbild_kvinnor_eftergymnasial_mindre_an3_ar_",
+      "visible": false,
+      "title": "eftergymnasial mindre an3 ar ",
+      "group": "utbild_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_kvinnor_folkskola___grundskola_",
+      "id": "utbild_kvinnor_folkskola___grundskola_",
+      "visible": false,
+      "title": "folkskola   grundskola ",
+      "group": "utbild_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_kvinnor_gymnasial__2_ar___gymnasial_storre_an2_ar_",
+      "id": "utbild_kvinnor_gymnasial__2_ar___gymnasial_storre_an2_ar_",
+      "visible": false,
+      "title": "gymnasial  2 ar   gymnasial storre an2 ar ",
+      "group": "utbild_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_kvinnor_uppgift_saknas_",
+      "id": "utbild_kvinnor_uppgift_saknas_",
+      "visible": false,
+      "title": "uppgift saknas ",
+      "group": "utbild_kvinnor",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_man_eftergymnasial_3__ar___forskarutbildning_",
+      "id": "utbild_man_eftergymnasial_3__ar___forskarutbildning_",
+      "visible": false,
+      "title": "eftergymnasial 3  ar   forskarutbildning ",
+      "group": "utbild_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_man_eftergymnasial_mindre_an3_ar_",
+      "id": "utbild_man_eftergymnasial_mindre_an3_ar_",
+      "visible": false,
+      "title": "eftergymnasial mindre an3 ar ",
+      "group": "utbild_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_man_folkskola___grundskola_",
+      "id": "utbild_man_folkskola___grundskola_",
+      "visible": false,
+      "title": "folkskola   grundskola ",
+      "group": "utbild_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_man_gymnasial__2_ar___gymnasial_storre_an2_ar_",
+      "id": "utbild_man_gymnasial__2_ar___gymnasial_storre_an2_ar_",
+      "visible": false,
+      "title": "gymnasial  2 ar   gymnasial storre an2 ar ",
+      "group": "utbild_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
+    },
+    {
+      "name": "utbild_man_uppgift_saknas_",
+      "id": "utbild_man_uppgift_saknas_",
+      "visible": false,
+      "title": "uppgift saknas ",
+      "group": "utbild_man",
+      "source": "mdk_statistik",
+      "style": "simple",
+      "type": "WFS",
+      "geometryName": "geom",
+      "attributes": "[{name: total}]"
     },
     {
       "attribution": "&copy Lantmäteriet Geodatasamverkan",
@@ -439,397 +964,6 @@
     }
   ],
   "styles": {
-    "k20_29s": [
-      [
-        {
-          "filter": "[k20_29] < 10",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(222, 251, 45, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k20_29] < 20",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(218, 182, 75, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k20_29] < 30",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(216, 184, 179, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k20_29] < 40",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 85, 84, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 0, 0, 0.4)"
-          }
-        }
-      ]
-    ],
-    "k10_19s": [
-      [
-        {
-          "filter": "[k10_19] < 10",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(222, 251, 45, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k10_19] < 20",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(218, 182, 75, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k10_19] < 30",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(216, 184, 179, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k10_19] < 40",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 85, 84, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 0, 0, 0.4)"
-          }
-        }
-      ]
-    ],
-    "k0_9s": [
-      [
-        {
-          "filter": "[k0_9] < 10",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(222, 251, 45, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k0_9] < 20",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(218, 182, 75, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k0_9] < 30",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(216, 184, 179, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[k0_9] < 40",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 85, 84, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 0, 0, 0.4)"
-          }
-        }
-      ]
-    ],
-    "m20_29s": [
-      [
-        {
-          "filter": "[m20_29] < 10",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(222, 251, 45, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m20_29] < 20",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(218, 182, 75, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m20_29] < 30",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(216, 184, 179, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m20_29] < 40",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 85, 84, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 0, 0, 0.4)"
-          }
-        }
-      ]
-    ],
-    "m10_19s": [
-      [
-        {
-          "filter": "[m10_19] < 10",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(222, 251, 45, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m10_19] < 20",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(218, 182, 75, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m10_19] < 30",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(216, 184, 179, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m10_19] < 40",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 85, 84, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 0, 0, 0.4)"
-          }
-        }
-      ]
-    ],
-    "m0_9s": [
-      [
-        {
-          "filter": "[m0_9] < 10",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(222, 251, 45, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m0_9] < 20",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(218, 182, 75, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m0_9] < 30",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(216, 184, 179, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[m0_9] < 40",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 85, 84, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 0, 0, 0.4)"
-          }
-        }
-      ]
-    ],"k0_5s": [
-      [
-        {
-          "filter": "[total] < 10",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(222, 251, 45, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[total] < 20",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(218, 182, 75, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[total] < 30",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(216, 184, 179, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "filter": "[total] < 40",
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 85, 84, 0.4)"
-          }
-        }
-      ],
-      [
-        {
-          "stroke": {
-            "color": "rgba(0,0,0,1.0)"
-          },
-          "fill": {
-            "color": "rgba(180, 0, 0, 0.4)"
-          }
-        }
-      ]
-    ],
     "simple": [
       [
         {
