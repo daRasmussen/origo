@@ -89,8 +89,10 @@ core.util.DRS = (function () {
     function handleUp() {onHTMLhandle = false;}
 
     // core functions
-    function setBounds(element, x, y, w, h) {
-      if (x === void 0) {
+    function setBounds(element, xx, yy, ww, hh) {
+      var w = ww;
+      var h = hh;
+      if (xx === void 0) {
         b = b || pane.getBoundingClientRect();
         x = b.left;
         y = b.top;
@@ -98,8 +100,8 @@ core.util.DRS = (function () {
         h = b.height;
       }
       var wh = convertUnits(w, h);
-      element.style.left = x + 'px';
-      element.style.top = y + 'px';
+      element.style.left = xx + 'px';
+      element.style.top = yy + 'px';
       element.style.width = wh[0];
       element.style.height = wh[1];
     }
@@ -208,25 +210,27 @@ core.util.DRS = (function () {
       };
     }
 
-    function canMove(bool) {
+    function canMove() {
       for (var i in handles) {
-        var h = drawDragHandle(handles[i]);
-        var c = h.coords;
-        var r = {};
-        var yb = b.height - y;
-        var xr = b.width - x;
+        if (handles[i]) {
+          var h = drawDragHandle(handles[i]);
+          var c = h.coords;
+          var r = {};
+          var yb = b.height - y;
+          var xr = b.width - x;
 
-        // determine bounds of click area coordinates
-        if (c.bottom !== null && c.bottom !== undefined) {r.bottom = yb < c.height || (!c.height && y > c.top) && yb > c.bottom && inLR;}
-        if (c.top !== null && c.top !== undefined) {r.top = y < c.height || (!c.height && yb > c.bottom) && y > c.top && inLR;}
-        if (c.right !== null && c.right !== undefined) {r.right = xr < c.width || (!c.width && x > c.left ) && xr > c.right && inTB;}
-        if (c.left !== null && c.left !== undefined) {r.left = x < c.width || (!c.width && xr > c.right ) && x > c.left && inTB;}
+          // determine bounds of click area coordinates
+          if (c.bottom !== null && c.bottom !== void 0) { r.bottom = yb < c.height || (!c.height && y > c.top) && yb > c.bottom && inLR; }
+          if (c.top !== null && c.top !== void 0) { r.top = y < c.height || (!c.height && yb > c.bottom) && y > c.top && inLR; }
+          if (c.right !== null && c.right !== void 0) { r.right = xr < c.width || (!c.width && x > c.left) && xr > c.right && inTB; }
+          if (c.left !== null && c.left !== void 0) { r.left = x < c.width || (!c.width && xr > c.right) && x > c.left && inTB; }
 
-        var result = ( (r.bottom || r.top  ) && r.left && r.right ) ||
-				( (r.left || r.right) && r.bottom && r.top   );
+          var result = ((r.bottom || r.top) && r.left && r.right) ||
+            ((r.left || r.right) && r.bottom && r.top);
 
-        if (c.invert && !result || onHTMLhandle) return true;
-        else if ( result || onHTMLhandle ) return true;
+          if (c.invert && !result || onHTMLhandle) return true;
+          else if (result || onHTMLhandle) return true;
+        }
       }
       return false;
     }
@@ -236,7 +240,7 @@ core.util.DRS = (function () {
       if (h.type === 'html') return h;
       if (h.coords.hide) return h;
       if (!h.drawn) {
-        var e = document.createElement('div');
+        e = document.createElement('div');
         e.className = 'drag-area';
         e.style.position = 'absolute';
         e.style.pointerEvents = 'all';
@@ -266,7 +270,7 @@ core.util.DRS = (function () {
         20: {top: 20, 	bottom: 20, 		left: 20, 	right: 20, 	width: null, height: null, 	invert: false},
         none:	{top: null, 	bottom: null,	left: null, 	right: null, width: null, height: null, 	invert: false}
       };
-      if (h.type instanceof Array) {h.coords = h.type;} else if (h.type == 'html') {h.coords = h.ele.getBoundingClientRect();} else if (!h.type) {h.type = 'full';}
+      if (h.type instanceof Array) {h.coords = h.type;} else if (h.type === 'html') {h.coords = h.ele.getBoundingClientRect();} else if (!h.type) {h.type = 'full';}
       if (!h.coords) {
         h.coords = types[h.type.split(' ')[0]];
         h.coords.invert = h.type.indexOf('invert') + 1;
@@ -281,10 +285,10 @@ core.util.DRS = (function () {
         }
       }, this);
     }
-    function calc(e) {
+    function calc(ed) {
       b = pane.getBoundingClientRect();
-      x = e.clientX - b.left;
-      y = e.clientY - b.top;
+      x = ed.clientX - b.left;
+      y = ed.clientY - b.top;
 
       // define inner and outer margins
       var dMi = RESIZE_MARGIN_INNER;
@@ -323,7 +327,6 @@ core.util.DRS = (function () {
 
       // resizeing
       if (clicked && clicked.isResizing) {
-        console.log('isResining');
         setDragPan(false);
         if (clicked.onRightEdge) {pane.style.width = Math.max(x, minWidth) + 'px';}
         if (clicked.onBottomEdge) {pane.style.height = Math.max(y, minHeight) + 'px';}
@@ -398,8 +401,8 @@ core.util.DRS = (function () {
 
     animate();
 
-    function onUp(e) {
-      calc(e);
+    function onUp(ed) {
+      calc(ed);
 
       if (clicked && clicked.isMoving) {
         // Check for Snap
@@ -440,7 +443,7 @@ core.util.DRS = (function () {
 
     pane.addEventListener('click', trippleClick);
 
-    function trippleClick(e) {
+    function trippleClick(v) {
       clicks[2] = clicks[0] && clicks[1] && !clicks[2] ? e.timeStamp : clicks[2];
       clicks[1] = clicks[0] && !clicks[1] ? e.timeStamp : clicks[1];
       clicks[0] = !clicks[0] ? e.timeStamp : clicks[0];
@@ -452,8 +455,8 @@ core.util.DRS = (function () {
           clicks = [0, 0, 0];
         }, 500);
       }
-      e.preventDefault();
-      e.stopPropagation();
+      v.preventDefault();
+      v.stopPropagation();
       return false;
     }
 
@@ -466,12 +469,22 @@ core.util.DRS = (function () {
 
     // utility functions
     function hasHTMLElement(a) {
-      for (var i in a) if (i instanceof HTMLElement) return true;
+      var instanceofHTML = false;
+      for (var i in a) {
+        if (i instanceof HTMLElement) {
+          instanceofHTML = true;
+        }
+      }
+      return instanceofHTML;
     }
 
     function bindEvents(ele, events, callback) {
-      events = events.split(' ');
-      for (var e in events) ele.addEventListener(events[e], callback);
+      var evts = events.split(' ');
+      for (var v in evts) {
+        if (evts[v]) {
+          ele.addEventListener(evts[v], callback);
+        }
+      }
     }
 
     return {
@@ -486,7 +499,6 @@ core.util.DRS = (function () {
 
 module.exports.init = function (o) {
   var t = o.target;
-  // console.log(t)
   // create drsw
   var nPanea = document.createElement('div');
   nPanea.id = 'panea';
