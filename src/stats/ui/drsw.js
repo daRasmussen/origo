@@ -84,9 +84,9 @@ core.util.DRS = (function () {
 
     window.addEventListener('load', createHandleObjects());
 
-    function handleDown() {onHTMLhandle = true;}
+    function handleDown() { onHTMLhandle = true; }
 
-    function handleUp() {onHTMLhandle = false;}
+    function handleUp() { onHTMLhandle = false; }
 
     // core functions
     function setBounds(element, xx, yy, ww, hh) {
@@ -170,6 +170,13 @@ core.util.DRS = (function () {
     document.addEventListener('touchmove', onTouchMove);
     document.addEventListener('touchend', onTouchEnd);
 
+    function pauseEvent(v) {
+      if (v.stopPropagation) v.stopPropagation();
+      if (v.preventDefault) v.preventDefault();
+      v.cancelBubble = true;
+      v.returnValue = false;
+      return false;
+    }
     function onTouchDown() {
       onDown(e.touches[0]);
     }
@@ -186,7 +193,8 @@ core.util.DRS = (function () {
       if (e.touches.length === 0) onUp(e.changedTouches[0]);
     }
 
-    function onMouseDown() {
+    function onMouseDown(evt) {
+      pauseEvent(evt);
       onDown(e);
     }
 
@@ -312,6 +320,7 @@ core.util.DRS = (function () {
     }
 
     function onMove(ee) {
+      pauseEvent(ee);
       calc(ee);
       e = ee;
       redraw = true;
