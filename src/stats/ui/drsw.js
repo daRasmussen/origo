@@ -7,8 +7,8 @@ core.util.DRS = (function () {
   var makeDRS = function (pane, handle, opt) {
     var options = opt || {};
     // Minimum resizable area
-    var minWidth 			= 60;
-    var minHeight			= 40;
+    var minWidth 			= 600;
+    var minHeight			= 400;
 
     // Thresholds
     var SNAP_MARGINS 		    = -(options.snapEdge || 5);
@@ -177,20 +177,20 @@ core.util.DRS = (function () {
       v.returnValue = false;
       return false;
     }
-    function onTouchDown() {
-      onDown(e.touches[0]);
+    function onTouchDown(evt) {
+      onDown(evt.touches[0]);
     }
 
-    function onTouchMove() {
-      onMove(e.touches[0]);
+    function onTouchMove(evt) {
+      onMove(evt.touches[0]);
       if (clicked && (clicked.isMoving || clicked.isResizing)) {
-        e.preventDefault();
-        e.stopPropagation();
+        evt.preventDefault();
+        evt.stopPropagation();
       }
     }
 
-    function onTouchEnd() {
-      if (e.touches.length === 0) onUp(e.changedTouches[0]);
+    function onTouchEnd(evt) {
+      if (evt.touches.length === 0) onUp(evt.changedTouches[0]);
     }
 
     function onMouseDown(evt) {

@@ -1,8 +1,10 @@
 .pane {
-  width:40%;
-  height:30%;
-  left:35%;
-  top:55%;
+  width:600px;
+  height:400px;
+  
+  left:5%;
+  top: 25%;
+
   background-color: rgba(230, 235, 235, 1);
   position:fixed;
   border: 2px solid rgba(80, 82, 88, 1);
@@ -11,6 +13,7 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: rgba(80, 82, 88, 0.7);
   box-shadow: 5px 5px 5px rgba(0,0,0, 0.5);
+  z-index: 1;
 }
 
 .content {
@@ -24,7 +27,7 @@
   position: absolute;
   width: 100%;
   height: 80%;
-  top: 10%;
+  top: 15%;
 }
 .drag-area{
   background-color: #F7F7F7;

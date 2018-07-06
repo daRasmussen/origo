@@ -1558,7 +1558,7 @@ module.exports.init = function (optOptions) {
   // connectNames(summary.tools.names, summary.tools.list);
 
   // Enables charts window
-  var footer = document.getElementById('o-footer');
+  var footer = document.getElementById('o-tools-bottom');
   // console.log(footer);
   drsw.init({'target': footer});
 
@@ -1621,6 +1621,7 @@ module.exports.init = function (optOptions) {
     data: data
   }); */
   console.log(xcharts)
+
   c = xcharts.init('chart', 'bar', options, data);
 
   // TODO: Different sturctures on lables and data. For pie etc...
