@@ -2,23 +2,23 @@
   "controls": [
     {
       "name": "home"
-    },  
+    },
     {
       "name": "geoposition"
     },
     {
       "name": "mapmenu",
-	  "options": {
-    	"isActive": true
-  		}
+      "options": {
+        "isActive": true
+      }
     },
     {
       "name": "sharemap"
-    },    
+    },
     {
       "name": "print"
     },
-	{
+    {
       "name": "about",
       "options": {
         "buttontext": "Om karttjänsten",
@@ -26,33 +26,15 @@
         "content": "<p>Kartan redovisar detaljplaner, planprogram och översiktsplaner som möjliggör bostadsbyggnation, samt projektidéer för nya projekt.<br/>Många av projektidéerna är ännu inte beslutade politiskt, men redovisas för att få en överblick över platser som redan är ”upptagna”.<br/>Karttjänsten redovisar även påbörjad och färdigställdbyggnation 2015-2018 samt prognoser för kommande bostadsbyggnation (antal lägenheter). Prognoserna uppdateras  två gånger per år, i mars och september, och baseras främst på uppgifter lämnade från byggherrar.</p>"
       }
     },
-	{
-      "name": "splash",
-      "options": {
-        "buttontext": "Om karttjänsten",
-        "title": "Karttjänst för bostadsbyggande",
-        "content": "<p>Kartan redovisar detaljplaner, planprogram och översiktsplaner som möjliggör bostadsbyggnation, samt projektidéer för nya projekt.<br/>Många av projektidéerna är ännu inte beslutade politiskt, men redovisas för att få en överblick över platser som redan är ”upptagna”.<br/>Karttjänsten redovisar även påbörjad och färdigställdbyggnation 2015-2018 samt prognoser för kommande bostadsbyggnation (antal lägenheter). Prognoserna uppdateras  två gånger per år, i mars och september, och baseras främst på uppgifter lämnade från byggherrar.</p>"
-      }
-    },
-    {
-      "name": "search",
-      "options": {
-          "url": "https://kartserver.vasteras.se/origoserver/ext/singlesearch",
-          "searchAttribute": "NAMN",
-          "geometryAttribute": "GEOM",
-          "title": "Adress",
-          "hintText": "Sök adress..."
-      }
-    },
     {
       "name": "legend",
       "options": {
-          "hasMapLegend": true
+        "hasMapLegend": true
       }
     },
     {
       "name": "fullscreen"
-    }	
+    }
   ],
   "projectionCode": "EPSG:3010",
   "projectionExtent": [
@@ -62,11 +44,11 @@
     8775797.92
   ],
   "proj4Defs": [
-      {
-          "code": "EPSG:3010",
-          "alias": "urn:ogc:def:crs:EPSG::3010",
-          "projection": "+proj=tmerc +lat_0=0 +lon_0=16.5 +k=1 +x_0=150000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
-      }
+    {
+      "code": "EPSG:3010",
+      "alias": "urn:ogc:def:crs:EPSG::3010",
+      "projection": "+proj=tmerc +lat_0=0 +lon_0=16.5 +k=1 +x_0=150000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+    }
   ],
   "extent": [
     -1678505.1838360203,
@@ -75,14 +57,14 @@
     8775797.92
   ],
   "center": [
-      153797,
-      6612614
+    153797,
+    6612614
   ],
   "home": [
-      134966,
-      6593080,
-      176372,
-      6636922  
+    134966,
+    6593080,
+    176372,
+    6636922
   ],
   "zoom": 4,
   "resolutions": [
@@ -102,931 +84,27 @@
     0.13999999999999999
   ],
   "source": {
-    "ags_vasteras": {
-      "url": "https://kartor.vasteras.se/arcgis/rest/services/ext/sk_webbobjekt_dyn/FeatureServer/"
-    },
-	"bostadMap": {
-      "url": "https://kartor.vasteras.se/arcgis/rest/services/ext/sk_bostadbyggande_map/MapServer"
-    },
-	"OP2026Map": {
+    "OP2026Map": {
       "url": "http://kartor.vasteras.se/ArcGIS/rest/services/ext/sbf_oprev_dyn/MapServer"
     },
-	"ltp": {
-      "url": "https://kartserver.vasteras.se/geoserver/ltp/ows"
-    },	
-	"bostadGeo": {
-      "url": "https://kartserver.vasteras.se/geoserver/bostad/wfs"
-	},	
-	"mdk2": {
-      "url": "https://www.malardalskartan.se/geoserver/mdk/wfs"
-    },
-	"mdk": {
-      "url": "https://www.malardalskartan.se/geoserver/mdk/ows",
-	  "version": "1.1.1"
-	},	  	
     "basemap": {
       "url": "https://www.malardalskartan.se/geowebcache/service/wmts"
     }
   },
   "groups": [
-  		{
-            "name": "bostadsbyggnation",
-			"title": "Bostadsbyggnation",
-			"expanded": false,
-			"groups": [
-				{
-					"name": "projide",
-					"title": "Projektidéer",
-					"expanded": false,
-					"class": "unik",
-					"abstract": "<img class=expanded src=img/png/PPK_Andamal.png alt=PPK, teckenförklaring >"
-				},
-				{
-					"name": "markan",
-					"title": "Markanvisningar",
-					"expanded": false
-				},
-				{
-					"name": "ovr",
-					"title": "Planer",
-					"expanded": false
-				},
-				{
-					"name": "skeden",
-					"title": "Prognos 2018-2021",
-					"expanded": false
-				},
-				{
-					"name": "paborjadbygg",
-					"title": "Påbörjad bostadsbyggnation",
-					"expanded": false
-				},
-				{
-					"name": "fardigbygg",
-					"title": "Färdig bostadsbyggnation",
-					"expanded": false
-				}
-			]
-        },
-		{
-            "name": "op2026",
-            "title": "Översiktsplan 2026",
-            "expanded": false
-        },
-        {
-            "name": "background",
-            "title": "Bakgrundskartor",
-            "expanded": false
-        }
+    {
+      "name": "op2026",
+      "title": "Översiktsplan 2026",
+      "expanded": false
+    },
+    {
+      "name": "background",
+      "title": "Bakgrundskartor",
+      "expanded": false
+    }
   ],
   "layers": [
-		{
-      "name": "Prognos1821",
-      "title": "Total prognos",
-      "style": "BostadTot_pkt",
-      "group": "skeden",
-      "type": "GROUP",
-      "visible": false,
-      "layers": [
-	     {
-       "name": "Bostads_prognos_info",
-       "source": "ltp",
-       "title": "Information om byggnation",
-       "style": "cirkel22",
-       "type": "WFS",
-       "visible": true,
-       "attributes": [
-	   {
-            "name": "Plannr",
-            "title": "Plannummer: "
-          },
-		  {
-            "name": "Namn",
-            "title": "Namn: "
-          },
-		   {
-            "name": "Planlage",
-            "title": "Planläge: "
-          },
-		  {
-            "name": "2018_2021",
-            "title": "Antal lgh 2018-2021: "
-          },
-		  {
-            "name": "2018",
-            "title": "Antal lgh 2018: "
-          },
-		  {
-            "name": "2019",
-            "title": "Antal lgh 2019: "
-          },
-		  {
-            "name": "2020",
-            "title": "Antal lgh 2020: "
-          },
-		  {
-            "name": "2021",
-            "title": "Antal lgh 2021: "
-          }
-		  ]
-        },
-		{
-        "name": "Bostads_prognos",
-       	"source": "ltp",
-       	"title": "Total prognos alla",
-        "style": "BostadTot_pkt",
-        "type": "WFS",
-        "clusterStyle": "BostadTot_cluster",
-       	"layerType": "cluster",
-        "queryable": false,
-       	"visible": true
-        }
-      ]
-    },
-	{
-      "name": "Prognos1821_ldp",
-      "title": "Inom lagakraftv. DP",
-      "style": "DP_pkt",
-      "group": "skeden",
-      "type": "GROUP",
-      "visible": false,
-      "layers": [
-	     {
-       "name": "Bostads_prognos_info",
-       "source": "ltp",
-       "title": "Information om byggnation",
-       "style": "cirkel22",
-       "type": "WFS",
-	   "filter": "Planlage = 'Lagakraft'",
-	   "geometryName": "the_geom",
-       "visible": true,
-       "attributes": [
-	   {
-            "name": "Plannr",
-            "title": "Plannummer: "
-          },
-		  {
-            "name": "Namn",
-            "title": "Namn: "
-          },
-		   {
-            "name": "Planlage",
-            "title": "Planläge: "
-          },
-		  {
-            "name": "2018_2021",
-            "title": "Antal lgh 2018-2021: "
-          },
-		  {
-            "name": "2018",
-            "title": "Antal lgh 2018: "
-          },
-		  {
-            "name": "2019",
-            "title": "Antal lgh 2019: "
-          },
-		  {
-            "name": "2020",
-            "title": "Antal lgh 2020: "
-          },
-		  {
-            "name": "2021",
-            "title": "Antal lgh 2021: "
-          }
-		  ]
-        },
-		{
-        "name": "Bostads_prognos",
-       	"source": "ltp",
-       	"title": "Inom lagakraftv. DP",
-        "style": "DP_pkt",
-        "type": "WFS",
-        "clusterStyle": "DP_cluster",
-       	"layerType": "cluster",
-		"filter": "Planlage = 'Lagakraft'",
-		"geometryName": "the_geom",
-        "queryable": false,
-       	"visible": true
-        }
-      ]
-    },
-	{
-      "name": "Prognos1821_pdp",
-      "title": "Inom pågående DP",
-      "style": "PDP_pkt",
-      "group": "skeden",
-      "type": "GROUP",
-      "visible": false,
-      "layers": [
-	     {
-       "name": "Bostads_prognos_info",
-       "source": "ltp",
-       "title": "Information om byggnation",
-       "style": "cirkel22",
-       "type": "WFS",
-	   "filter": "Planlage = 'Pågående detaljplan'",
-	   "geometryName": "the_geom",
-       "visible": true,
-       "attributes": [
-	   {
-            "name": "Plannr",
-            "title": "Plannummer: "
-          },
-		  {
-            "name": "Namn",
-            "title": "Namn: "
-          },
-		   {
-            "name": "Planlage",
-            "title": "Planläge: "
-          },
-		  {
-            "name": "2018_2021",
-            "title": "Antal lgh 2018-2021: "
-          },
-		  {
-            "name": "2018",
-            "title": "Antal lgh 2018: "
-          },
-		  {
-            "name": "2019",
-            "title": "Antal lgh 2019: "
-          },
-		  {
-            "name": "2020",
-            "title": "Antal lgh 2020: "
-          },
-		  {
-            "name": "2021",
-            "title": "Antal lgh 2021: "
-          }
-		  ]
-        },
-		{
-        "name": "Bostads_prognos",
-       	"source": "ltp",
-       	"title": "Inom pågående. DP",
-        "style": "PDP_pkt",
-        "type": "WFS",
-        "clusterStyle": "PDP_cluster",
-       	"layerType": "cluster",
-		"filter": "Planlage = 'Pågående detaljplan'",
-		"geometryName": "the_geom",
-        "queryable": false,
-       	"visible": true
-        }
-      ]
-    },
-	{
-      "name": "Prognos1821_kdp",
-      "title": "Inom kommande DP",
-      "style": "KDP_pkt",
-      "group": "skeden",
-      "type": "GROUP",
-      "visible": false,
-      "layers": [
-	     {
-       "name": "Bostads_prognos_info",
-       "source": "ltp",
-       "title": "Information om byggnation",
-       "style": "cirkel22",
-       "type": "WFS",
-	   "filter": "Planlage = 'Kommande detaljplan'",
-	   "geometryName": "the_geom",
-       "visible": true,
-       "attributes": [
-	   {
-            "name": "Plannr",
-            "title": "Plannummer: "
-          },
-		  {
-            "name": "Namn",
-            "title": "Namn: "
-          },
-		   {
-            "name": "Planlage",
-            "title": "Planläge: "
-          },
-		  {
-            "name": "2018_2021",
-            "title": "Antal lgh 2018-2021: "
-          },
-		  {
-            "name": "2018",
-            "title": "Antal lgh 2018: "
-          },
-		  {
-            "name": "2019",
-            "title": "Antal lgh 2019: "
-          },
-		  {
-            "name": "2020",
-            "title": "Antal lgh 2020: "
-          },
-		  {
-            "name": "2021",
-            "title": "Antal lgh 2021: "
-          }
-		  ]
-        },
-		{
-        "name": "Bostads_prognos",
-       	"source": "ltp",
-       	"title": "Inom kommande DP",
-        "style": "KDP_pkt",
-        "type": "WFS",
-        "clusterStyle": "KDP_cluster",
-       	"layerType": "cluster",
-		"filter": "Planlage = 'Kommande detaljplan'",
-		"geometryName": "the_geom",
-        "queryable": false,
-       	"visible": true
-        }
-      ]
-    },
-		{
-       "name": "allamarkanvisningar",
-       "title": "Kommande markanvisningar",
-       "style": "markanvisningar_pkt",
-       "group": "markan",
-	   "abstract": "<p>Markanvisning anger här ett område som kommer att erbjudas till marknaden med ett jämförelseförfarande (byggherren väljs ut genom en urvalsprocess). En markanvisning är en överenskommelse mellan en kommun och en byggherre som ger byggherren ensamrätt att under en begränsad tid och under givna villkor förhandla med kommunen om överlåtelse eller upplåtelse av ett kommunägt markområde för bebyggande.</p>",
-       "type": "GROUP",
-       "visible": false,
-       "layers": [
-         {
-           "name": "markanvisningar_pkt_alla",
-           "source": "mdk",
-           "style": "markanvisningar_pkt",
-           "clusterStyle": "markanvisningar_cluster",
-           "title": "Markanvisningar",
-           "group": "markan",
-           "type": "WFS",
-		   "layerType": "cluster",
-           "visible": true,
-                                                             "minScale":30000,
-           "attributes": [
-             {
-           "name": "OMRADE",
-           "title": "Område: ",
-                                                             "url": "URL_MARKAN"
-         },
-         {
-           "name": "PLANNR",
-           "title": "Plannummer: ",
-                                                             "url": "URL_DP"
-         },
-         {
-           "name": "TYP",
-           "title": "Typ: "
-         },
-         {
-           "name": "AREA",
-           "title": "Area (m2): "
-         },
-         {
-           "name": "ANT_BOSTAD",
-           "title": "Antal bostäder: "
-         },
-         {
-           "name": "TIDSPLAN",
-           "title": "Tidsplan: "
-         },
-         {
-           "name": "SKEDE",
-           "title": "Skede: "
-         },
-         {
-           "name": "ANMARKNING",
-           "title": "Anmärkning: "
-         },
-         {
-           "name": "KONTPERS",
-           "title": "Kontaktperson: "
-         },                                              
-         {
-           "name": "TELEFON",
-           "title": "Telefon: "
-         },
-         {
-           "name": "EPOST",
-           "title": "E-post: "
-         },
-         {
-           "name": "NR",
-           "title": "Id-nummer: "
-         }                                               
-           ]
-         },
-        {
-           "name": "markanvisningar_pkt",
-           "source": "mdk",
-           "style": "markanvisningar_pkt",
-           "title": "Markanvisningar",
-           "group": "markan",
-           "type": "WFS",
-           "visible": true,
-                                                             "maxScale":30000,
-           "attributes": [
-              {
-           "name": "OMRADE",
-           "title": "Område: ",
-                                                             "url": "URL_MARKAN"
-         },
-         {
-           "name": "PLANNR",
-           "title": "Plannummer: ",
-                                                             "url": "URL_DP"
-         },
-         {
-           "name": "TYP",
-           "title": "Typ: "
-         },
-         {
-           "name": "AREA",
-           "title": "Area (m2): "
-         },
-         {
-           "name": "ANT_BOSTAD",
-           "title": "Antal bostäder: "
-         },
-         {
-           "name": "TIDSPLAN",
-           "title": "Tidsplan: "
-         },
-         {
-           "name": "SKEDE",
-           "title": "Skede: "
-         },
-         {
-           "name": "ANMARKNING",
-           "title": "Anmärkning: "
-         },
-         {
-           "name": "KONTPERS",
-           "title": "Kontaktperson: "
-         },                                              
-         {
-           "name": "TELEFON",
-           "title": "Telefon: "
-         },
-         {
-           "name": "EPOST",
-           "title": "E-post: "
-         },
-         {
-           "name": "NR",
-           "title": "Id-nummer: "
-         }
-           ]
-         },
-                                                          {
-           "name": "markanvisningar",
-           "source": "mdk",
-           "style": "markanvisningar",
-           "title": "Markanvisningar",
-           "group": "markan",
-           "type": "WFS",
-           "visible": true,
-                                                             "maxScale":30000,
-           "attributes": [
-              {
-           "name": "OMRADE",
-           "title": "Område: ",
-                                                             "url": "URL_MARKAN"
-         },
-         {
-           "name": "PLANNR",
-           "title": "Plannummer: ",
-                                                             "url": "URL_DP"
-         },
-         {
-           "name": "TYP",
-           "title": "Typ: "
-         },
-         {
-           "name": "AREA",
-           "title": "Area (m2): "
-         },
-         {
-           "name": "ANT_BOSTAD",
-           "title": "Antal bostäder: "
-         },
-         {
-           "name": "TIDSPLAN",
-           "title": "Tidsplan: "
-         },
-         {
-           "name": "SKEDE",
-           "title": "Skede: "
-         },
-         {
-           "name": "ANMARKNING",
-           "title": "Anmärkning: "
-         },
-         {
-           "name": "KONTPERS",
-           "title": "Kontaktperson: "
-         },                                              
-         {
-           "name": "TELEFON",
-           "title": "Telefon: "
-         },
-         {
-           "name": "EPOST",
-           "title": "E-post: "
-         },
-         {
-           "name": "NR",
-           "title": "Id-nummer: "
-         }
-           ]
-         }
-       ]
-     },      
-	{
-      "name": "projektja_1_2",
-      "title": "Ja, idén vidare, platsen prövas",
-      "style": "projide1_2",
-      "source": "bostadMap",
-      "group": "projide",
-      "type": "AGS_TILE",
-      "id": "280",
-      "visible": false,
-      "queryable": false
-  	},
-	{
-      "name": "projektja_1",
-      "title": "Eventuellt, idén utreds",
-      "style": "projide1",
-      "source": "bostadMap",
-      "group": "projide",
-      "type": "AGS_TILE",
-      "id": "279",
-      "visible": false,
-      "queryable": false
-  	},
-	{
-      "name": "beredningsgrupp_nej",
-      "title": "Nej, idén ej aktuell",
-      "style": "bgrupp_nej",
-      "source": "bostadMap",
-      "group": "projide",
-      "type": "AGS_TILE",
-      "id": "277",
-      "visible": false,
-      "queryable": false
-    },
-	{
-      "name": "fardig2018",
-	  "id": "bostbygg_fardig",
-      "title": "2018",
-      "style": "fardig2018",
-      "source": "bostadGeo",
-      "group": "fardigbygg",
-	  "filter": "ARTAL = 2018",
-      "geometryName": "the_geom",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-         {
-           "name": "BYGGHERRE",
-		   "title": "Byggherre: "
-          },
-		  {
-           "name": "SUMMA",
-		   "title": "Antal bostäder: "
-          },
-		  {
-           "name": "UPPL_FORM",
-		   "title": "Upplåtelseform: "
-          }
-		 
-       ]
-    },
-	{
-      "name": "fardig2017",
-	  "id": "bostbygg_fardig",
-      "title": "2017",
-      "style": "fardig2017",
-      "source": "bostadGeo",
-      "group": "fardigbygg",
-	  "filter": "ARTAL = 2017",
-      "geometryName": "the_geom",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-         {
-           "name": "BYGGHERRE",
-		   "title": "Byggherre: "
-          },
-		  {
-           "name": "SUMMA",
-		   "title": "Antal bostäder: "
-          },
-		  {
-           "name": "UPPL_FORM",
-		   "title": "Upplåtelseform: "
-          }
-		 
-       ]
-    },
-	{
-      "name": "fardig2016",
-	  "id": "bostbygg_fardig",
-      "title": "2016",
-      "style": "fardig2016",
-      "source": "bostadGeo",
-      "group": "fardigbygg",
-	  "filter": "ARTAL = 2016",
-      "geometryName": "the_geom",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-         
-		  {
-           "name": "BYGGHERRE",
-		   "title": "Byggherre: "
-          },
-		  {
-           "name": "SUMMA",
-		   "title": "Antal bostäder: "
-          },
-		  {
-           "name": "UPPL_FORM",
-		   "title": "Upplåtelseform: "
-          }
-		 
-       ]
-    },
-	{
-      "name": "fardig2015",
-	  "id": "bostbygg_fardig",
-      "title": "2015",
-      "style": "fardig2015",
-      "source": "bostadGeo",
-      "group": "fardigbygg",
-	  "filter": "ARTAL = 2015",
-      "geometryName": "the_geom",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-         
-		  {
-           "name": "BYGGHERRE",
-		   "title": "Byggherre: "
-          },
-		  {
-           "name": "SUMMA",
-		   "title": "Antal bostäder: "
-          },
-		  {
-           "name": "UPPL_FORM",
-		   "title": "Upplåtelseform: "
-          }
-		 
-       ]
-    },
-	{
-      "name": "2018",
-	  "id": "bostbygg_paborjad",
-      "title": "2018",
-      "style": "paborjat2018",
-      "source": "bostadGeo",
-      "group": "paborjadbygg",
-	  "filter": "ARTAL = 2018",
-      "geometryName": "the_geom",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-         
-		  {
-           "name": "BYGGHERRE",
-		   "title": "Byggherre: "
-          },
-		  {
-           "name": "SUMMA",
-		   "title": "Antal bostäder: "
-          },
-		  {
-           "name": "UPPL_FORM",
-		   "title": "Upplåtelseform: "
-          }
-		 
-       ]
-    },
-	{
-      "name": "2017",
-	  "id": "bostbygg_paborjad",
-      "title": "2017",
-      "style": "paborjat2017",
-      "source": "bostadGeo",
-      "group": "paborjadbygg",
-	  "filter": "ARTAL = 2017",
-      "geometryName": "the_geom",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-         
-		  {
-           "name": "BYGGHERRE",
-		   "title": "Byggherre: "
-          },
-		  {
-           "name": "SUMMA",
-		   "title": "Antal bostäder: "
-          },
-		  {
-           "name": "UPPL_FORM",
-		   "title": "Upplåtelseform: "
-          }
-		 
-       ]
-    },
-	{
-      "name": "2016",
-	  "id": "bostbygg_paborjad",
-      "title": "2016",
-      "style": "paborjat2016",
-      "source": "bostadGeo",
-      "group": "paborjadbygg",
-	  "filter": "ARTAL = 2016",
-      "geometryName": "the_geom",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-       
-		  {
-           "name": "BYGGHERRE",
-		   "title": "Byggherre: "
-          },
-		  {
-           "name": "SUMMA",
-		   "title": "Antal bostäder: "
-          },
-		  {
-           "name": "UPPL_FORM",
-		   "title": "Upplåtelseform: "
-          }
-		 
-       ]
-    },
-	{
-      "name": "2015",
-	  "id": "bostbygg_paborjad",
-      "title": "2015",
-      "style": "paborjat2015",
-      "source": "bostadGeo",
-      "group": "paborjadbygg",
-	  "filter": "ARTAL = 2015",
-      "geometryName": "the_geom",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-    
-		  {
-           "name": "BYGGHERRE",
-		   "title": "Byggherre: "
-          },
-		  {
-           "name": "SUMMA",
-		   "title": "Antal bostäder: "
-          },
-		  {
-           "name": "UPPL_FORM",
-		   "title": "Upplåtelseform: "
-          }
-		 
-       ]
-    },
-	{
-      "name": "gallande_detaljplaner",
-      "title": "Antagen detaljplan, alla",
-      "style": "dp_yta",
-      "source": "mdk2",
-      "group": "ovr",
-      "type": "WFS",
-	  "filter": "KOMMUNKOD = '1980'",
-      "visible": false,
-      "attributes": [
-         {
-           "name": "PLANTYP",
-		   "title": "Plantyp: "
-		  },
-		  {
-           "name": "AKT_BET",
-		   "title": "Akt: "
-         },
-		 {
-		   "url": "LANK",
-		   "html": "Läs mer &raquo; "
-         }
-       ]
-    },	
-	{
-      "name": "DPreserv",
-      "title": "Planreserv",
-      "style": "dp_yta_bostad",
-      "source": "bostadGeo",
-      "group": "ovr",
-	  "abstract": "<p>Planreserv visar lagakraftvunna detaljplaner där de finns byggrätter kvar för byggande av bostäder.</p>",
-      "type": "WFS",
-      "visible": false,
-      "attributes": [
-         {
-           "name": "NAMN",
-		   "title": "Namn: "
-		  },
-		  {
-           "name": "Antal_lgh",
-		   "title": "Antal bostäder: "
-          },
-		  {
-		   "url": "EXTERNDOK",
-		   "html": "Läs mer &raquo; ",
-		   "urlPrefix": "https://www.vasteras.se/bygga-bo-och-miljo/kommunens-planarbete/detaljplaner/",
-		   "urlSuffix": ".html"
-         }
-       ]
-    },	
-	{
-      "name": "pagaende_detaljplaner",
-	  "source": "bostadMap",
-      "title": "Pågående detaljplan",
-      "style": "dp_yta_bostad_pagaende",
-      "group": "ovr",
-      "type": "AGS_TILE",
-      "id": "265",
-      "visible": false,
-      "attributes": [
-      	 {
-           "name": "ANMARKNING",
-		   "title": "Namn: "
-		 },
-		 {
-           "name": "ANTAL_LGH",
-		   "title": "Antal lägenheter: "
-		 },
-		  {
-           "name": "EXTERNDOK",
-		   "title": "Länk: ",
-		   "url": "EXTERNDOK",
-		   "urlPrefix": "https://www.vasteras.se/bygga-bo-och-miljo/kommunens-planarbete/pagaende-planer/",
-		   "urlSuffix": ".html"
-		 }
-		 		 
-       ]
-    },
-	{
-      "name": "FOP_tmp",
-      "title": "Antagna FÖP och PP",
-      "style": "fop_pp_antagen",
-      "source": "bostadGeo",
-      "group": "ovr",
-      "type": "WFS",
-	  "abstract": "<p>FÖP står för Fördjupad översiktsplan. En fördjupad översiktsplan används som underlag när man fattar beslut om hur vi ska använda våra mark- och vattenområden. En översiktsplan ger också underlag för framtida detaljplaner inom området.<br/>PP står för Planprogram. Ett planprogram kan tas fram för ett större område, till exempel en stadsdel, som underlag och stöd för flera framtida detaljplaner inom området.</p>",
-      "geometryName": "the_geom",
-	  "visible": false,
-      "attributes": [
-         {
-           "name": "NAMN",
-		   "title": "Namn: "
-		  },
-		  {
-           "name": "ANTAL_LGH",
-		   "title": "Antal bostäder: "
-         },
-		  {
-           "url": "DOKUMENT",
-		   "html": "Läs mer &raquo; "
-         }
-       ]
-    },
-	{
-      "name": "pagaende_PP_FOP",
-      "title": "Pågående FÖP och PP",
-      "style": "fop_pp_pagaende",
-      "source": "bostadGeo",
-      "group": "ovr",
-      "type": "WFS",
-	  "abstract": "<p>FÖP står för Fördjupad översiktsplan. En fördjupad översiktsplan används som underlag när man fattar beslut om hur vi ska använda våra mark- och vattenområden. En översiktsplan ger också underlag för framtida detaljplaner inom området.<br/>PP står för Planprogram. Ett planprogram kan tas fram för ett större område, till exempel en stadsdel, som underlag och stöd för flera framtida detaljplaner inom området.</p>",
-	  "geometryName": "the_geom",
-      "visible": false,
-      "attributes": [
-         {
-           "name": "ANMARKNING",
-		   "title": "Namn: "
-		  },
-		  {
-           "name": "ANTAL_LGH",
-		   "title": "Antal bostäder: "
-         },
-		 {
-           "url": "DOKUMENT",
-		   "html": "Läs mer &raquo; "
-         }
-       ]
-    },
-	{
+    {
       "name": "op2026_markvatten",
       "title": "Mark- och vattenanvändning",
       "style": "ic_list",
@@ -1034,265 +112,85 @@
       "group": "op2026",
       "type": "AGS_TILE",
       "id": "45",
-	  "abstract": "<p>Översiktsplan 2026 ligger till grund för all planering av byggande och markanvändning i kommunen. Den beskriver hur vi ska använda kommunens mark och vatten, samt hur vi ska utveckla bebyggelsen ur ett långsiktigt perspektiv.</p><img class=expanded src=img/png/markvatten.png alt='MarkVatten', teckenförklaring >",
+      "abstract": "<p>Översiktsplan 2026 ligger till grund för all planering av byggande och markanvändning i kommunen. Den beskriver hur vi ska använda kommunens mark och vatten, samt hur vi ska utveckla bebyggelsen ur ett långsiktigt perspektiv.</p><img class=expanded src=img/png/markvatten.png alt='MarkVatten', teckenförklaring >",
       "visible": false,
       "queryable": false
-  	},
-	{
+    },
+    {
       "name": "op2026_resurshallning",
       "title": "Resurshushållning",
       "style": "ic_list",
       "source": "OP2026Map",
       "group": "op2026",
       "type": "AGS_TILE",
-      "id": "73",
-	  "abstract": "<p>Översiktsplan 2026 ligger till grund för all planering av byggande och markanvändning i kommunen. Den beskriver hur vi ska använda kommunens mark och vatten, samt hur vi ska utveckla bebyggelsen ur ett långsiktigt perspektiv.</p><img class=expanded src=img/png/resurshushalln.png alt='Resurshallning', teckenförklaring >",
-      "visible": false,
-      "queryable": false
-  	},
-	{
-      "name": "upplatelseformer",
-      "title": "Upplåtelseformer",
-      "style": "upplatelse",
-      "source": "bostadGeo",
-      "group": "bostadsbyggnation",
-      "type": "WFS",
-	  "abstract": "<img class=expanded src=img/png/upplformer.png alt='upplform', teckenförklaring >",
-      "visible": false,
       "attributes": [
-	  	  {
-            "html": "<b>Bostadsrätt: </b>{{BOSTR_PROC}}%"
-          },
-		  {
-            "html": "<b>Hyresrätt: </b>{{HYR_PROC}}%"
-          },
-		  {
-            "html": "<b>Äganderätt: </b>{{AGANDE_PRO}}%"
-          }]
-    },
-	 
-		{
-		  "name": "vasteras",
-		  "opacity": 0.15,
-		  "title": "Mdk",
-		  "queryable": false,
-		  "source": "data/vasteras.geojson",
-		  "style": "mask",
-		  "type": "GEOJSON",
-		  "visible": true
-		},		
         {
-            "attribution": "&copy Lantmäteriet Geodatasamverkan",
-            "format": "image/png",
-            "group": "background",
-            "name": "topowebbkartan_nedtonad",
-            "source": "basemap",
-            "title": "Karta, grå",
-            "type": "WMTS",
-            "style": "karta_gra",
-            "visible": true
-        },
-        {
-            "attribution": "&copy Lantmäteriet Geodatasamverkan",
-            "format": "image/png",
-            "group": "background",
-            "name": "topowebbkartan",
-            "source": "basemap",
-            "title": "Karta, färg",
-            "type": "WMTS",
-            "style": "karta_farg",
-            "visible": false
-        },
-        {
-            "attribution": "&copy Lantmäteriet Geodatasamverkan",
-            "format": "image/jpeg",
-            "group": "background",
-            "name": "orto",
-            "source": "basemap",
-            "title": "Flygfoto",
-            "type": "WMTS",
-            "style": "orto",
-            "visible": false
+          "name": "Beskrivning"
         }
+      ],
+      "id": "73",
+      "abstract": "<p>Översiktsplan 2026 ligger till grund för all planering av byggande och markanvändning i kommunen. Den beskriver hur vi ska använda kommunens mark och vatten, samt hur vi ska utveckla bebyggelsen ur ett långsiktigt perspektiv.</p><img class=expanded src=img/png/resurshushalln.png alt='Resurshallning', teckenförklaring >",
+      "visible": false,
+      "queryable": true
+    },
+    {
+      "name": "vasteras",
+      "opacity": 0.15,
+      "title": "Mdk",
+      "queryable": false,
+      "source": "data/vasteras.geojson",
+      "style": "mask",
+      "type": "GEOJSON",
+      "visible": true
+    },
+    {
+      "attribution": "&copy Lantmäteriet Geodatasamverkan",
+      "format": "image/png",
+      "group": "background",
+      "name": "topowebbkartan_nedtonad",
+      "source": "basemap",
+      "title": "Karta, grå",
+      "type": "WMTS",
+      "style": "karta_gra",
+      "visible": true
+    },
+    {
+      "attribution": "&copy Lantmäteriet Geodatasamverkan",
+      "format": "image/png",
+      "group": "background",
+      "name": "topowebbkartan",
+      "source": "basemap",
+      "title": "Karta, färg",
+      "type": "WMTS",
+      "style": "karta_farg",
+      "visible": false
+    },
+    {
+      "attribution": "&copy Lantmäteriet Geodatasamverkan",
+      "format": "image/jpeg",
+      "group": "background",
+      "name": "orto",
+      "source": "basemap",
+      "title": "Flygfoto",
+      "type": "WMTS",
+      "style": "orto",
+      "visible": false
+    }
   ],
   "styles": {
-	   "paborjat2018": [
-        [
-          {
-            "circle": {
-              "radius": 5,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(197,82,240,0.8)"			
-              }
-            }
-          }
-        ]
-      ],
-     "paborjat2017": [
-        [
-          {
-            "circle": {
-              "radius": 5,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(205,245,122,0.8)"			
-              }
-            }
-          }
-        ]
-      ],
-	  "paborjat2016": [
-        [
-          {
-            "circle": {
-              "radius": 5,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(255,211,127,0.8)"			
-              }
-            }
-          }
-        ]
-      ],
-	    "paborjat2015": [
-        [
-          {
-            "circle": {
-              "radius": 5,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(115,178,255,0.8)"			
-              }
-            }
-          }
-        ]
-      ],
-	  	 "fardig2018": [
-        [
-          {
-            "circle": {
-              "radius": 5,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(197,82,240,0.8)"			
-              }
-            }
+    "mask": [
+      [
+        {
+          "stroke": {
+            "color": "rgba(0,0,0,1.0)"
           },
-		  {
-            "circle": {
-              "radius": 2,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 2
-              },
-              "fill": {
-                "color": "rgba(197,82,240,0.8)"			
-              }
-            }
+          "fill": {
+            "color": "rgba(0,0,0,1.0)"
           }
-        ]
-      ],
-	    "fardig2017": [
-        [
-          {
-            "circle": {
-              "radius": 5,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(205,245,122,0.8)"			
-              }
-            }
-          },
-		  {
-            "circle": {
-              "radius": 2,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 2
-              },
-              "fill": {
-                "color": "rgba(205,245,122,0.8)"			
-              }
-            }
-          }
-        ]
-      ],
-	  "fardig2016": [
-        [
-          {
-            "circle": {
-              "radius": 5,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(255,211,127,0.8)"			
-              }
-            }
-          },
-		  {
-            "circle": {
-              "radius": 2,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 2
-              },
-              "fill": {
-                "color": "rgba(255,211,127,0.8)"			
-              }
-            }
-          }
-        ]
-      ],
-	  "fardig2015": [
-        [
-          {
-            "circle": {
-              "radius": 5,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(115,178,255,0.8)"			
-              }
-            }
-          },
-		  {
-            "circle": {
-              "radius": 2,
-              "stroke": {
-                "color": "rgba(0,0,0,0.8)",
-                "width": 2
-              },
-              "fill": {
-                "color": "rgba(115,178,255,0.8)"			
-              }
-            }
-          }
-        ]
-      ],
-	 "ic_list": [
+        }
+      ]
+    ],
+    "ic_list": [
       [
         {
           "icon": {
@@ -1305,856 +203,278 @@
         }
       ]
     ],
-	"cirkel22": [
+    "cirkel": [
       [
         {
           "circle": {
-            "radius": 10,
+            "radius": 6,
             "stroke": {
-              "color": "rgba(0,0,0,0.01)",
-              "width": 1
-            },
-            "fill": {
-              "color": "rgba(0,0,0,0.01)"
-            }
-          }
-        }
-      ]
-    ],
-	"bgrupp_nej": [
-      [
-        {
-          "icon": {
-            "size": [
-              20,
-              20
-            ],
-            "src": "img/png/bgruppnej.png"
-          }
-        }
-      ]
-    ],
-	"projide1_2": [
-      [
-        {
-          "icon": {
-            "size": [
-              20,
-              20
-            ],
-            "src": "img/png/projide1_2.png"
-          }
-        }
-      ]
-    ],
-	"projide1": [
-      [
-        {
-          "icon": {
-            "size": [
-              20,
-              20
-            ],
-            "src": "img/png/projide1.png"
-          }
-        }
-      ]
-    ],			
-	  "markanvisningar_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_lila.png"
-            }
-          }                                                    
-        ]
-      ],                      
-                               "markanvisningar": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_lila.png"
-            },
-            "geometry": "centerPoint",
-                                                                                       "zIndex": 10
-          },                                             
-          {
-                                                                                       "fill": {
-              "color": "rgba(153,102,204,0.2)"                                                                                                
-                                                                                       },                                                         
-            "stroke": {
-              "color": "rgba(153,102,204,1)",
+              "color": "rgba(0,0,0,1)",
               "width": 2
-            }
-          }
-        ]
-      ],                    
-"markanvisningar_cluster": [
-        [
-          {
-            "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(153,102,204,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(153,102,204,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "size",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],
-	  "dp_yta": [
-        [
-          {
-            "stroke": {
-               "color": "rgba(38,115,0,1.0)",
-               "width": 2
             },
             "fill": {
-              "color": "rgba(0,0,0,0)"
+              "color": "rgba(0,0,0,0.5)"
             }
           }
-        ]
-      ],
-	  "dp_yta_bostad": [
-        [
-          {
-            "stroke": {
-               "color": "rgba(38,115,0,1.0)",
-               "width": 2
-            },
-            "fill": {
-              "color": "rgba(68,176,28,0.8)"
-            }
-          }
-        ]
-      ],
-	  "dp_yta_bostad_pagaende": [
-        [
-          {
-            "stroke": {
-               "color": "rgba(110,110,110,1.0)",
-               "width": 2
-            },
-            "fill": {
-              "color": "rgba(255,190,190,0.8)"
-            }
-          }
-        ]
-      ],
-	  "fop_pp_antagen": [
-        [
-          {
-			 
-            "stroke": {
-               "color": "rgba(41,179,103,1.0)",
-               "width": 2
-            },
-            "fill": {
-              "color": "rgba(48,209,121,0.8)"
-            }
-			
-          } 
-		  
-        ]
-      ],
-	  "fop_pp_pagaende": [
-        [
-          {
-            "stroke": {
-               "color": "rgba(110,110,110,1.0)",
-               "width": 2
-            },
-            "fill": {
-              "color": "rgba(115,178,255,0.8)"
-            }
-          }
-        ]
-      ],
-	  "upplatelse": [
-	  [
-        {
-          "icon": {
-            "size": [
-              20,
-              20
-            ],
-            "src": "img/png/ic_list_black_18dp.png"
-          },
-		    "filter": "[U_FORM] == 'vadsom'"
         }
-      ],
+      ]
+    ],
+    "karta_gra": [
       [
-  		  {
-    			"fill": {
-    			  "color": "rgba(255,170,122,0.8)"
-    			},
-    			"stroke": {
-    			  "color": "rgba(110,110,110,1)",
-    			  "width": 1
-    			},
-    			"filter": "[U_FORM] == 'Hyresrätt'"
-  		  }
-  		],
-  		[
-  		  {
-    			"fill": {
-    			  "color": "rgba(239,224,39,0.8)"
-    			},
-    			"stroke": {
-    			  "color": "rgba(110,110,110,1)",
-    			  "width": 1
-    			},
-    			"filter": "[U_FORM] == 'Bostadsrätt'"
-  		  }
-  		], 
-		[
-  		  {
-    			"fill": {
-    			  "color": "rgba(255,255,255,0.8)"
-    			},
-    			"stroke": {
-    			  "color": "rgba(110,110,110,1)",
-    			  "width": 1
-    			},
-    			"filter": "[U_FORM] == 'Uppgift saknas'"
-  		  }
-  		],
-		[
-  		  {
-    			"fill": {
-    			  "color": "rgba(0,200,255,0.8)"
-    			},
-    			"stroke": {
-    			  "color": "rgba(110,110,110,1)",
-    			  "width": 1
-    			},
-    			"filter": "[U_FORM] == 'Äganderätt'"
-  		  }
-  		]    
-      ],  
-	  "cykelvagar": [
-        [
-          {
-            "stroke": {
-              "color": "rgba(232,54,76,1.0)",
-              "lineDash": [
-                8,
-                8
-              ],
-              "width": 3
-            }
+        {
+          "image": {
+            "src": "img/png/gra.png"
           }
-        ]
-      ],
-	   "cykelvagar_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_rod.png"
-            }
+        }
+      ]
+    ],
+    "karta_farg": [
+      [
+        {
+          "image": {
+            "src": "img/png/farg.png"
           }
-        ]
-      ],
-	    "vagar": [
-        [
-          {
-            "stroke": {
-              "color": "rgba(0,0,0,1.0)",
-              "lineDash": [
-                8,
-                8
-              ],
-              "width": 3
-            }
+        }
+      ]
+    ],
+    "orto": [
+      [
+        {
+          "image": {
+            "src": "img/png/orto.png"
           }
-        ]
-      ],
-	   "vagar_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_black.png"
-            }
-          }
-        ]
-      ],
-	   "vagar_yta": [
-        [
-          {
-            "stroke": {
-               "color": "rgba(0,0,0,1.0)",
-              "lineDash": [
-                8,
-                8
-              ],
-              "width": 3
-            },
-            "fill": {
-              "color": "rgba(0,0,0,0.2)"
-            }
-          }
-        ]
-      ],
-	   "jvg_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_morkgul.png"
-            }
-          }
-        ]
-      ],
-	  "jvg_linje": [
-        [
-          {
-            "stroke": {
-              "color": "rgba(247,232,38,1.0)",
-              "lineDash": [
-                8,
-                8
-              ],
-              "width": 3
-            }
-          }
-        ]
-      ],
-	  "jvg_yta": [
-        [
-          {
-            "stroke": {
-               "color": "rgba(247,232,38,1.0)",
-              "lineDash": [
-                8,
-                8
-              ],
-              "width": 3
-            },
-            "fill": {
-              "color": "rgba(247,232,38,0.2)"
-            }
-          }
-        ]
-      ],
-	  "mask": [
-        [
-          {
-            "stroke": {
-              "color": "rgba(0,0,0,1.0)"
-            },
-            "fill": {
-              "color": "rgba(0,0,0,1.0)"
-            }
-          }
-        ]
-      ],
-	"ledig_naringsmark": [
-        [
-          {
-            "minScale": 30000,
-            "filter": "[TYP] != 'Bokad mark'",
-            "stroke": {
-              "color": "rgba(103,60,31,1.0)",
-              "width": 1
-            },
-            "fill": {
-              "color": "rgba(103,60,31,0.1)"
-            }
+        }
+      ]
+    ]
+  }
+} {
+  "controls": [{
+      "name": "home"
+    },
+    {
+      "name": "geoposition"
+    },
+    {
+      "name": "mapmenu",
+      "options": {
+        "isActive": true
+      }
+    },
+    {
+      "name": "sharemap"
+    },
+    {
+      "name": "print"
+    },
+    {
+      "name": "about",
+      "options": {
+        "buttontext": "Om karttjänsten",
+        "title": "Karttjänst för bostadsbyggande",
+        "content": "<p>Kartan redovisar detaljplaner, planprogram och översiktsplaner som möjliggör bostadsbyggnation, samt projektidéer för nya projekt.<br/>Många av projektidéerna är ännu inte beslutade politiskt, men redovisas för att få en överblick över platser som redan är ”upptagna”.<br/>Karttjänsten redovisar även påbörjad och färdigställdbyggnation 2015-2018 samt prognoser för kommande bostadsbyggnation (antal lägenheter). Prognoserna uppdateras  två gånger per år, i mars och september, och baseras främst på uppgifter lämnade från byggherrar.</p>"
+      }
+    },
+    {
+      "name": "legend",
+      "options": {
+        "hasMapLegend": true
+      }
+    },
+    {
+      "name": "fullscreen"
+    }
+  ],
+  "projectionCode": "EPSG:3010",
+  "projectionExtent": [
+    -1678505.1838360203,
+    4665380,
+    2431912.7361639794,
+    8775797.92
+  ],
+  "proj4Defs": [{
+    "code": "EPSG:3010",
+    "alias": "urn:ogc:def:crs:EPSG::3010",
+    "projection": "+proj=tmerc +lat_0=0 +lon_0=16.5 +k=1 +x_0=150000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+  }],
+  "extent": [
+    -1678505.1838360203,
+    4665380,
+    2431912.7361639794,
+    8775797.92
+  ],
+  "center": [
+    153797,
+    6612614
+  ],
+  "home": [
+    134966,
+    6593080,
+    176372,
+    6636922
+  ],
+  "zoom": 4,
+  "resolutions": [
+    1146.8799999999999,
+    573.4399999999999,
+    286.71999999999997,
+    143.35999999999999,
+    71.67999999999999,
+    35.839999999999996,
+    17.919999999999998,
+    8.959999999999999,
+    4.4799999999999995,
+    2.2399999999999998,
+    1.1199999999999999,
+    0.5599999999999999,
+    0.27999999999999997,
+    0.13999999999999999
+  ],
+  "source": {
+    "OP2026Map": {
+      "url": "http://kartor.vasteras.se/ArcGIS/rest/services/ext/sbf_oprev_dyn/MapServer"
+    },
+    "basemap": {
+      "url": "https://www.malardalskartan.se/geowebcache/service/wmts"
+    }
+  },
+  "groups": [{
+      "name": "op2026",
+      "title": "Översiktsplan 2026",
+      "expanded": false
+    },
+    {
+      "name": "background",
+      "title": "Bakgrundskartor",
+      "expanded": false
+    }
+  ],
+  "layers": [{
+      "name": "op2026_markvatten",
+      "title": "Mark- och vattenanvändning",
+      "style": "ic_list",
+      "source": "OP2026Map",
+      "group": "op2026",
+      "type": "AGS_TILE",
+      "id": "45",
+      "abstract": "<p>Översiktsplan 2026 ligger till grund för all planering av byggande och markanvändning i kommunen. Den beskriver hur vi ska använda kommunens mark och vatten, samt hur vi ska utveckla bebyggelsen ur ett långsiktigt perspektiv.</p><img class=expanded src=img/png/markvatten.png alt='MarkVatten', teckenförklaring >",
+      "visible": false,
+      "queryable": false
+    },
+    {
+      "name": "op2026_resurshallning",
+      "title": "Resurshushållning",
+      "style": "ic_list",
+      "source": "OP2026Map",
+      "group": "op2026",
+      "type": "AGS_TILE",
+      "attributes": [{
+        "name": "Beskrivning"
+      }],
+      "id": "73",
+      "abstract": "<p>Översiktsplan 2026 ligger till grund för all planering av byggande och markanvändning i kommunen. Den beskriver hur vi ska använda kommunens mark och vatten, samt hur vi ska utveckla bebyggelsen ur ett långsiktigt perspektiv.</p><img class=expanded src=img/png/resurshushalln.png alt='Resurshallning', teckenförklaring >",
+      "visible": false,
+      "queryable": true
+    },
+    {
+      "name": "vasteras",
+      "opacity": 0.15,
+      "title": "Mdk",
+      "queryable": false,
+      "source": "data/vasteras.geojson",
+      "style": "mask",
+      "type": "GEOJSON",
+      "visible": true
+    },
+    {
+      "attribution": "&copy Lantmäteriet Geodatasamverkan",
+      "format": "image/png",
+      "group": "background",
+      "name": "topowebbkartan_nedtonad",
+      "source": "basemap",
+      "title": "Karta, grå",
+      "type": "WMTS",
+      "style": "karta_gra",
+      "visible": true
+    },
+    {
+      "attribution": "&copy Lantmäteriet Geodatasamverkan",
+      "format": "image/png",
+      "group": "background",
+      "name": "topowebbkartan",
+      "source": "basemap",
+      "title": "Karta, färg",
+      "type": "WMTS",
+      "style": "karta_farg",
+      "visible": false
+    },
+    {
+      "attribution": "&copy Lantmäteriet Geodatasamverkan",
+      "format": "image/jpeg",
+      "group": "background",
+      "name": "orto",
+      "source": "basemap",
+      "title": "Flygfoto",
+      "type": "WMTS",
+      "style": "orto",
+      "visible": false
+    }
+  ],
+  "styles": {
+    "mask": [
+      [{
+        "stroke": {
+          "color": "rgba(0,0,0,1.0)"
+        },
+        "fill": {
+          "color": "rgba(0,0,0,1.0)"
+        }
+      }]
+    ],
+    "ic_list": [
+      [{
+        "icon": {
+          "size": [
+            20,
+            20
+          ],
+          "src": "img/png/ic_list_black_18dp.png"
+        }
+      }]
+    ],
+    "cirkel": [
+      [{
+        "circle": {
+          "radius": 6,
+          "stroke": {
+            "color": "rgba(0,0,0,1)",
+            "width": 2
           },
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe.png"
-            },
-            "geometry": "centerPoint"
+          "fill": {
+            "color": "rgba(0,0,0,0.5)"
           }
-        ],
-        [
-          {
-            "minScale": 30000,
-            "filter": "[TYP] == 'Bokad mark'",
-            "stroke": {
-              "color": "rgba(103,60,31,1.0)",
-              "width": 1
-            },
-            "fill": {
-              "color": "rgba(103,60,31,0.1)"
-            }
-          },
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe.png"
-            },
-            "geometry": "centerPoint",
-            "text": {
-              "font": "Bold 10px Arial",
-              "offsetY": 20,
-              "textAlign": "center",
-              "text": "Bokad",
-              "fill": {
-                "color": "rgba(0,0,0,1.0)"
-              }
-            }
-          }
-        ]
-      ],
-      "ledig_naringsmark_cluster": [
-        [
-          {
-            "maxScale": 30000,
-            "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(103,60,31,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "size",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],
-      "ledig_naringsmark_pkt": [
-        [
-          {
-            "maxScale": 30000,
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe.png"
-            }
-          }
-        ]
-      ],
-      "etableringsomraden": [
-        [
-          {
-			"fill": {
-              "color": "rgba(255,255,255,0)"				
-			},		  
-            "stroke": {
-              "color": "rgba(103,60,31,0.5)",
-              "width": 4
-            }
-          }
-        ]
-      ],
-	   "AntagnaFOP_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_lila.png"
-            }
-          }
-        ]
-      ],
-	   "PagaendeFOP_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_morkbla.png"
-            }
-          }
-        ]
-      ],
-	  "AntagnaFOP": [
-        [
-          {
-            "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(16,99,198,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(16,99,198,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "{{Id}}",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],
-	    "BostadTot_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_gron.png"
-            }
-          }
-        ]
-      ],
-	  "BostadTot_cluster": [
-        [
-          {
-            "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(92,177,48,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(92,177,48,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "size",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],
-	    "DP_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_lila.png"
-            }
-          }
-        ]
-      ],
-	  "DP_cluster": [
-        [
-          {
-            "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(153,102,204,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(153,102,204,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "size",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],
-	  "PPK_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_rosa.png"
-            }
-          }
-        ]
-      ],
-	  "PPK_cluster": [
-        [
-          {
-            "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(237,36,127,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(237,36,127,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "size",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],
-	   "PDP_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/drop_blue.png"
-            }
-          }
-        ]
-      ],
-	  "PDP_cluster": [
-        [
-          {
-             "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(0,153,255,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(0,153,255,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "size",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],
-	  	   "KDP_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_orange.png"
-            }
-          }
-        ]
-      ],
-	  "KDP_cluster": [
-        [
-          {
-             "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(255,153,51,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(255,153,51,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "size",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],
-	  "Planreserv_pkt": [
-        [
-          {
-            "icon": {
-              "size": [
-                23,
-                36
-              ],
-              "src": "img/png/droppe_gul.png"
-            }
-          }
-        ]
-      ],
-	  "Planreserv_cluster": [
-        [
-          {
-             "circle": {
-              "radius": 16,
-              "fill": {
-                "color": "rgba(247,247,25,0.5)"
-              },
-              "stroke": {
-                "color": "rgba(247,247,25,0.9)",
-                "width": 4
-              }
-            }
-          },
-          {
-            "text": {
-              "font": "Bold 12px Arial",
-              "textAlign": "center",
-              "text": "size",
-              "fill": {
-                "color": "rgba(255,255,255,1.0)"
-              },
-              "stroke": {
-                "color": "rgba(103,60,31,0.9)",
-                "width": 2
-              }
-            }
-          }
-        ]
-      ],        
-      "cirkel": [
-        [
-          {
-            "circle": {
-              "radius": 6,
-              "stroke": {
-                "color": "rgba(0,0,0,1)",
-                "width": 2
-              },
-              "fill": {
-                "color": "rgba(0,0,0,0.5)"
-              }       
-            }
-          }
-        ]
-      ],      
-  "karta_gra": [
-    [
-      {
+        }
+      }]
+    ],
+    "karta_gra": [
+      [{
         "image": {
           "src": "img/png/gra.png"
         }
-      }
-    ]
-  ],
-  "karta_farg": [
-    [
-      {
+      }]
+    ],
+    "karta_farg": [
+      [{
         "image": {
           "src": "img/png/farg.png"
         }
-      }
-    ]
-  ],
-  "orto": [
-    [
-      {
+      }]
+    ],
+    "orto": [
+      [{
         "image": {
           "src": "img/png/orto.png"
         }
-      }
+      }]
     ]
-  ]
   }
 }

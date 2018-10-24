@@ -199,29 +199,13 @@
  */
   /* invisible but not hidden */
   /*workaround to remove ol logo until class for the logo*/
-  /* display none until init */
-  /* mouse grab icon */
-  /* fix */
   /*
-* 	Owl Carousel Owl Demo Theme
-*	v1.3.3
-*/
-  /* Styling Next and Prev buttons */
-  /* Clickable class fix problem with hover on touch devices */
-  /* Use it for non-touch hover action */
-  /* Styling Pagination*/
-  /* If PaginationNumbers is true */
-  /* preloading images */
-  /*
- *  Owl Carousel CSS3 Transitions
- *  v1.3.2
+ *  Owl Carousel - Core
  */
-  /* fade */
-  /* backSlide */
-  /* goDown */
-  /* scaleUp */
-  /* Keyframes */
-  /*empty*/
+  /* No Js */
+  /*
+ * 	Default theme - Owl Carousel CSS File
+ */
   /*Tooltip arrow*/
   /*remove the boxshadow when selected*/ }
   .o-map html {
@@ -683,319 +667,133 @@
     width: 1.5em; }
   .o-map .ol-attribution li a {
     color: #bbb; }
-  .o-map .owl-carousel .owl-wrapper:after {
-    content: ".";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    line-height: 0;
-    height: 0; }
   .o-map .owl-carousel {
     display: none;
-    position: relative;
     width: 100%;
-    -ms-touch-action: pan-y; }
-  .o-map .owl-carousel .owl-wrapper {
-    display: none;
+    -webkit-tap-highlight-color: transparent;
+    /* position relative and z-index fix webkit rendering fonts issue */
     position: relative;
-    -webkit-transform: translate3d(0px, 0px, 0px); }
-  .o-map .owl-carousel .owl-wrapper-outer {
-    height: calc(100% - 130px);
-    overflow: hidden;
-    position: relative;
-    width: 100%; }
-  .o-map .owl-carousel .owl-wrapper-outer.autoHeight {
-    -webkit-transition: height 500ms ease-in-out;
-    -moz-transition: height 500ms ease-in-out;
-    -ms-transition: height 500ms ease-in-out;
-    -o-transition: height 500ms ease-in-out;
-    transition: height 500ms ease-in-out; }
-  .o-map .owl-carousel .owl-item {
-    float: left; }
-  .o-map .owl-controls .owl-page,
-  .o-map .owl-controls .owl-buttons div {
-    cursor: pointer; }
-  .o-map .owl-controls {
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent; }
-  .o-map .grabbing {
-    cursor: url(grabbing.png) 8 8, move; }
-  .o-map .owl-carousel .owl-wrapper,
-  .o-map .owl-carousel .owl-item {
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    -ms-backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0); }
-  .o-map .owl-theme .owl-controls {
+    z-index: 1; }
+    .o-map .owl-carousel .owl-stage {
+      position: relative;
+      -ms-touch-action: pan-Y;
+      touch-action: manipulation;
+      -moz-backface-visibility: hidden;
+      /* fix firefox animation glitch */ }
+    .o-map .owl-carousel .owl-stage:after {
+      content: ".";
+      display: block;
+      clear: both;
+      visibility: hidden;
+      line-height: 0;
+      height: 0; }
+    .o-map .owl-carousel .owl-stage-outer {
+      position: relative;
+      overflow: hidden;
+      /* fix for flashing background */
+      -webkit-transform: translate3d(0px, 0px, 0px); }
+    .o-map .owl-carousel .owl-wrapper,
+    .o-map .owl-carousel .owl-item {
+      -webkit-backface-visibility: hidden;
+      -moz-backface-visibility: hidden;
+      -ms-backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      -ms-transform: translate3d(0, 0, 0); }
+    .o-map .owl-carousel .owl-item {
+      position: relative;
+      min-height: 1px;
+      float: left;
+      -webkit-backface-visibility: hidden;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none; }
+    .o-map .owl-carousel .owl-item img {
+      display: block;
+      width: 100%; }
+    .o-map .owl-carousel .owl-nav.disabled,
+    .o-map .owl-carousel .owl-dots.disabled {
+      display: none; }
+    .o-map .owl-carousel .owl-nav .owl-prev,
+    .o-map .owl-carousel .owl-nav .owl-next,
+    .o-map .owl-carousel .owl-dot {
+      cursor: pointer;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none; }
+    .o-map .owl-carousel .owl-nav button.owl-prev,
+    .o-map .owl-carousel .owl-nav button.owl-next,
+    .o-map .owl-carousel button.owl-dot {
+      background: none;
+      color: inherit;
+      border: none;
+      padding: 0 !important;
+      font: inherit; }
+    .o-map .owl-carousel.owl-loaded {
+      display: block; }
+    .o-map .owl-carousel.owl-loading {
+      opacity: 0;
+      display: block; }
+    .o-map .owl-carousel.owl-hidden {
+      opacity: 0; }
+    .o-map .owl-carousel.owl-refresh .owl-item {
+      visibility: hidden; }
+    .o-map .owl-carousel.owl-drag .owl-item {
+      touch-action: pan-y;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none; }
+    .o-map .owl-carousel.owl-grab {
+      cursor: move;
+      cursor: grab; }
+    .o-map .owl-carousel.owl-rtl {
+      direction: rtl; }
+    .o-map .owl-carousel.owl-rtl .owl-item {
+      float: right; }
+  .o-map .no-js .owl-carousel {
+    display: block; }
+  .o-map .owl-theme .owl-nav {
     margin-top: 10px;
-    text-align: center; }
-  .o-map .owl-theme .owl-controls .owl-buttons div {
-    color: #FFF;
-    display: inline-block;
-    zoom: 1;
-    *display: inline;
-    /*IE7 life-saver */
-    margin: .3125em;
-    padding: .3125em;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.15); }
-  .o-map .owl-theme .owl-controls.clickable .owl-buttons div:hover {
-    background: rgba(0, 0, 0, 0.3);
-    text-decoration: none; }
-  .o-map .owl-theme .owl-controls .owl-page {
-    display: inline-block;
-    zoom: 1;
-    *display: inline;
-    /*IE7 life-saver */ }
-  .o-map .owl-theme .owl-controls .owl-page span {
-    display: block;
-    width: 12px;
-    height: 12px;
-    margin: 5px 7px;
-    filter: Alpha(Opacity=50);
-    /*IE7 fix*/
-    opacity: 0.5;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-    background: rgba(0, 0, 0, 0.5); }
-  .o-map .owl-theme .owl-controls .owl-page.active span,
-  .o-map .owl-theme .owl-controls.clickable .owl-page:hover span {
-    filter: Alpha(Opacity=100);
-    /*IE7 fix*/
-    opacity: 1; }
-  .o-map .owl-theme .owl-controls .owl-page span.owl-numbers {
-    height: auto;
-    width: auto;
-    color: #FFF;
-    padding: 2px 10px;
-    font-size: 12px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    border-radius: 30px; }
-  .o-map .owl-item.loading {
-    min-height: 150px;
-    background: url(AjaxLoader.gif) no-repeat center center; }
-  .o-map .owl-origin {
-    -webkit-perspective: 1200px;
-    -webkit-perspective-origin-x: 50%;
-    -webkit-perspective-origin-y: 50%;
-    -moz-perspective: 1200px;
-    -moz-perspective-origin-x: 50%;
-    -moz-perspective-origin-y: 50%;
-    perspective: 1200px; }
-  .o-map .owl-fade-out {
-    z-index: 10;
-    -webkit-animation: fadeOut .7s both ease;
-    -moz-animation: fadeOut .7s both ease;
-    animation: fadeOut .7s both ease; }
-  .o-map .owl-fade-in {
-    -webkit-animation: fadeIn .7s both ease;
-    -moz-animation: fadeIn .7s both ease;
-    animation: fadeIn .7s both ease; }
-  .o-map .owl-backSlide-out {
-    -webkit-animation: backSlideOut 1s both ease;
-    -moz-animation: backSlideOut 1s both ease;
-    animation: backSlideOut 1s both ease; }
-  .o-map .owl-backSlide-in {
-    -webkit-animation: backSlideIn 1s both ease;
-    -moz-animation: backSlideIn 1s both ease;
-    animation: backSlideIn 1s both ease; }
-  .o-map .owl-goDown-out {
-    -webkit-animation: scaleToFade .7s ease both;
-    -moz-animation: scaleToFade .7s ease both;
-    animation: scaleToFade .7s ease both; }
-  .o-map .owl-goDown-in {
-    -webkit-animation: goDown .6s ease both;
-    -moz-animation: goDown .6s ease both;
-    animation: goDown .6s ease both; }
-  .o-map .owl-fadeUp-in {
-    -webkit-animation: scaleUpFrom .5s ease both;
-    -moz-animation: scaleUpFrom .5s ease both;
-    animation: scaleUpFrom .5s ease both; }
-  .o-map .owl-fadeUp-out {
-    -webkit-animation: scaleUpTo .5s ease both;
-    -moz-animation: scaleUpTo .5s ease both;
-    animation: scaleUpTo .5s ease both; }
-
-@-webkit-keyframes empty {
-  0% {
-    opacity: 1; } }
-
-@-moz-keyframes empty {
-  0% {
-    opacity: 1; } }
-
-@keyframes empty {
-  0% {
-    opacity: 1; } }
-
-@-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0; }
-  100% {
-    opacity: 1; } }
-
-@-moz-keyframes fadeIn {
-  0% {
-    opacity: 0; }
-  100% {
-    opacity: 1; } }
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0; }
-  100% {
-    opacity: 1; } }
-
-@-webkit-keyframes fadeOut {
-  0% {
-    opacity: 1; }
-  100% {
-    opacity: 0; } }
-
-@-moz-keyframes fadeOut {
-  0% {
-    opacity: 1; }
-  100% {
-    opacity: 0; } }
-
-@keyframes fadeOut {
-  0% {
-    opacity: 1; }
-  100% {
-    opacity: 0; } }
-
-@-webkit-keyframes backSlideOut {
-  25% {
-    opacity: .5;
-    -webkit-transform: translateZ(-500px); }
-  75% {
-    opacity: .5;
-    -webkit-transform: translateZ(-500px) translateX(-200%); }
-  100% {
-    opacity: .5;
-    -webkit-transform: translateZ(-500px) translateX(-200%); } }
-
-@-moz-keyframes backSlideOut {
-  25% {
-    opacity: .5;
-    -moz-transform: translateZ(-500px); }
-  75% {
-    opacity: .5;
-    -moz-transform: translateZ(-500px) translateX(-200%); }
-  100% {
-    opacity: .5;
-    -moz-transform: translateZ(-500px) translateX(-200%); } }
-
-@keyframes backSlideOut {
-  25% {
-    opacity: .5;
-    transform: translateZ(-500px); }
-  75% {
-    opacity: .5;
-    transform: translateZ(-500px) translateX(-200%); }
-  100% {
-    opacity: .5;
-    transform: translateZ(-500px) translateX(-200%); } }
-
-@-webkit-keyframes backSlideIn {
-  0%, 25% {
-    opacity: .5;
-    -webkit-transform: translateZ(-500px) translateX(200%); }
-  75% {
-    opacity: .5;
-    -webkit-transform: translateZ(-500px); }
-  100% {
-    opacity: 1;
-    -webkit-transform: translateZ(0) translateX(0); } }
-
-@-moz-keyframes backSlideIn {
-  0%, 25% {
-    opacity: .5;
-    -moz-transform: translateZ(-500px) translateX(200%); }
-  75% {
-    opacity: .5;
-    -moz-transform: translateZ(-500px); }
-  100% {
-    opacity: 1;
-    -moz-transform: translateZ(0) translateX(0); } }
-
-@keyframes backSlideIn {
-  0%, 25% {
-    opacity: .5;
-    transform: translateZ(-500px) translateX(200%); }
-  75% {
-    opacity: .5;
-    transform: translateZ(-500px); }
-  100% {
-    opacity: 1;
-    transform: translateZ(0) translateX(0); } }
-
-@-webkit-keyframes scaleToFade {
-  to {
-    opacity: 0;
-    -webkit-transform: scale(0.8); } }
-
-@-moz-keyframes scaleToFade {
-  to {
-    opacity: 0;
-    -moz-transform: scale(0.8); } }
-
-@keyframes scaleToFade {
-  to {
-    opacity: 0;
-    transform: scale(0.8); } }
-
-@-webkit-keyframes goDown {
-  from {
-    -webkit-transform: translateY(-100%); } }
-
-@-moz-keyframes goDown {
-  from {
-    -moz-transform: translateY(-100%); } }
-
-@keyframes goDown {
-  from {
-    transform: translateY(-100%); } }
-
-@-webkit-keyframes scaleUpFrom {
-  from {
-    opacity: 0;
-    -webkit-transform: scale(1.5); } }
-
-@-moz-keyframes scaleUpFrom {
-  from {
-    opacity: 0;
-    -moz-transform: scale(1.5); } }
-
-@keyframes scaleUpFrom {
-  from {
-    opacity: 0;
-    transform: scale(1.5); } }
-
-@-webkit-keyframes scaleUpTo {
-  to {
-    opacity: 0;
-    -webkit-transform: scale(1.5); } }
-
-@-moz-keyframes scaleUpTo {
-  to {
-    opacity: 0;
-    -moz-transform: scale(1.5); } }
-
-@keyframes scaleUpTo {
-  to {
-    opacity: 0;
-    transform: scale(1.5); } }
+    text-align: center;
+    -webkit-tap-highlight-color: transparent; }
+    .o-map .owl-theme .owl-nav [class*='owl-'] {
+      color: #FFF;
+      font-size: 14px;
+      margin: 5px;
+      padding: 4px 7px;
+      background: #D6D6D6;
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 3px; }
+      .o-map .owl-theme .owl-nav [class*='owl-']:hover {
+        background: #869791;
+        color: #FFF;
+        text-decoration: none; }
+    .o-map .owl-theme .owl-nav .disabled {
+      opacity: 0.5;
+      cursor: default; }
+  .o-map .owl-theme .owl-nav.disabled + .owl-dots {
+    margin-top: 10px; }
+  .o-map .owl-theme .owl-dots {
+    text-align: center;
+    -webkit-tap-highlight-color: transparent; }
+    .o-map .owl-theme .owl-dots .owl-dot {
+      display: inline-block;
+      zoom: 1;
+      *display: inline; }
+      .o-map .owl-theme .owl-dots .owl-dot span {
+        width: 10px;
+        height: 10px;
+        margin: 5px 7px;
+        background: #D6D6D6;
+        display: block;
+        -webkit-backface-visibility: visible;
+        transition: opacity 200ms ease;
+        border-radius: 30px; }
+      .o-map .owl-theme .owl-dots .owl-dot.active span, .o-map .owl-theme .owl-dots .owl-dot:hover span {
+        background: #869791; }
   .o-map h1, .o-map h2, .o-map h3, .o-map h4, .o-map h5, .o-map h6,
   .o-map .h1, .o-map .h2, .o-map .h3, .o-map .h4, .o-map .h5, .o-map .h6 {
     margin-bottom: 0.5rem; }
@@ -1237,7 +1035,7 @@
     position: absolute;
     top: 0;
     width: 100%;
-    z-index: 105; }
+    z-index: 1050; }
   .o-map .o-modal {
     background-color: white;
     border-radius: 6px;
@@ -1256,7 +1054,7 @@
     -moz-transform-style: preserve-3d;
     transform-style: preserve-3d;
     width: 300px;
-    z-index: 110; }
+    z-index: 1100; }
   .o-map .o-no-csstransforms .o-modal {
     margin-left: -150px;
     margin-top: -50px; }
@@ -1293,14 +1091,13 @@
     max-width: 300px;
     width: 90%; }
   .o-map #o-popup {
-    width: 270px; }
+    width: 270px;
+    display: none; }
   .o-map #o-identify-carousel,
   .o-map #o-identify {
     height: 100%; }
   .o-map .o-popup {
-    display: none;
     bottom: 12px;
-    left: -50%;
     width: 100%;
     z-index: 1010;
     padding: 1px;
@@ -1405,7 +1202,7 @@
     right: -270px;
     top: 0px;
     width: 270px;
-    z-index: 30;
+    z-index: 110;
     -ms-transform: translateX(0);
     -webkit-transform: translateX(0);
     transform: translateX(0);
@@ -1697,7 +1494,7 @@
     right: -230px;
     top: 0px;
     width: 230px;
-    z-index: 100;
+    z-index: 103;
     -ms-transform: translateX(0);
     -webkit-transform: translateX(0);
     transform: translateX(0);
@@ -1902,7 +1699,7 @@
     padding: 0 5px 5px 5px;
     position: absolute;
     z-index: 1; }
-    .o-map #o-map-legend .o-legend-item-info {
+    .o-map #o-map-legend .o-legend-item-info, .o-map #o-map-legend .o-legend-item-remove {
       display: none; }
   .o-map .o-icon-fa-chevron-down,
   .o-map .o-icon-fa-chevron-right {
@@ -2026,6 +1823,14 @@
     height: 20px;
     top: 4px;
     width: 20px; }
+  .o-map .o-legendlist li .o-legend-item-remove {
+    cursor: pointer;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    height: 24px;
+    top: 4px;
+    width: 24px; }
   .o-map .o-checkbox {
     display: inline;
     float: left;
@@ -2263,6 +2068,9 @@
       padding: 0; }
   .o-map .o-hidden {
     display: none; }
+  .o-map .o-identify-content {
+    width: 240px;
+    word-wrap: break-word; }
 
 html,
 body {
