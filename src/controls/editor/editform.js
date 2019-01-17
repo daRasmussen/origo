@@ -10,6 +10,9 @@ const createForm = function createForm(obj) {
   const dropdownOptions = obj.options || [];
   const today = new Date();
   const isoDate = new Date(today.getTime() - (today.getTimezoneOffset() * 60000)).toISOString();
+  const visible = obj.hidden ? 'o-hidden' : '';
+  const hash = window.location.hash.replace('#id=', '') || '';
+  console.log(hash);
   let el;
   let checked;
   let firstOption;
@@ -36,7 +39,8 @@ const createForm = function createForm(obj) {
       }
       el += '</select></div>';
       break;
-    case 'image': {
+    case 'image':
+    {
       const imageClass = val ? '' : 'o-hidden';
       el = `<div class="${cls}"><label>${label}</label><br>`;
       el += `<img src="${val}" id="image-upload" class="${imageClass}"/>`;
@@ -74,6 +78,9 @@ const createForm = function createForm(obj) {
         val = obj.defaultColor ? obj.defaultColor : '';
       }
       el = `<div><label>${label}</label><br><input type="color" id="${id}" value="${val}"></div>`;
+      break;
+    case 'permalink':
+      el = `<div class="${visible}"><label>${label}</label><br><input type="text" id="${id}" value="${hash}" ${maxLength} readonly></div>`;
       break;
     default:
       break;
