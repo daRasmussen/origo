@@ -11,7 +11,7 @@ const createForm = function createForm(obj) {
   const today = new Date();
   const isoDate = new Date(today.getTime() - (today.getTimezoneOffset() * 60000)).toISOString();
   const visible = obj.hidden ? 'o-hidden' : '';
-  const hash = window.location.hash.replace('#id=', '') || '';
+  const hash = window.location.hash.replace('#pageid=', '') || '';
   console.log(hash);
   let el;
   let checked;
@@ -79,7 +79,7 @@ const createForm = function createForm(obj) {
       }
       el = `<div><label>${label}</label><br><input type="color" id="${id}" value="${val}"></div>`;
       break;
-    case 'permalink':
+    case 'pageid':
       el = `<div class="${visible}"><label>${label}</label><br><input type="text" id="${id}" value="${hash}" ${maxLength} readonly></div>`;
       break;
     default:

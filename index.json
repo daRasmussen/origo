@@ -116,10 +116,11 @@
       "group": "obj",
       "type": "AGS_FEATURE",
       "visible": true,
+      "filter": "PAGEID=' '",
       "attributes": [{
-          "title": "Permalink",
-          "name": "permanlink-id",
-          "type": "permalink",
+          "title": "PAGEID: ",
+          "name": "PAGEID",
+          "type": "pageid",
           "maxLength": 50,
           "hidden": false
         }, {
@@ -184,7 +185,7 @@
       "title": "Linjeobjekt",
       "group": "obj",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "attributes": [{
           "title": "Namn: ",
           "name": "NAME",
@@ -247,7 +248,7 @@
       "title": "Ytobjekt",
       "group": "obj",
       "type": "AGS_FEATURE",
-      "visible": true,
+      "visible": false,
       "attributes": [{
           "title": "Namn: ",
           "name": "NAME",

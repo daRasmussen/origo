@@ -61,7 +61,8 @@ function initCarousel(id, opt) {
     items: 1,
     nav: true,
     navText: ['<svg class="o-icon-fa-chevron-left"><use xlink:href="#fa-chevron-left"></use></svg>',
-      '<svg class="o-icon-fa-chevron-right"><use xlink:href="#fa-chevron-right"></use></svg>']
+      '<svg class="o-icon-fa-chevron-right"><use xlink:href="#fa-chevron-right"></use></svg>'
+    ]
   };
   if (identifyTarget === 'overlay') {
     const popupHeight = $('.o-popup').outerHeight() + 20;
@@ -154,6 +155,7 @@ function onClick(evt) {
   savedPin = undefined;
   // Featurinfo in two steps. Concat serverside and clientside when serverside is finished
   const clientResult = getFeatureInfo.getFeaturesAtPixel(evt, clusterFeatureinfoLevel);
+
   // Abort if clientResult is false
   if (clientResult !== false) {
     getFeatureInfo.getFeaturesFromRemote(evt)
