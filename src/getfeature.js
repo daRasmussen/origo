@@ -1,78 +1,79 @@
-import EsriJSONFormat from 'ol/format/EsriJSON';
-import GeoJSONFormat from 'ol/format/GeoJSON';
-import $ from 'jquery';
+var ol = require('openlayers');
+var $ = require('jquery');
+var viewer = require('./viewer');
 
-let projectionCode;
-let projection;
-const sourceType = {};
+var sourceType = {};
+var projectionCode;
+var source;
 
-export default function (id, layer, source, projCode, proj) {
-  projectionCode = projCode;
-  projection = proj;
-  const serverUrl = source[layer.get('sourceName')].url;
-  const type = layer.get('type');
-  // returns a promise with features as result
-  return sourceType[type](id, layer, serverUrl);
-}
-
-function fail(response) {
-  if (response.error) {
-    console.log(`${response.error.message}
-      ${response.error.details.join('\n')}`);
-  }
+module.exports = function(id, layer) {
+    projectionCode = viewer.getProjectionCode();
+    source = viewer.getMapSource();
+    var serverUrl = source[layer.get('sourceName')].url;
+    var type = layer.get('type');
+    //returns a promise with features as result
+    return sourceType[type](id, layer, serverUrl);
 }
 
 sourceType.AGS_FEATURE = function agsFeature(id, layer, serverUrl) {
-  const esriSrs = projectionCode.split(':').pop();
-  const layerId = layer.get('id');
-  const esrijsonFormat = new EsriJSONFormat();
+  var esriSrs = projectionCode.split(':').pop();
+  var layerId = layer.get('id');
+  var esrijsonFormat = new ol.format.EsriJSON();
 
-  const url = [`${serverUrl}/${layerId}/query?f=json`,
-    '&returnGeometry=true',
-    `&objectIds=${id}`,
-    '&geometryType=esriGeometryEnvelope',
-    `&inSR=${esriSrs}`,
-    '&outFields=*',
-    '&returnIdsOnly=false',
-    '&returnCountOnly=false',
-    '&geometryPrecision=2',
-    `&outSR=${esriSrs}`
-  ].join('');
+  var url = serverUrl + '/' + layerId +
+      '/query?f=json&' +
+      'returnGeometry=true' +
+      '&objectIds=' + id +
+      '&geometryType=esriGeometryEnvelope'+
+      '&inSR=' + esriSrs +
+      '&outFields=*' +
+      '&returnIdsOnly=false' +
+      '&returnCountOnly=false' +
+      '&geometryPrecision=2' +
+      '&outSR=' + esriSrs;
 
   return $.ajax({
-    url,
-    dataType: 'jsonp'
+        url: url,
+        dataType: 'jsonp'
   })
-    .then((response) => {
-      if (response.error) {
-        fail(response);
-        return [];
-      }
-      const features = esrijsonFormat.readFeatures(response, {
-        featureProjection: projection
-      });
-      return features;
-    }, fail);
-};
+    .then(function(response) {
+        if(response.error) {
+            fail(response);
+            return [];
+        }
+        else {
+            var features = esrijsonFormat.readFeatures(response, {
+                    featureProjection: viewer.getProjection()
+            });
+            return features;
+        }
+    }, fail
+    );
+}
 
-sourceType.WFS = function wfsSourceType(id, layer, serverUrl) {
-  const geometryName = layer.get('geometryName');
-  const format = new GeoJSONFormat({
-    geometryName
-  });
-  const url = `${serverUrl}?`;
-  const data = ['service=WFS',
-    '&version=1.0.0',
-    `&request=GetFeature&typeName=${layer.get('name')}`,
-    '&outputFormat=json',
-    `&featureId=${id}`
-  ].join('');
-
+sourceType.WFS = function(id, layer, serverUrl) {
+  var geometryName = layer.get('geometryName');
+  var format = new ol.format.GeoJSON({geometryName: geometryName});
+  var url = serverUrl +'?';
+  var data = 'service=WFS' +
+      '&version=1.0.0' +
+      '&request=GetFeature&typeName=' + layer.get('name') +
+      '&outputFormat=json' +
+      '&featureId=' + id;
   return $.ajax({
-    url,
-    data,
+    url: url,
+    data: data,
     type: 'POST',
     dataType: 'json'
   })
-    .then(response => format.readFeatures(response));
-};
+    .then(function(response) {
+        return format.readFeatures(response);
+    });
+}
+
+function fail(response) {
+    if(response.error) {
+        console.log(response.error.message + '\n' +
+            response.error.details.join('\n'));
+    }
+}

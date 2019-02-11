@@ -1,46 +1,48 @@
-import viewer from '../viewer';
+"use strict";
 
-export default function getCenter(geometryIn, destination, axisOrientation, map) {
-  const geometry = geometryIn.clone();
+var ol = require('openlayers');
+var Viewer = require('../viewer');
 
-  if (destination && map) {
-    geometry.transform(map.getView().getProjection(), destination);
-  }
+var getCenter = function getCenter(geometry_in, destination, axisOrientation) {
+    var geometry = geometry_in.clone();
 
-
-  const type = geometry.getType();
-  let center;
-  switch (type) {
-    case 'Polygon':
-      center = geometry.getInteriorPoint().getCoordinates();
-      break;
-    case 'MultiPolygon':
-      center = geometry.getInteriorPoints().getCoordinates()[0];
-      break;
-    case 'Point':
-      center = geometry.getCoordinates();
-      break;
-    case 'MultiPoint':
-      center = geometry[0].getCoordinates();
-      break;
-    case 'LineString':
-      center = geometry.getCoordinateAt(0.5);
-      break;
-    case 'MultiLineString':
-      center = geometry.getLineStrings()[0].getCoordinateAt(0.5);
-      break;
-    case 'Circle':
-      center = geometry.getCenter();
-      break;
-    default:
-      center = undefined;
-  }
-
-  if (axisOrientation) {
-    if (axisOrientation === 'reverse') {
-      center.reverse();
+    if (destination) {
+      geometry.transform(Viewer.getMap().getView().getProjection(), destination);
     }
-  }
 
-  return center;
+    var type = geometry.getType();
+    var center;
+    switch (type) {
+        case "Polygon":
+            center = geometry.getInteriorPoint().getCoordinates();
+            break;
+        case "MultiPolygon":
+            center = geometry.getInteriorPoints().getCoordinates()[0];
+            break;
+        case "Point":
+            center = geometry.getCoordinates();
+            break;
+        case "MultiPoint":
+            center = geometry[0].getCoordinates();
+            break;
+        case "LineString":
+            center = geometry.getCoordinateAt(0.5);
+            break;
+        case "MultiLineString":
+            center = geometry.getLineStrings()[0].getCoordinateAt(0.5);
+            break;
+        case "Circle":
+            center = geometry.getCenter();
+            break;
+    }
+
+    if (axisOrientation) {
+      if (axisOrientation === 'reverse') {
+        center.reverse();
+      }
+    }
+
+    return center;
 }
+
+module.exports = getCenter;

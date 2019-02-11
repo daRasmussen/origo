@@ -1,18 +1,6 @@
 {
-<<<<<<< HEAD
   "controls": [{
       "name": "home",
-=======
-  "controls": [
-    {
-      "name": "home",
-      "options": {
-        "zoomOnStart": true
-      }
-    },
-    {
-      "name": "mapmenu",
->>>>>>> origin
       "options": {
         "extent": [
           150568,
@@ -57,12 +45,6 @@
       "options": {
         "hasMapLegend": true
       }
-<<<<<<< HEAD
-=======
-    },
-    {
-      "name": "measure"
->>>>>>> origin
     }
   ],
   "projectionCode": "EPSG:3010",
@@ -113,15 +95,11 @@
       "url": "https://www.malardalskartan.se/geowebcache/service/wmts"
     }
   },
-<<<<<<< HEAD
   "groups": [{
       "name": "obj",
       "title": "Typ av objekt",
       "expanded": true
     },
-=======
-  "groups": [
->>>>>>> origin
     {
       "name": "background",
       "title": "Bakgrundskartor",
@@ -198,7 +176,6 @@
       ]
     },
     {
-<<<<<<< HEAD
       "name": "webb_linje",
       "geometryType": "LineString",
       "id": "1",
@@ -260,20 +237,6 @@
           ]
         }
       ]
-=======
-      "name": "origo-cities",
-      "title": "Origokommuner",
-      "group": "root",
-      "source": "data/origo-cities-3857.geojson",
-      "style": "origo-logo",
-      "type": "GEOJSON",
-      "attributes": [
-          {
-            "name": "name"
-          }
-      ],
-      "visible": true
->>>>>>> origin
     },
     {
       "name": "webb_yta",
@@ -353,17 +316,11 @@
       "attribution": "&copyLantmäterietGeodatasamverkan",
       "format": "image/png",
       "group": "background",
-<<<<<<< HEAD
       "name": "topowebbkartan_nedtonad",
       "source": "basemap",
       "title": "Karta, grå",
       "type": "WMTS",
       "style": "karta_gra",
-=======
-      "queryable": false,
-      "style": "karta_osm",
-      "type": "OSM",
->>>>>>> origin
       "visible": true
     },
     {
@@ -390,7 +347,6 @@
     }
   ],
   "styles": {
-<<<<<<< HEAD
     "linje": [
       [{
         "stroke": {
@@ -428,98 +384,6 @@
           },
           "fill": {
             "color": "rgba(0,0,0,1)"
-=======
-      "mask": [
-        [
-          {
-            "stroke": {
-              "color": "rgba(0,0,0,1.0)"
-            },
-            "fill": {
-              "color": "rgba(0,0,0,1.0)"
-            }
-          }
-        ]
-      ],
-      "origo-logo": [
-        [
-          {
-            "label": "Origokommuner",
-            "circle": {
-              "radius": 16,
-              "stroke": {
-                "color": "rgba(0,0,0,1)",
-                "width": 5
-              },
-              "fill": {
-                "color": "rgba(255,255,255,0.9)"
-              }
-            }
-          },
-          {
-            "circle": {
-              "radius": 4,
-              "stroke": {
-                "color": "rgba(0,0,0,0)",
-                "width": 1
-              },
-              "fill": {
-                "color": "rgba(37,129,196,1)"
-              }
-            }
-          }
-        ]
-      ],
-      "cirkel": [
-        [
-          {
-            "circle": {
-              "radius": 6,
-              "stroke": {
-                "color": "rgba(0,0,0,1)",
-                "width": 2
-              },
-              "fill": {
-                "color": "rgba(0,0,0,0.5)"
-              }
-            }
-          }
-        ]
-      ],
-      "karta_osm": [
-        [
-          {
-            "image": {
-              "src": "img/png/osm.png"
-            }
-          }
-        ]
-      ],      
-      "karta_gra": [
-        [
-          {
-            "image": {
-              "src": "img/png/gra.png"
-            }
-          }
-        ]
-      ],
-      "karta_farg": [
-        [
-          {
-            "image": {
-              "src": "img/png/farg.png"
-            }
-          }
-        ]
-      ],
-      "orto": [
-        [
-          {
-            "image": {
-              "src": "img/png/orto.png"
-            }
->>>>>>> origin
           }
         }
       }]

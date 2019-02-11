@@ -8,11 +8,8 @@
 }
 
 .awesomplete {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
+    display: inline-block;
     position: relative;
-    width: 100%;
 }
 
 .awesomplete > input {
@@ -29,7 +26,6 @@
     padding: 0;
     margin: 0;
     background: #fff;
-    top: 40px;
 }
 
 .awesomplete > ul:empty {

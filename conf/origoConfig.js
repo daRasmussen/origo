@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   crossDomain: true,
   target: '#app-wrapper',
   svgSpritePath: 'css/svg/',
@@ -10,20 +10,21 @@ export default {
     l: [768, 500]
   },
   breakPointsPrefix: 'o-media',
-  defaultControls: [{
-    name: 'scaleline'
-  },
-  {
-    name: 'zoom'
-  },
-  {
-    name: 'rotate'
-  },
-  {
-    name: 'attribution'
-  },
-  {
-    name: 'fullscreen'
-  }
+  defaultControls: [
+    {
+      "name": "scaleline"
+    },
+    {
+      "name": "zoom"
+    },
+    {
+      "name": "rotate"
+    },
+    {
+      "name": "attribution"
+    },
+    {
+       "name": "fullscreen"
+    }
   ]
-};
+}

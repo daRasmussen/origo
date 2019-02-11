@@ -1,19 +1,21 @@
-export default function numberFormatter(numberToFormat) {
-  let nr = numberToFormat;
-  const length = nr.toString().length;
-  if (length > 3) {
-    const delimiter = ' '; // white space as delimiter
+"use strict";
 
-    // Round by factor
+module.exports = function numberFormatter(numberToFormat) {
+  var nr = numberToFormat;
+  var length = nr.toString().length;
+  if (length > 3) {
+    var delimiter = ' '; //white space as delimiter
+
+    //Round by factor
     if (nr >= 1000) {
-      const factor = (10 ** length) / 10000;
+      var factor = Math.pow(10, length) / 10000;
       nr = Math.round(nr / factor) * factor;
     }
 
-    let nrStr = nr.toString();
-    const a = [];
+    var nrStr = nr.toString();
+    var a = [];
     while (nrStr.length > 3) {
-      const n = nrStr.substr(nrStr.length - 3);
+      var n = nrStr.substr(nrStr.length - 3);
       a.unshift(n);
       nrStr = nrStr.substr(0, nrStr.length - 3);
     }
@@ -22,6 +24,7 @@ export default function numberFormatter(numberToFormat) {
     }
     nrStr = a.join(delimiter);
     return nrStr;
+  } else {
+    return nr.toString();
   }
-  return nr.toString();
 }

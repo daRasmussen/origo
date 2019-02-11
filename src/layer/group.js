@@ -1,13 +1,15 @@
-import layerGroup from 'ol/layer/Group';
-import $ from 'jquery';
+"use strict";
 
-const group = function group(layerOptions) {
-  const groupDefault = {
+var ol = require('openlayers');
+var $ = require('jquery');
+
+var group = function group(layerOptions) {
+  var groupDefault = {
     layerType: 'group',
     styleName: 'default'
   };
-  const groupOptions = $.extend(groupDefault, layerOptions);
-  return new layerGroup(groupOptions);
-};
+  var groupOptions = $.extend(groupDefault, layerOptions);
+  return new ol.layer.Group(groupOptions);
+}
 
-export default group;
+module.exports = group;

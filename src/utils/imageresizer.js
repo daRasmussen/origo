@@ -1,31 +1,37 @@
-export default function imageresizer(imageData, optOptions, orientation, callback) {
-  const fileType = imageData.split(';')[0].split('/')[1];
-  const options = optOptions;
-  const image = new Image();
+"use strict";
 
-  image.onload = () => {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    const maxSize = options.maxSize || 600;
-    let width = image.width;
-    let height = image.height;
-    let translateWidth;
-    let translateHeight;
-    let rotation;
+module.exports = function imageresizer(imageData, opt_options, orientation, callback) {
+  var fileType = imageData.split(';')[0].split('/')[1];
+  var options = opt_options;
+  var image = new Image();
+
+  image.onload = function(imageEvent) {
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+    var max_size = options.maxSize || 600;
+    var width = image.width;
+    var height = image.height;
+    var translateWidth;
+    var translateHeight;
+    var rotation;
+    var dataUrl;
 
     if (width > height) {
-      if (width > maxSize) {
-        height *= maxSize / width;
-        width = maxSize;
+      if (width > max_size) {
+        height *= max_size / width;
+        width = max_size;
       }
-    } else if (height > maxSize) {
-      width *= maxSize / height;
-      height = maxSize;
+    } else {
+      if (height > max_size) {
+        width *= max_size / height;
+        height = max_size;
+      }
     }
+
     canvas.width = width;
     canvas.height = height;
 
-    if (orientation % 2 === 0) {
+    if (orientation%2 === 0) {
       canvas.width = height;
       canvas.height = width;
     }
@@ -58,12 +64,12 @@ export default function imageresizer(imageData, optOptions, orientation, callbac
         break;
     }
 
-    context.translate(translateWidth, translateHeight);
-    context.rotate((rotation * Math.PI) / 180);
+    context.translate(translateWidth,translateHeight);
+    context.rotate(rotation*Math.PI/180);
     context.drawImage(image, 0, 0, width, height);
-    const dataUrl = canvas.toDataURL(`image/${fileType}`);
+    dataUrl = canvas.toDataURL('image/' + fileType);
     callback(dataUrl);
-  };
+  }
 
   image.src = imageData;
 }

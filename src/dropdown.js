@@ -1,25 +1,29 @@
-import $ from 'jquery';
-import utils from './utils';
+ "use strict";
 
-export default function dropDown(target, items, options) {
-  const dataAttribute = `data-${options.dataAttribute}` || 'default';
-  const $target = $(`#${target}`);
-  const activeItem = options.active || undefined;
-  const activeCls = 'o-active';
-  let ul;
-  const li = [];
-  const cls = 'o-dropdown-li';
-  const icon = utils.createSvg({
+var $ = require('jquery');
+var utils = require('./utils');
+
+module.exports = function(target, items, options) {
+  var dataAttribute = 'data-' + options.dataAttribute || 'default';
+  var $target = $('#' + target);
+  var activeItem = options.active || undefined;
+  var activeCls = 'o-active';
+  var ul;
+  var li = [];
+  var cls = 'o-dropdown-li';
+  var icon = utils.createSvg({
     href: '#ic_check_24px',
     cls: 'o-icon-24'
   });
+  render();
+  addListener();
 
   function render() {
-    items.forEach((item, index) => {
-      const obj = {
-        cls
+    items.forEach(function(item, index) {
+      var obj = {
+        cls: cls
       };
-      const active = utils.createElement('span', icon, {
+      var active = utils.createElement('span', icon, {
         cls: 'o-icon'
       });
       obj[dataAttribute] = item.value;
@@ -34,14 +38,9 @@ export default function dropDown(target, items, options) {
     $target.append(ul);
   }
 
-  function toggleActive($active) {
-    $target.find('li').removeClass(activeCls);
-    $active.addClass(activeCls);
-  }
-
   function addListener() {
-    $target.on('click', 'ul', (e) => {
-      const $active = $(e.target);
+    $target.on('click', 'ul', function(e) {
+      var $active = $(e.target);
       $target.trigger({
         type: 'changeDropdown',
         dataAttribute: $(e.target).data(options.dataAttribute)
@@ -50,6 +49,8 @@ export default function dropDown(target, items, options) {
     });
   }
 
-  render();
-  addListener();
-}
+  function toggleActive($active) {
+    $target.find('li').removeClass(activeCls);
+    $active.addClass(activeCls);
+  }
+};

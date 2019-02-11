@@ -1,62 +1,53 @@
-import $ from 'jquery';
-import TopoJSONFormat from 'ol/format/TopoJSON';
-import GeoJSONFormat from 'ol/format/GeoJSON';
-import MVTFormat from 'ol/format/MVT';
-import VectorTileSource from 'ol/source/VectorTile';
-import vector from './vector';
-import maputils from '../maputils';
+"use strict";
 
-function createSource(opt, vectortileOptions) {
-  const options = opt;
-  let format;
-  switch (vectortileOptions.format) {
-    case 'topojson':
-      format = new TopoJSONFormat();
-      break;
-    case 'geojson':
-      format = new GeoJSONFormat();
-      break;
-    case 'pbf':
-      format = new MVTFormat();
-      break;
-    default:
-      break;
-  }
-  if (vectortileOptions.layerURL) {
-    options.url += vectortileOptions.layerURL;
-  } else {
-    options.url += `${vectortileOptions.layerName}@${vectortileOptions.gridset}@${vectortileOptions.format}/{z}/{x}/{-y}.${vectortileOptions.format}`;
-  }
-  options.format = format;
-  return new VectorTileSource(options);
-}
+var ol = require('openlayers');
+var $ = require('jquery');
+var viewer = require('../viewer');
+var vector = require('./vector');
+var maputils = require('../maputils');
 
-const vectortile = function vectortile(layerOptions, viewer) {
-  const vectortileDefault = {
+var vectortile = function vectortile(layerOptions) {
+  var vectortileDefault = {
     layerType: 'vectortile',
     featureinfoLayer: undefined
   };
-  const sourceDefault = {};
-  const vectortileOptions = $.extend(vectortileDefault, layerOptions);
+  var sourceDefault = {};
+  var vectortileOptions = $.extend(vectortileDefault, layerOptions);
   vectortileOptions.sourceName = vectortileOptions.name;
-  const sourceOptions = $.extend(sourceDefault, viewer.getMapSource()[layerOptions.source]);
+  var sourceOptions = $.extend(sourceDefault, viewer.getMapSource()[layerOptions.source]);
   sourceOptions.attributions = vectortileOptions.attribution;
   sourceOptions.projection = viewer.getProjectionCode() || 'EPSG:3857';
-
-  if (vectortileOptions.tileGrid) {
-    sourceOptions.tileGrid = maputils.tileGrid(vectortileOptions.tileGrid);
-  } else if (sourceOptions.tileGrid) {
+  if(sourceOptions.tileGrid){
     sourceOptions.tileGrid = maputils.tileGrid(sourceOptions.tileGrid);
   } else {
     sourceOptions.tileGrid = viewer.getTileGrid();
-
-    if (vectortileOptions.extent) {
-      sourceOptions.tileGrid.extent = vectortileOptions.extent;
-    }
   }
+  
+  var vectortileSource = createSource(sourceOptions, vectortileOptions);
+  return vector(vectortileOptions, vectortileSource);
+}
 
-  const vectortileSource = createSource(sourceOptions, vectortileOptions);
-  return vector(vectortileOptions, vectortileSource, viewer);
-};
+function createSource(options, vectortileOptions) {
+  var format;
+  switch(vectortileOptions.format) {
+    case 'topojson':
+    format = new ol.format.TopoJSON();
+    break;
+    case 'geojson':
+    format = new ol.format.GeoJSON();
+    break;
+    case 'pbf':
+    format = new ol.format.MVT();
+    break;
+  }
+  if(vectortileOptions.layerURL){
+    options.url += vectortileOptions.layerURL;
+  }
+  else {
+    options.url += vectortileOptions.layerName + '@'  + vectortileOptions.gridset + '@' + vectortileOptions.format + '/{z}/{x}/{-y}.'+ vectortileOptions.format;
+  }
+  options.format = format;
+  return new ol.source.VectorTile(options);
+}
 
-export default vectortile;
+module.exports = vectortile;

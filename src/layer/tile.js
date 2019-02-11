@@ -1,7 +1,8 @@
-import TileLayer from 'ol/layer/Tile';
+"use strict";
 
-export default function tile(options, source) {
-  const opt = options;
-  opt.source = source;
-  return new TileLayer(opt);
+var ol = require('openlayers');
+
+module.exports = function tile(options, source) {
+  options.source = source;
+  return new ol.layer.Tile(options);
 }

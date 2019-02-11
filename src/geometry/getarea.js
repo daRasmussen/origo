@@ -1,7 +1,9 @@
-import round from '../utils/round';
+"use strict";
 
-export default function getArea(geometryIn, decimals) {
-  let area = geometryIn.getArea ? geometryIn.getArea() : 0;
+var round = require('../utils/round');
+
+var getArea = function getArea(geometry_in, decimals) {
+  var area = geometry_in.getArea ? geometry_in.getArea() : 0;
   if (decimals) {
     area = round(area, decimals);
   } else {
@@ -9,3 +11,5 @@ export default function getArea(geometryIn, decimals) {
   }
   return area;
 }
+
+module.exports = getArea;

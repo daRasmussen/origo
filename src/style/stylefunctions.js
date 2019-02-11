@@ -1,12 +1,15 @@
-import defaultStyle from './stylefunctions/default';
+"use strict";
 
-const customStyles = {
+var defaultStyle = require('./stylefunctions/default');
+
+var customStyles = {
   default: defaultStyle
 };
 
-export default function styleFunctions(customStyle, params) {
+module.exports = function styleFunctions(customStyle, params) {
   if (customStyle in customStyles) {
     return customStyles[customStyle](params);
+  } else {
+    return customStyles.default(params);
   }
-  return customStyles.default(params);
-}
+};

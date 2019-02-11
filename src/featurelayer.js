@@ -1,43 +1,37 @@
-import VectorSource from 'ol/source/Vector';
-import VectorLayer from 'ol/layer/Vector';
+"use strict";
 
-// create unmanaged layer
-export default function (features, map) {
-  let sourceLayer;
-  const collection = features ? [features] : [];
-  const featureLayerStore = new VectorSource({
-    features: collection
+var ol = require('openlayers');
+
+//create unmanaged layer
+module.exports = function(features, map) {
+  var collection = features ? [features] : [];
+  var featureLayerStore = new ol.source.Vector({
+      features: collection
   });
-  const featureLayer = new VectorLayer({
+  var featureLayer = new ol.layer.Vector({
     source: featureLayerStore,
-    map
+    map: map
   });
   return {
-    addFeature: function addFeature(feature) {
-      featureLayerStore.addFeature(feature);
-    },
-    setSourceLayer: function setSourceLayer(layer) {
-      sourceLayer = layer;
-    },
-    getFeatures: function getFeatures() {
-      return featureLayerStore.getFeatures();
-    },
-    getFeatureLayer: function getFeatureLayer() {
-      return featureLayer;
-    },
-    getFeatureStore: function getFeatureStore() {
-      return featureLayerStore;
-    },
-    getSourceLayer: function getSourceLayer() {
-      return sourceLayer;
-    },
-    clear: function clear() {
-      featureLayerStore.clear();
-    },
-    clearAndAdd: function clearAndAdd(feature, style) {
-      featureLayerStore.clear();
-      featureLayer.setStyle(style);
-      featureLayerStore.addFeature(feature);
-    }
-  };
+      addFeature: function addFeature(feature) {
+          featureLayerStore.addFeature(feature);
+      },
+      getFeatures: function getFeatures() {
+          return featureLayerStore.getFeatures();
+      },
+      getFeatureLayer: function getFeatureLayer() {
+          return featureLayer;
+      },
+      getFeatureStore: function getFeatureStore() {
+          return featureLayerStore;
+      },
+      clear: function clear() {
+          featureLayerStore.clear();
+      },
+      clearAndAdd: function clearAndAdd(feature, style) {
+          featureLayerStore.clear();
+          featureLayer.setStyle(style);
+          featureLayerStore.addFeature(feature);
+      }
+  }
 }

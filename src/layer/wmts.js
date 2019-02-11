@@ -1,58 +1,59 @@
-import WMTSSource from 'ol/source/WMTS';
-import Tilegrid from 'ol/tilegrid/WMTS';
-import { getTopLeft } from 'ol/extent';
-import $ from 'jquery';
-import tile from './tile';
+"use strict";
 
-function createSource(options) {
-  return new WMTSSource({
-    crossOrigin: 'anonymous',
-    attributions: options.attribution,
-    url: options.url,
-    projection: options.projectionCode,
-    layer: options.id,
-    matrixSet: options.matrixSet,
-    format: options.format,
-    tileGrid: new Tilegrid({
-      origin: options.origin || getTopLeft(options.projectionExtent),
-      resolutions: options.resolutions,
-      matrixIds: options.matrixIds,
-      tileSize: options.tileSize
-    }),
-    style: 'default'
-  });
-}
+var ol = require('openlayers');
+var $ = require('jquery');
+var viewer = require('../viewer');
+var tile = require('./tile');
 
-const wmts = function wmts(layerOptions, viewer) {
-  const wmtsDefault = {
+var wmts = function wmts(layerOptions) {
+  var wmtsDefault = {
     layerType: 'tile',
     featureinfoLayer: undefined
   };
-  const sourceDefault = {
+  var sourceDefault = {
     matrixSet: viewer.getProjectionCode(),
-    matrixIdsPrefix: `${viewer.getProjectionCode()}:`,
+    matrixIdsPrefix: viewer.getProjectionCode() + ':',
     format: 'image/png',
     resolutions: viewer.getResolutions(),
     tileSize: [256, 256]
   };
-  const wmtsOptions = $.extend(wmtsDefault, layerOptions);
+  var wmtsOptions = $.extend(wmtsDefault, layerOptions);
   wmtsOptions.name.split(':').pop();
   wmtsOptions.sourceName = wmtsOptions.name;
-  const sourceOptions = $.extend(sourceDefault, viewer.getMapSource()[layerOptions.source]);
-  if (Object.prototype.hasOwnProperty.call(wmtsOptions, 'format')) {
+  var sourceOptions = $.extend(sourceDefault, viewer.getMapSource()[layerOptions.source]);
+  if (wmtsOptions.hasOwnProperty('format')) {
     sourceOptions.format = wmtsOptions.format;
   }
   sourceOptions.attribution = wmtsOptions.attribution;
   sourceOptions.projectionCode = viewer.getProjectionCode();
   sourceOptions.matrixIds = [];
-  sourceOptions.resolutions.forEach((resolution, i) => {
+  sourceOptions.resolutions.forEach(function(resolution, i) {
     sourceOptions.matrixIds[i] = sourceOptions.matrixIdsPrefix + i;
   });
   sourceOptions.projectionExtent = viewer.getProjection().getExtent();
   sourceOptions.id = wmtsOptions.id;
 
-  const wmtsSource = createSource(sourceOptions);
-  return tile(wmtsOptions, wmtsSource, viewer);
-};
+  var wmtsSource = createSource(sourceOptions);
+  return tile(wmtsOptions, wmtsSource);
 
-export default wmts;
+  function createSource(options) {
+    return new ol.source.WMTS({
+      crossOrigin: 'anonymous',
+      attributions: options.attribution,
+      url: options.url,
+      projection: options.projectionCode,
+      layer: options.id,
+      matrixSet: options.matrixSet,
+      format: options.format,
+      tileGrid: new ol.tilegrid.WMTS({
+        origin: options.origin || ol.extent.getTopLeft(options.projectionExtent),
+        resolutions: options.resolutions,
+        matrixIds: options.matrixIds,
+        tileSize: options.tileSize
+      }),
+      style: 'default'
+    })
+  }
+}
+
+module.exports = wmts;

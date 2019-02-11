@@ -1,10 +1,7 @@
 {
   "controls": [
     {
-      "name": "home",
-      "options": {
-        "zoomOnStart": true
-      }
+      "name": "home"
     },
     {
       "name": "mapmenu",
@@ -51,6 +48,9 @@
     },
     {
       "name": "measure"
+    },
+    {
+      "name": "scaleLine"
     }
   ],
   "pageSettings": {
@@ -115,6 +115,11 @@
   },
   "groups": [
     {
+      "name": "test",
+      "title": "Test",
+      "expanded": true
+    },
+    {
       "name": "background",
       "title": "Bakgrundskartor",
       "expanded": true
@@ -124,7 +129,7 @@
     {
       "name": "origo-cities",
       "title": "Origokommuner",
-      "group": "root",
+      "group": "test",
       "source": "data/origo-cities-3857.geojson",
       "style": "origo-logo",
       "type": "GEOJSON",
@@ -151,7 +156,7 @@
       "title": "OpenStreetMap",
       "group": "background",
       "queryable": false,
-      "style": "karta_osm",
+      "style": "karta_farg",
       "type": "OSM",
       "visible": true
     }
@@ -172,7 +177,6 @@
       "origo-logo": [
         [
           {
-            "label": "Origokommuner",
             "circle": {
               "radius": 16,
               "stroke": {
@@ -214,15 +218,6 @@
           }
         ]
       ],
-      "karta_osm": [
-        [
-          {
-            "image": {
-              "src": "img/png/osm.png"
-            }
-          }
-        ]
-      ],      
       "karta_gra": [
         [
           {

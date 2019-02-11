@@ -1,54 +1,17 @@
-import * as LoadingStrategy from 'ol/loadingstrategy';
-import { createXYZ } from 'ol/tilegrid';
-import VectorSource from 'ol/source/Vector';
-import GeoJSONFormat from 'ol/format/GeoJSON';
-import $ from 'jquery';
-import vector from './vector';
+"use strict";
+var ol = require('openlayers');
+var $ = require('jquery');
+var viewer = require('../viewer');
+var vector = require('./vector');
 
-function createSource(options) {
-  const serverUrl = options.url;
-  let queryFilter = '';
-
-  // If cql filter then bbox must be used in the filter.
-  if (options.strategy === 'all') {
-    queryFilter = options.filter ? `&CQL_FILTER=${options.filter}` : '';
-  } else {
-    queryFilter = options.filter ? `&CQL_FILTER=${options.filter} AND BBOX(${options.geometryName},` : '&BBOX=';
-  }
-  const bboxProjectionCode = options.filter ? `'${options.projectionCode}')` : options.projectionCode;
-  const vectorSource = new VectorSource({
-    attributions: options.attribution,
-    format: new GeoJSONFormat({
-      geometryName: options.geometryName
-    }),
-    loader(extent) {
-      let url = [`${serverUrl}?service=WFS`,
-        `&version=1.1.0&request=GetFeature&typeName=${options.featureType}&outputFormat=application/json`,
-        `&srsname=${options.projectionCode}`].join('');
-      url += options.strategy === 'all' ? queryFilter : `${queryFilter + extent.join(',')},${bboxProjectionCode}`;
-      url = encodeURI(url);
-      $.ajax({
-        url,
-        cache: false
-      })
-        .done((response) => {
-          vectorSource.addFeatures(vectorSource.getFormat().readFeatures(response));
-        });
-    },
-    strategy: options.loadingstrategy
-  });
-  return vectorSource;
-}
-
-export default function wfs(layerOptions, viewer) {
-  const wfsDefault = {
+var wfs = function wfs(layerOptions) {
+  var wfsDefault = {
     layerType: 'vector'
   };
-  const sourceDefault = {};
-  const wfsOptions = Object.assign({}, wfsDefault, layerOptions);
-  const sourceOptions = Object.assign({}, sourceDefault, viewer.getMapSource()[layerOptions.sourceName]);
-  sourceOptions.featureType = wfsOptions.id;
-  wfsOptions.featureType = wfsOptions.id;
+  var sourceDefault = {};
+  var wfsOptions = $.extend(wfsDefault, layerOptions);
+  var sourceOptions = $.extend(sourceDefault, viewer.getMapSource()[layerOptions.sourceName]);
+  wfsOptions.featureType = sourceOptions.featureType = wfsOptions.id;
   sourceOptions.geometryName = wfsOptions.geometryName;
   sourceOptions.filter = wfsOptions.filter;
   sourceOptions.attribution = wfsOptions.attribution;
@@ -58,17 +21,57 @@ export default function wfs(layerOptions, viewer) {
   sourceOptions.strategy = layerOptions.strategy ? layerOptions.strategy : sourceOptions.strategy;
   switch (sourceOptions.strategy) {
     case 'all':
-      sourceOptions.loadingstrategy = LoadingStrategy.all;
-      break;
+      sourceOptions.loadingstrategy = ol.loadingstrategy.all;
+    break;
     case 'tile':
-      sourceOptions.loadingstrategy = LoadingStrategy.tile(createXYZ({
+    sourceOptions.loadingstrategy = ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
         maxZoom: sourceOptions.resolutions.length
       }));
-      break;
+    break;
     default:
-      sourceOptions.loadingstrategy = LoadingStrategy.bbox;
-      break;
+    sourceOptions.loadingstrategy = ol.loadingstrategy.bbox;
+    break;
   }
-  const wfsSource = createSource(sourceOptions);
-  return vector(wfsOptions, wfsSource, viewer);
+  var wfsSource = createSource(sourceOptions);
+  return vector(wfsOptions, wfsSource);
+
+  function createSource(options) {
+    var vectorSource = null;
+    var serverUrl = options.url;
+    var queryFilter;
+
+    //If cql filter then bbox must be used in the filter.
+    if(options.strategy === 'all'){
+      queryFilter = options.filter ? '&CQL_FILTER=' + options.filter : '';
+    }
+    else{
+      queryFilter = options.filter ? '&CQL_FILTER=' + options.filter + ' AND BBOX(' + options.geometryName + ',' : '&BBOX=';
+    }
+    var bboxProjectionCode = options.filter ? "'" + options.projectionCode + "')" : options.projectionCode;
+    vectorSource = new ol.source.Vector({
+      attributions: options.attribution,
+      format: new ol.format.GeoJSON({
+        geometryName: options.geometryName
+      }),
+      loader: function(extent, resolution, projection) {
+        var url = serverUrl +
+          '?service=WFS&' +
+          'version=1.1.0&request=GetFeature&typeName=' + options.featureType +
+          '&outputFormat=application/json' +
+          '&srsname=' + options.projectionCode;
+        url += options.strategy === 'all' ? queryFilter : queryFilter + extent.join(',') + ',' + bboxProjectionCode;
+        $.ajax({
+            url: url,
+            cache: false
+          })
+          .done(function(response) {
+            vectorSource.addFeatures(vectorSource.getFormat().readFeatures(response));
+          });
+      },
+      strategy: options.loadingstrategy
+    });
+    return vectorSource;
+  }
 }
+
+module.exports = wfs;

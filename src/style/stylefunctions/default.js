@@ -1,97 +1,115 @@
-import Circle from 'ol/style/Circle';
-import Fill from 'ol/style/Fill';
-import Stroke from 'ol/style/Stroke';
-import Style from 'ol/style/Style';
-import getColor from '../getcolor';
+var ol = require('openlayers');
+var getColor = require('../getcolor');
 
-export default function defaultStyle() {
-  const fill = new Fill({
+module.exports = function defaultStyle(params) {
+  var fill = new ol.style.Fill({
     color: ''
   });
-  const stroke = new Stroke({
+  var stroke = new ol.style.Stroke({
     color: '',
     width: 0.1,
     lineCap: 'square',
     lineJoin: 'round'
   });
-  const polygon = new Style({
-    fill,
+  var noStroke = new ol.style.Stroke({
+    color: '',
+    width: 0.0
+  });
+  var overlayedStroke = new ol.style.Stroke({
+    color: '',
+    width: 0.1,
+    lineCap: 'square',
+    lineJoin: 'round'
+  });
+  var dashedStroke = new ol.style.Stroke({
+    color: '',
+    width: 1,
+    lineDash: [1, 2]
+  });
+  var polygon = new ol.style.Style({
+    fill: fill,
     zIndex: 1
   });
-  const strokedPolygon = new Style({
-    fill,
-    stroke,
+  var strokedPolygon = new ol.style.Style({
+    fill: fill,
+    stroke: stroke,
     zIndex: 2
   });
-  const line = new Style({
-    stroke,
+  var dashedPolygon = new ol.style.Style({
+    fill: fill,
+    stroke: dashedStroke,
+    zIndex: 2
+  });
+  var line = new ol.style.Style({
+    stroke: stroke,
     zIndex: 10
   });
-  const point = new Style({
-    image: new Circle({
+  var overlayedLine = new ol.style.Style({
+    stroke: overlayedStroke,
+    zIndex: 11
+  });
+  var dashedLine = new ol.style.Style({
+    stroke: dashedStroke,
+    zIndex: 12
+  });
+  var point = new ol.style.Style({
+    image: new ol.style.Circle({
       radius: 5,
-      fill,
-      stroke
+      fill: fill,
+      stroke: stroke
     }),
     zIndex: 50
   });
-  const styles = [];
+  var styles = [];
 
-  return function style(feature) {
+  return function(feature, resolution) {
     polygon.setZIndex(1);
     line.setZIndex(10);
-    let length = 0;
-    const geom = feature.getGeometry().getType();
+    var length = 0;
+    var geom = feature.getGeometry().getType();
     switch (geom) {
       case 'Polygon':
         stroke.setColor(getColor('blue'));
         stroke.setWidth(1);
         fill.setColor(getColor('blue', 0.8));
-        styles[length] = strokedPolygon;
-        length += 1;
+        styles[length++] = strokedPolygon;
         break;
       case 'MultiPolygon':
         stroke.setColor(getColor('blue'));
         stroke.setWidth(1);
         fill.setColor(getColor('blue', 0.8));
-        styles[length] = strokedPolygon;
-        length += 1;
+        styles[length++] = strokedPolygon;
         break;
       case 'LineString':
         stroke.setColor(getColor('red'));
         stroke.setWidth(1);
-        styles[length] = line;
-        length += 1;
+        styles[length++] = line;
         break;
       case 'MultiLineString':
         stroke.setColor(getColor('red'));
         stroke.setWidth(1);
-        styles[length] = line;
-        length += 1;
+        styles[length++] = line;
         break;
       case 'Point':
         stroke.setColor(getColor('yellow'));
         stroke.setWidth(1);
         fill.setColor(getColor('yellow', 0.8));
-        styles[length] = point;
-        length += 1;
+        styles[length++] = point;
         break;
       case 'MultiPoint':
         stroke.setColor(getColor('yellow'));
         stroke.setWidth(1);
         fill.setColor(getColor('yellow', 0.8));
-        styles[length] = point;
-        length += 1;
+        styles[length++] = point;
         break;
       default:
         stroke.setColor(getColor('blue'));
         stroke.setWidth(1);
         fill.setColor(getColor('blue', 0.8));
-        styles[length] = strokedPolygon;
-        length += 1;
+        styles[length++] = strokedPolygon;
         break;
     }
     styles.length = length;
     return styles;
   };
-}
+};

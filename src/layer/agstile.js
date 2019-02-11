@@ -1,46 +1,35 @@
-import TileArcGISRest from 'ol/source/TileArcGISRest';
-import $ from 'jquery';
-import tile from './tile';
-import maputils from '../maputils';
+"use strict";
 
-function createSource(options) {
-  return new TileArcGISRest({
-    attributions: options.attribution,
-    projection: options.projection,
-    crossOrigin: 'anonymous',
-    params: options.params,
-    url: options.url,
-    tileGrid: options.tileGrid
-  });
-}
+var ol = require('openlayers');
+var $ = require('jquery');
+var viewer = require('../viewer');
+var tile = require('./tile');
 
-const agsTile = function agsTile(layerOptions, viewer) {
-  const agsDefault = {
+var agsTile = function agsTile(layerOptions) {
+  var agsDefault = {
     layerType: 'tile',
     featureinfoLayer: undefined
   };
-  const sourceDefault = {};
-  const agsOptions = $.extend(agsDefault, layerOptions);
-  const sourceOptions = $.extend(sourceDefault, viewer.getMapSource()[layerOptions.source]);
+  var sourceDefault = {};
+  var agsOptions = $.extend(agsDefault, layerOptions);
+  var sourceOptions = $.extend(sourceDefault, viewer.getMapSource()[layerOptions.source]);
   sourceOptions.attribution = agsOptions.attribution;
   sourceOptions.projection = viewer.getProjection();
   sourceOptions.params = agsOptions.params || {};
-  sourceOptions.params.layers = `show:${agsOptions.id}`;
+  sourceOptions.params.layers = "show:" + agsOptions.id;
 
-  if (agsOptions.tileGrid) {
-    sourceOptions.tileGrid = maputils.tileGrid(agsOptions.tileGrid);
-  } else if (sourceOptions.tileGrid) {
-    sourceOptions.tileGrid = maputils.tileGrid(sourceOptions.tileGrid);
-  } else {
-    sourceOptions.tileGrid = viewer.getTileGrid();
+  var agsSource = createSource(sourceOptions);
+  return tile(agsOptions, agsSource);
 
-    if (agsOptions.extent) {
-      sourceOptions.tileGrid.extent = agsOptions.extent;
-    }
+  function createSource(options) {
+    return new ol.source.TileArcGISRest({
+      attributions: options.attribution,
+      projection: options.projection,
+      crossOrigin: 'anonymous',
+      params: options.params,
+      url: options.url
+    });
   }
+}
 
-  const agsSource = createSource(sourceOptions);
-  return tile(agsOptions, agsSource, viewer);
-};
-
-export default agsTile;
+module.exports = agsTile;

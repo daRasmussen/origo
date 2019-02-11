@@ -3,7 +3,8 @@
 	margin: 0.2em 0 0;
 	background: hsla(0,0%,100%,.9);
 	background: linear-gradient(to bottom right, white, hsla(0,0%,100%,.8));
-	box-shadow: $shadow;
+	border: 1px solid rgba(0,0,0,.3);
+	box-shadow: 0.05em 0.2em 0.6em rgba(0,0,0,.2);
 	text-shadow: none;
 	min-width: $search-width;
 }
@@ -77,10 +78,8 @@
 	background-color: $search-hover-backround;
 }
 
-&[class*=#{$media-l-m}] {
+&[class*=#{$media-l}] {
 	.awesomplete > ul {
-		min-width: calc(100% + 2rem);
-		max-width: calc(100% + 2rem);
-		top: 2.25rem;
+		min-width: 100%;
 	}
 }

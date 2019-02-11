@@ -1,8 +1,8 @@
-import getcenter from './geometry/getcenter';
-import getarea from './geometry/getarea';
+var getcenter = require('./geometry/getcenter');
+var getarea = require('./geometry/getarea');
 
-const geom = {};
+var geom = {};
 geom.center = getcenter;
 geom.area = getarea;
 
-export default geom;
+module.exports = geom;
