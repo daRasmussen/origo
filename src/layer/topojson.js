@@ -1,19 +1,27 @@
-"use strict";
+import $ from 'jquery';
+import VectorSource from 'ol/source/Vector';
+import TopoJSONFormat from 'ol/format/TopoJSON';
+import vector from './vector';
+import isUrl from '../utils/isurl';
 
-var ol = require('openlayers');
-var $ = require('jquery');
-var viewer = require('../viewer');
-var vector = require('./vector');
-var isUrl = require('../utils/isurl');
+function createSource(options) {
+  return new VectorSource({
+    attributions: options.attribution,
+    url: options.url,
+    format: new TopoJSONFormat({
+      dataProjection: options.projectionCode
+    })
+  });
+}
 
-var topojson = function topojson(layerOptions) {
-  var baseUrl = viewer.getBaseUrl();
-  var topojsonDefault = {
+const topojson = function topojson(layerOptions, viewer) {
+  const baseUrl = viewer.getBaseUrl();
+  const topojsonDefault = {
     layerType: 'vector'
   };
-  var topojsonOptions = $.extend(topojsonDefault, layerOptions);
-  var topojsonSource;
-  var sourceOptions = {};
+  const topojsonOptions = $.extend(topojsonDefault, layerOptions);
+  const sourceOptions = {};
+
   sourceOptions.attribution = topojsonOptions.attribution;
   sourceOptions.projectionCode = viewer.getProjectionCode();
   sourceOptions.sourceName = layerOptions.source;
@@ -24,18 +32,8 @@ var topojson = function topojson(layerOptions) {
     sourceOptions.url = baseUrl + topojsonOptions.source;
   }
 
-  topojsonSource = createSource(sourceOptions);
-  return vector(topojsonOptions, topojsonSource);
+  const topojsonSource = createSource(sourceOptions);
+  return vector(topojsonOptions, topojsonSource, viewer);
+};
 
-  function createSource(options) {
-    return new ol.source.Vector({
-      attributions: options.attribution,
-      url: options.url,
-      format: new ol.format.TopoJSON({
-        defaultDataProjection: options.projectionCode
-      })
-    });
-  }
-}
-
-module.exports = topojson;
+export default topojson;

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use strict";
 
 var ol = require('openlayers');
@@ -98,17 +99,94 @@ function init(el, mapOptions) {
   elQuery(map, {
     breakPoints: mapOptions.breakPoints,
     breakPointsPrefix: mapOptions.breakPointsPrefix,
+=======
+import Collection from 'ol/Collection';
+import Feature from 'ol/Feature';
+import geom from 'ol/geom/Geometry';
+import { Component } from './ui';
+import Map from './map';
+import proj from './projection';
+import MapSize from './utils/mapsize';
+import Featureinfo from './featureinfo';
+import maputils from './maputils';
+import Layer from './layer';
+import Main from './components/main';
+import Footer from './components/footer';
+import flattenGroups from './utils/flattengroups';
+
+const Viewer = function Viewer(targetOption, options = {}) {
+  let map;
+  let tileGrid;
+  let featureinfo;
+
+  let {
+    projection
+  } = options;
+
+  const {
+    baseUrl = '',
+    breakPoints,
+    breakPointsPrefix,
+    clsOptions = '',
+    consoleId = 'o-console',
+    mapCls = 'o-map',
+    controls = [],
+    enableRotation = true,
+    featureinfoOptions = {},
+    groups: groupOptions = [],
+    mapGrid = true,
+    pageSettings = {},
+    projectionCode,
+    projectionExtent,
+    extent = [],
+    center: centerOption = [0, 0],
+    zoom: zoomOption = 0,
+    resolutions = null,
+    layers: layerOptions = [],
+    map: mapName,
+    params: urlParams = {},
+    proj4Defs,
+    styles = {},
+    source = {},
+    clusterOptions = {},
+    tileGridOptions = {},
+    url
+  } = options;
+
+  const target = targetOption;
+  const center = urlParams.center || centerOption;
+  const zoom = urlParams.zoom || zoomOption;
+  const groups = flattenGroups(groupOptions);
+  const defaultTileGridOptions = {
+    alignBottomLeft: true,
+    extent,
+    resolutions,
+    tileSize: [256, 256]
+  };
+  const tileGridSettings = Object.assign({}, defaultTileGridOptions, tileGridOptions);
+  const mapGridCls = mapGrid ? 'o-mapgrid' : '';
+  const cls = `${clsOptions} ${mapGridCls} ${mapCls} o-ui`.trim();
+  const footerData = pageSettings.footer || {};
+  const main = Main();
+  const footer = Footer({
+    footerData
+>>>>>>> origin
   });
+  let mapSize;
 
-  if (urlParams.pin) {
-    settings.featureinfoOptions.savedPin = urlParams.pin;
-  }
+  const addControl = function addControl(control) {
+    if (control.onAdd && control.dispatch) {
+      this.addComponent(control);
+    } else {
+      throw new Error('Valid control must have onAdd and dispatch methods');
+    }
+  };
 
-  //This needs further development for proper handling in permalink
-  else if (urlParams.selection) {
-    settings.featureinfoOptions.savedSelection = new ol.Feature({
-      geometry: new ol.geom[urlParams.selection.geometryType](urlParams.selection.coordinates)
+  const addControls = function addControls() {
+    controls.forEach((control) => {
+      this.addControl(control);
     });
+<<<<<<< HEAD
   } else if (urlParams.pageid) {
     settings.layers.forEach((layer) => {
       if (layer.get('type') === 'AGS_FEATURE' && layer.get('visible')) {
@@ -294,12 +372,68 @@ function getLayersByProperty(key, val, byName) {
   if (byName) {
     return layers.map(function (layer) {
       return layer.get('name');
-    });
-  } else {
-    return layers;
-  }
-}
+=======
+  };
 
+  const getExtent = () => extent;
+
+  const getBaseUrl = () => baseUrl;
+
+  const getBreakPoints = function getBreakPoints(size) {
+    return size && size in breakPoints ? breakPoints[size] : breakPoints;
+  };
+
+  const getFeatureinfo = () => featureinfo;
+
+  const getMapName = () => mapName;
+
+  const getTileGrid = () => tileGrid;
+
+  const getTileGridSettings = () => tileGridSettings;
+
+  const getTileSize = () => tileGridSettings.tileSize;
+
+  const getUrl = () => url;
+
+  const getStyle = (styleName) => {
+    if (styleName in styles) {
+      return styles[styleName];
+    }
+    return null;
+  };
+
+  const getStyles = () => styles;
+
+  const getResolutions = () => resolutions;
+
+  const getMapUrl = () => {
+    let layerNames = '';
+    let mapUrl;
+
+    // delete search arguments if present
+    if (window.location.search) {
+      mapUrl = window.location.href.replace(window.location.search, '?');
+    } else {
+      mapUrl = `${window.location.href}?`;
+    }
+    const mapView = map.getView();
+    const centerCoords = mapView.getCenter().map(coord => parseInt(coord, 10));
+    const zoomLevel = mapView.getZoom();
+    const layers = map.getLayers();
+
+    // add layer if visible
+    layers.forEach((el) => {
+      if (el.getVisible() === true) {
+        layerNames += `${el.get('name')};`;
+      } else if (el.get('legend') === true) {
+        layerNames += `${el.get('name')},1;`;
+      }
+>>>>>>> origin
+    });
+    return `${mapUrl}${centerCoords}&${zoomLevel}&${layerNames.slice(0, layerNames.lastIndexOf(';'))}`;
+  };
+
+<<<<<<< HEAD
 function getLayer(layername) {
   var layer = $.grep(settings.layers, function (obj) {
     return (obj.get('name') == layername);
@@ -339,73 +473,128 @@ function getSubgroups() {
   function findSubgroups(groups, n) {
     if (n >= groups.length) {
       return;
-    }
+=======
+  const getMap = () => map;
 
+  const getLayers = () => map.getLayers().getArray();
+
+  const getLayersByProperty = function getLayersByProperty(key, val, byName) {
+    const layers = map.getLayers().getArray().filter(layer => layer.get(key) && layer.get(key) === val);
+
+    if (byName) {
+      return layers.map(layer => layer.get('name'));
+>>>>>>> origin
+    }
+    return layers;
+  };
+
+  const getLayer = layerName => getLayers().filter(layer => layer.get('name') === layerName)[0];
+
+  const getQueryableLayers = function getQueryableLayers() {
+    const queryableLayers = getLayers().filter(layer => layer.get('queryable') && layer.getVisible());
+    return queryableLayers;
+  };
+
+  const getSearchableLayers = function getSearchableLayers(searchableDefault) {
+    const searchableLayers = [];
+    map.getLayers().forEach((layer) => {
+      let searchable = layer.get('searchable');
+      const visible = layer.getVisible();
+      searchable = searchable === undefined ? searchableDefault : searchable;
+      if (searchable === 'always' || (searchable && visible)) {
+        searchableLayers.push(layer.get('name'));
+      }
+    });
+    return searchableLayers;
+  };
+
+<<<<<<< HEAD
     if (groups[n].groups) {
       groups[n].groups.forEach(function (subgroup) {
         subgroups.push(subgroup);
       });
+=======
+  const getGroup = function getGroup(groupName) {
+    return groups.find(group => group.name === groupName);
+  };
+>>>>>>> origin
 
-      findSubgroups(groups[n].groups, 0);
+  const getSource = function getSource(name) {
+    if (name in source) {
+      return source[name];
     }
+    throw new Error(`There is no source with name: ${name}`);
+  };
 
+<<<<<<< HEAD
     findSubgroups(groups, n + 1);
   }
+=======
+  const getGroups = () => groups;
+>>>>>>> origin
 
-  findSubgroups(settings.groups, 0);
-  return subgroups;
-}
+  const getProjectionCode = () => projectionCode;
 
-function getProjectionCode() {
-  return settings.projectionCode;
-}
+  const getProjection = () => projection;
 
-function getProjection() {
-  return settings.projection;
-}
+  const getMapSource = () => source;
 
-function getMapSource() {
-  return settings.source;
-}
+  const getControlByName = function getControlByName(name) {
+    const components = this.getComponents();
+    const control = components.find(component => component.name === name);
+    if (!control) {
+      return null;
+    }
+    return control;
+  };
 
+<<<<<<< HEAD
 function getControlNames() {
   var controlNames = settings.controls.map(function (obj) {
     return obj.name;
   });
   return controlNames;
 }
+=======
+  const getSize = function getSize() {
+    return mapSize.getSize();
+  };
+>>>>>>> origin
 
-function getTarget() {
-  return settings.target;
-}
+  const getTarget = () => target;
 
+<<<<<<< HEAD
 function getClusterOptions() {
   return settings.clusterOptions;
 }
+=======
+  const getClusterOptions = () => clusterOptions;
+>>>>>>> origin
 
-function checkScale(scale, maxScale, minScale) {
-  if (maxScale || minScale) {
+  const getConsoleId = () => consoleId;
 
-    // Alter 1: maxscale and minscale
-    if (maxScale && minScale) {
-      if ((scale > maxScale) && (scale < minScale)) {
-        return true;
-      }
+  const getInitialZoom = () => zoom;
+
+  const getFooter = () => footer;
+
+  const getMain = () => main;
+
+  const mergeSavedLayerProps = (initialLayerProps, savedLayerProps) => {
+    if (savedLayerProps) {
+      const mergedLayerProps = initialLayerProps.reduce((acc, initialProps) => {
+        const layerName = initialProps.name.split(':').pop();
+        const savedProps = savedLayerProps[layerName] || {
+          visible: false,
+          legend: false
+        };
+        savedProps.name = initialProps.name;
+        const mergedProps = Object.assign({}, initialProps, savedProps);
+        acc.push(mergedProps);
+        return acc;
+      }, []);
+      return mergedLayerProps;
     }
-
-    // Alter 2: only maxscale
-    else if (maxScale) {
-      if (scale > maxScale) {
-        return true;
-      }
-    }
-
-    // Alter 3: only minscale
-    else if (minScale) {
-      if (scale < minScale) {
-        return true;
-      }
-    }
+<<<<<<< HEAD
   }
 
   // Alter 4: no scale limit
@@ -461,13 +650,67 @@ function autoPan() {
       dy = 0;
     if (offsetX < 0 + menuSize) {
       dx = (-offsetX + menuSize) * map.getView().getResolution();
+=======
+    return initialLayerProps;
+  };
+
+  const removeOverlays = function removeOverlays(overlays) {
+    if (overlays) {
+      if (overlays.constructor === Array || overlays instanceof Collection) {
+        overlays.forEach((overlay) => {
+          map.removeOverlay(overlay);
+        });
+      } else {
+        map.removeOverlay(overlays);
+      }
+    } else {
+      map.getOverlays().clear();
+>>>>>>> origin
     }
-    if (offsetX > (mapSize[0] - $(el).outerWidth(true))) {
-      dx = -($(el).outerWidth(true) - (mapSize[0] - offsetX)) * map.getView().getResolution();
+  };
+
+  const setMap = function setMap(newMap) {
+    map = newMap;
+  };
+
+  const setProjection = function setProjection(newProjection) {
+    projection = newProjection;
+  };
+
+  const zoomToExtent = function zoomToExtent(geometry, level) {
+    const view = map.getView();
+    const maxZoom = level;
+    const geometryExtent = geometry.getExtent();
+    if (geometryExtent) {
+      view.fit(geometryExtent, {
+        maxZoom
+      });
+      return geometryExtent;
     }
-    if (offsetY < 0) {
-      dy = (-offsetY) * map.getView().getResolution();
+    return false;
+  };
+
+  const addLayer = function addLayer(layerProps) {
+    const layer = Layer(layerProps, this);
+    map.addLayer(layer);
+    this.dispatch('addlayer', { layerName: layerProps.name });
+  };
+
+  const addLayers = function addLayers(layersProps) {
+    layersProps.reverse().forEach((layerProps) => {
+      this.addLayer(layerProps);
+    });
+  };
+
+  const addGroup = function addGroup(groupProps) {
+    const defaultProps = { type: 'group' };
+    const groupDef = Object.assign({}, defaultProps, groupProps);
+    const name = groupDef.name;
+    if (!(groups.filter(group => group.name === name).length)) {
+      groups.push(groupDef);
+      this.dispatch('add:group', { group: groupDef });
     }
+<<<<<<< HEAD
     map.getView().animate({
       center: ([center[0] + dx, center[1] + dy]),
       duration: 300
@@ -484,36 +727,47 @@ function removeOverlays(overlays) {
       })
     } else {
       map.removeOverlay(overlays);
-    }
-  } else {
-    map.getOverlays().clear();
-  }
-}
+=======
+  };
 
-function render(el, mapOptions) {
-  pageSettings = mapOptions.pageSettings;
-  pageTemplate.mapClass = "o-map";
+  const addGroups = function addGroups(groupsProps) {
+    groupsProps.forEach((groupProps) => {
+      this.addGroup(groupProps);
+    });
+  };
 
-  if (pageSettings) {
-    if (pageSettings.footer) {
-      if (pageSettings.footer.hasOwnProperty('img')) {
-        pageTemplate.img = pageSettings.footer.img;
-      }
-      if (pageSettings.footer.hasOwnProperty('text')) {
-        pageTemplate.text = pageSettings.footer.text;
-      }
-      if (pageSettings.footer.hasOwnProperty('url')) {
-        pageTemplate.url = pageSettings.footer.url;
-      }
-      if (pageSettings.footer.hasOwnProperty('urlText')) {
-        pageTemplate.urlText = pageSettings.footer.urlText;
-      }
+  // removes group and any depending subgroups and layers
+  const removeGroup = function removeGroup(groupName) {
+    const group = groups.find(item => item.name === groupName);
+    if (group) {
+      const layers = getLayersByProperty('group', groupName);
+      layers.forEach((layer) => {
+        map.removeLayer(layer);
+      });
+      const groupIndex = groups.indexOf(group);
+      groups.splice(groupIndex, 1);
+      this.dispatch('remove:group', { group });
+>>>>>>> origin
     }
-    if (pageSettings.mapGrid) {
-      if (pageSettings.mapGrid.hasOwnProperty('visible') && pageSettings.mapGrid.visible === true) {
-        pageTemplate.mapClass = "o-map o-map-grid";
+    const subgroups = groups.filter((item) => {
+      if (item.parent) {
+        return item.parent === groupName;
       }
+      return false;
+    });
+    if (subgroups.length) {
+      subgroups.forEach((subgroup) => {
+        const name = subgroup.name;
+        removeGroup(groups[name]);
+      });
     }
+  };
+
+  const addSource = function addSource(sourceName, sourceProps) {
+    if (!(sourceName in source)) {
+      source[sourceName] = sourceProps;
+    }
+<<<<<<< HEAD
   }
 
   $(el).html(template(pageTemplate));
@@ -550,3 +804,117 @@ module.exports.checkScale = checkScale;
 module.exports.getMapName = getMapName;
 module.exports.getConsoleId = getConsoleId;
 module.exports.getUrl = getUrl;
+=======
+  };
+
+  const addStyle = function addStyle(styleName, styleProps) {
+    if (!(styleName in styles)) {
+      styles[styleName] = styleProps;
+    }
+  };
+
+  return Component({
+    onInit() {
+      this.render();
+
+      proj.registerProjections(proj4Defs);
+      setProjection(proj.Projection({
+        projectionCode,
+        projectionExtent
+      }));
+
+      tileGrid = maputils.tileGrid(tileGridSettings);
+
+      setMap(Map({
+        extent,
+        getFeatureinfo,
+        projection,
+        center,
+        resolutions,
+        zoom,
+        enableRotation,
+        target: this.getId()
+      }));
+
+      const layerProps = mergeSavedLayerProps(layerOptions, urlParams.layers);
+      this.addLayers(layerProps);
+
+      mapSize = MapSize(map, {
+        breakPoints,
+        breakPointsPrefix,
+        mapId: this.getId()
+      });
+
+      if (urlParams.pin) {
+        featureinfoOptions.savedPin = urlParams.pin;
+      } else if (urlParams.selection) {
+        // This needs further development for proper handling in permalink
+        featureinfoOptions.savedSelection = new Feature({
+          geometry: new geom[urlParams.selection.geometryType](urlParams.selection.coordinates)
+        });
+      }
+      featureinfoOptions.viewer = this;
+      featureinfo = Featureinfo(featureinfoOptions);
+      this.addComponent(featureinfo);
+      this.addControls();
+    },
+    render() {
+      const htmlString = `<div id="${this.getId()}" class="${cls}">
+                            <div class="transparent flex column height-full width-full absolute top-left no-margin z-index-low">
+                              ${main.render()}
+                              ${footer.render()}
+                            </div>
+                          </div>`;
+      const el = document.querySelector(target);
+      el.innerHTML = htmlString;
+      this.dispatch('render');
+    },
+    addControl,
+    addControls,
+    addGroup,
+    addGroups,
+    addLayer,
+    addLayers,
+    addSource,
+    addStyle,
+    getBaseUrl,
+    getBreakPoints,
+    getClusterOptions,
+    getConsoleId,
+    getControlByName,
+    getExtent,
+    getFeatureinfo,
+    getFooter,
+    getInitialZoom,
+    getTileGridSettings,
+    getGroup,
+    getGroups,
+    getMain,
+    getMapSource,
+    getQueryableLayers,
+    getResolutions,
+    getSearchableLayers,
+    getSize,
+    getLayer,
+    getLayers,
+    getLayersByProperty,
+    getMap,
+    getMapName,
+    getMapUrl,
+    getProjection,
+    getProjectionCode,
+    getSource,
+    getStyle,
+    getStyles,
+    getTarget,
+    getTileGrid,
+    getTileSize,
+    getUrl,
+    removeGroup,
+    removeOverlays,
+    zoomToExtent
+  });
+};
+
+export default Viewer;
+>>>>>>> origin
