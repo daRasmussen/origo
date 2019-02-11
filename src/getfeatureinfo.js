@@ -193,7 +193,6 @@ function getFeaturesAtPixel(evt, clusterFeatureinfoLevel) {
     if (cluster) {
         return false;
     } else {
-        console.log(result)
         return result;
     }
 }

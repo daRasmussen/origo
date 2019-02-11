@@ -26,7 +26,7 @@
       "name": "editor",
       "options": {
         "editableLayers": ["webb_pkt", "webb_linje", "webb_yta"],
-        "isActive": true,
+        "isActive": false,
         "autoSave": false
       }
     },
@@ -116,7 +116,7 @@
       "group": "obj",
       "type": "AGS_FEATURE",
       "visible": true,
-      "filter": "PAGEID=' '",
+      "filter": "PAGEID='9fs29-ybu21-271mn-n85kj'",
       "attributes": [{
           "title": "PAGEID: ",
           "name": "PAGEID",

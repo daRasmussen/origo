@@ -7,10 +7,11 @@ var modal = require('./modal');
 var mapmenu = require('./mapmenu');
 var utils = require('./utils');
 var permalink = require('./permalink/permalink');
+var popup = require('./popup');
 
 var shareButton;
 
-function init(){
+function init() {
     var el = utils.createListButton({
         id: 'o-share',
         iconCls: 'o-icon-fa-share-square-o',
@@ -21,19 +22,26 @@ function init(){
     shareButton = $('#o-share-button');
     bindUIActions();
 }
+
 function bindUIActions() {
-    shareButton.on('click', function(e) {
-        modal.createModal('#o-map', {title: 'Länk till karta', content: createContent()});
+    shareButton.on('click', function (e) {
+        modal.createModal('#o-map', {
+            title: 'Länk till karta',
+            content: createContent()
+        });
+        popup('#o-map').closePopup();
         modal.showModal();
         createLink(); //Add link to input
         mapmenu.toggleMenu();
         e.preventDefault();
     });
 }
+
 function createContent() {
     return '<div class="o-share-link"><input type="text"></div>' +
-           '<i>Kopiera och klistra in länken för att dela kartan.</i>';
+        '<i>Kopiera och klistra in länken för att dela kartan.</i>';
 }
+
 function createLink() {
     var url = permalink.getPermalink();
     $('.o-share-link input').val(url).select();

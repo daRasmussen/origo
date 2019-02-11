@@ -127,7 +127,6 @@ function onClick(evt) {
   savedPin = undefined;
   //Featurinfo in two steps. Concat serverside and clientside when serverside is finished
   var clientResult = getFeatureInfo.getFeaturesAtPixel(evt, clusterFeatureinfoLevel);
-  console.log(clientResult);
   //Abort if clientResult is false
   if (clientResult !== false) {
     getFeatureInfo.getFeaturesFromRemote(evt)
