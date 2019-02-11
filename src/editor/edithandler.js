@@ -34,7 +34,7 @@ var modify = undefined;
 var snap = undefined;
 var tools = undefined;
 
-module.exports = function(options) {
+module.exports = function (options) {
   map = viewer.getMap();
   currentLayer = options.currentLayer;
   editableLayers = options.editableLayers;
@@ -42,7 +42,7 @@ module.exports = function(options) {
 
   //set edit properties for editable layers
   editLayers = setEditProps(options);
-  editableLayers.forEach(function(layerName) {
+  editableLayers.forEach(function (layerName) {
     var layer = viewer.getLayer(layerName);
     verifyLayer(layerName);
     if (layerName === currentLayer && options.isActive) {
@@ -120,14 +120,14 @@ function setGeometryProps(layer) {
 
 function addFeatureAddListener(layerName) {
   var layer = viewer.getLayer(layerName);
-  layer.getSource().once('addfeature', function(e) {
+  layer.getSource().once('addfeature', function (e) {
     setGeometryProps(layer);
   });
 }
 
 function setEditProps(options) {
   var initialValue = {};
-  var result = editableLayers.reduce(function(layerProps, layerName) {
+  var result = editableLayers.reduce(function (layerProps, layerName) {
     var layer = viewer.getLayer(layerName);
     var snap = options.hasOwnProperty('snap') ? options.snap : true;
     var snapLayers = options.snapLayers || editableLayers;
@@ -213,7 +213,7 @@ function cancelAttribute() {
 }
 
 function onAttributesSave(feature, attributes) {
-  $('#o-save-button').on('click', function(e) {
+  $('#o-save-button').on('click', function (e) {
     var editEl = {};
     var fileReader;
     var imageData;
@@ -222,7 +222,7 @@ function onAttributesSave(feature, attributes) {
     var orientation;
 
     //Read values from form
-    attributes.forEach(function(attribute) {
+    attributes.forEach(function (attribute) {
 
       //Get the input container class
       var containerClass = '.' + attribute.elId.slice(1);
@@ -248,9 +248,9 @@ function onAttributesSave(feature, attributes) {
 
         if (file) {
           fileReader = new FileReader();
-          fileReader.onload = function() {
-            getImageOrientation(file, function(orientation) {
-              imageresizer(fileReader.result, attribute, orientation, function(resized) {
+          fileReader.onload = function () {
+            getImageOrientation(file, function (orientation) {
+              imageresizer(fileReader.result, attribute, orientation, function (resized) {
                 editEl[attribute.name] = resized;
                 $(document).trigger('imageresized');
               });
@@ -265,7 +265,7 @@ function onAttributesSave(feature, attributes) {
     });
 
     if (fileReader && fileReader.readyState == 1) {
-      $(document).on('imageresized', function() {
+      $(document).on('imageresized', function () {
         attributesSaveHandler(feature, editEl);
       });
     } else {
@@ -281,7 +281,7 @@ function onAttributesSave(feature, attributes) {
 function attributesSaveHandler(feature, formEl) {
 
   //get DOM values and set attribute values to feature
-  attributes.forEach(function(attribute) {
+  attributes.forEach(function (attribute) {
     if (formEl.hasOwnProperty(attribute.name)) {
       feature.set(attribute.name, formEl[attribute.name]);
     }
@@ -299,7 +299,7 @@ function removeInteractions() {
     map.removeInteraction(select);
     map.removeInteraction(draw);
     if (snap) {
-      snap.forEach(function(snapInteraction) {
+      snap.forEach(function (snapInteraction) {
         map.removeInteraction(snapInteraction);
       });
     }
@@ -320,8 +320,8 @@ function startDraw() {
 }
 
 function addListener() {
-  var fn = function(obj) {
-    $(obj.elDependencyId).on(obj.eventType, function(e) {
+  var fn = function (obj) {
+    $(obj.elDependencyId).on(obj.eventType, function (e) {
       var containerClass = '.' + obj.elId.slice(1);
       if ($(obj.elDependencyId + (' option:selected')).text() === obj.requiredVal) {
         $(containerClass).removeClass('o-hidden');
@@ -335,10 +335,10 @@ function addListener() {
 }
 
 function addImageListener() {
-  var fn = function(obj) {
+  var fn = function (obj) {
     var fileReader = new FileReader();
     var containerClass = '.' + obj.elId.slice(1);
-    $(obj.elId).on('change', function(e) {
+    $(obj.elId).on('change', function (e) {
       $(containerClass + ' img').removeClass('o-hidden');
       $(containerClass + ' input[type=button]').removeClass('o-hidden');
 
@@ -351,7 +351,7 @@ function addImageListener() {
       }
     });
 
-    $(containerClass + ' input[type=button]').on('click', function(e) {
+    $(containerClass + ' input[type=button]').on('click', function (e) {
       $(obj.elId).attr('value', '');
       $(containerClass + ' img').addClass('o-hidden');
       $(this).addClass('o-hidden');
@@ -377,24 +377,24 @@ function onToggleEdit(e) {
       cancelAttribute();
     }
   } else if (e.tool === 'delete') {
-      onDeleteSelected();
+    onDeleteSelected();
   } else if (e.tool === 'edit') {
-      setEditLayer(e.currentLayer);
+    setEditLayer(e.currentLayer);
   } else if (e.tool === 'cancel') {
-      removeInteractions();
+    removeInteractions();
   } else if (e.tool === 'save') {
-      saveFeatures();
+    saveFeatures();
   }
 }
 
 function onChangeEdit(e) {
-  if (e.tool!== 'draw' && e.active) {
+  if (e.tool !== 'draw' && e.active) {
     cancelDraw();
   }
 }
 
 function getSnapSources(layers) {
-  var sources = layers.map(function(layer) {
+  var sources = layers.map(function (layer) {
     return viewer.getLayer(layer).getSource();
   });
 
@@ -403,7 +403,7 @@ function getSnapSources(layers) {
 
 function addSnapInteraction(sources) {
   var snapInteractions = [];
-  sources.forEach(function(source) {
+  sources.forEach(function (source) {
     var interaction = new ol.interaction.Snap({
       source: source
     });
@@ -451,7 +451,7 @@ function editAttributes(feature) {
     if (attributes.length > 0) {
 
       //Create an array of defined attributes and corresponding values from selected feature
-      attributeObjects = attributes.map(function(attributeObject) {
+      attributeObjects = attributes.map(function (attributeObject) {
         var obj = {};
         $.extend(obj, attributeObject);
         obj.val = feature.get(obj.name) || '';
@@ -472,6 +472,8 @@ function editAttributes(feature) {
           obj.isVisible = true;
           obj.elId = '#input-' + obj.name;
           obj.addListener = addImageListener();
+        } else if (obj.type === 'pageid') {
+          obj.elId = '#input-' + obj.name;
         } else {
           obj.isVisible = true;
           obj.elId = '#input-' + obj.name;
@@ -482,7 +484,7 @@ function editAttributes(feature) {
       });
 
     }
-    var formElement = attributeObjects.reduce(function(prev, next) {
+    var formElement = attributeObjects.reduce(function (prev, next) {
       return prev + next.formElement;
     }, '');
     var form = '<form>' + formElement + '<br><div class="o-form-save"><input id="o-save-button" type="button" value="Ok"></input></div></form>';
@@ -493,7 +495,7 @@ function editAttributes(feature) {
     });
     modal.showModal();
 
-    attributeObjects.forEach(function(obj) {
+    attributeObjects.forEach(function (obj) {
       if (obj.hasOwnProperty('addListener')) {
         obj.addListener(obj);
       }
@@ -513,14 +515,14 @@ function saveFeature(change) {
 function saveFeatures() {
   var edits = editsStore.getEdits();
   var layerNames = Object.getOwnPropertyNames(edits);
-  layerNames.forEach(function(layerName) {
+  layerNames.forEach(function (layerName) {
     var transaction = {
       insert: null,
       delete: null,
       update: null
     };
     var editTypes = Object.getOwnPropertyNames(edits[layerName]);
-    editTypes.forEach(function(editType) {
+    editTypes.forEach(function (editType) {
       var layer = viewer.getLayer(layerName);
       var ids = edits[layerName][editType];
       var features;
@@ -538,18 +540,18 @@ function getFeaturesByIds(type, layer, ids) {
   var source = layer.getSource();
   var features = [];
   if (type === 'delete') {
-    ids.forEach(function(id) {
+    ids.forEach(function (id) {
       var dummy = new ol.Feature();
       dummy.setId(id);
       features.push(dummy);
     });
   } else {
-    ids.forEach(function(id) {
+    ids.forEach(function (id) {
       var feature;
       if (source.getFeatureById(id)) {
-         feature = source.getFeatureById(id);
-         feature.unset('bbox');
-         features.push(feature);
+        feature = source.getFeatureById(id);
+        feature.unset('bbox');
+        features.push(feature);
       }
     });
   }
@@ -558,13 +560,13 @@ function getFeaturesByIds(type, layer, ids) {
 }
 
 function getDefaultValues(attributes) {
-  return attributes.filter(function(attribute) {
+  return attributes.filter(function (attribute) {
       if (attribute.name && attribute.defaultValue) {
         return attribute;
       }
     })
-    .reduce(function(prev, curr) {
+    .reduce(function (prev, curr) {
       prev[curr.name] = curr.defaultValue
       return prev;
-    },{});
+    }, {});
 }

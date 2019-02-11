@@ -4,12 +4,15 @@ module.exports = function createForm(obj) {
   var id = obj.elId.slice(1);
   var cls = obj.cls || '';
   cls += id;
-  cls += obj.isVisible ? "" : " o-hidden";
+  cls += obj.isVisible ? "" : " o-hidden"; // isVisible is overriden in edithandler...
+  console.log(obj, obj.isVisible, cls)
   var label = obj.title;
   var val = obj.isVisible ? obj.val : '';
   var type = obj.type;
   var maxLength = obj.maxLength ? ' maxlength="' + obj.maxLength + '" ' : '';
   var dropdownOptions = obj.options || [];
+
+  var hash = window.location.hash.replace('#pageid=', '') || val;
   var el;
   var checked;
   var firstOption;
@@ -44,6 +47,12 @@ module.exports = function createForm(obj) {
       el += '<input type="file" id="' + id + '" value="' + val + '" accept="image/*">';
       el += '<input id="o-delete-image-button" class="' + imageClass + '" type="button" value="Ta bort bild">';
       el += '</div>';
+      break;
+    case 'pageid':
+      el = '<div class="' + cls + '"><label>' + label + '</label><br><input type="text" id="' + id + '" value="' + hash + '"' + maxLength + ' readonly></div>';
+      // el = `<div class="${cls}"><label>${label}</label><br><input type="text" id="${id}" value="${hash}" ${maxLength} readonly></div>`;
+      break;
+    default:
       break;
   }
   return el;
