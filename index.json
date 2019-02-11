@@ -116,13 +116,12 @@
       "group": "obj",
       "type": "AGS_FEATURE",
       "visible": true,
-      "filter": "PAGEID='9fs29-ybu21-271mn-n85kj'",
       "attributes": [{
           "title": "PAGEID: ",
           "name": "PAGEID",
           "type": "pageid",
           "maxLength": 50,
-          "isVisible": false
+          "isVisible": true
         }, {
           "title": "Namn: ",
           "name": "NAME",

@@ -24,19 +24,22 @@ var agsFeature = function agsFeature(layerOptions) {
   function createSource(options) {
     var vectorSource = null;
     var esriSrs = options.projectionCode.split(':').pop();
-    var queryFilter = options.filter ? '&where=' + options.filter : '';
+    var hash = window.location.hash.split('pageid');
+    hash = hash.length === 2 ? hash[1].substring(1, hash[1].length) : '';
+    // SETS HASH ON ALL LAYERS!
+    var queryFilter = options.filter ? '&where=' + options.filter : "&where=PAGEID='" + hash + "'";
     var esrijsonFormat = new ol.format.EsriJSON();
     vectorSource = new ol.source.Vector({
       attributions: options.attribution,
-      loader: function(extent, resolution, projection) {
+      loader: function (extent, resolution, projection) {
         var that = this;
         var url = options.url + options.id +
           encodeURI('/query?f=json&' +
             'returnGeometry=true' +
             '&spatialRel=esriSpatialRelIntersects' +
             '&geometry=' + '{"xmin":' + extent[0] + ',"ymin":' +
-              extent[1] + ',"xmax":' + extent[2] + ',"ymax":' + extent[3] +
-              ',"spatialReference":{"wkid":' + esriSrs + '}}' +
+            extent[1] + ',"xmax":' + extent[2] + ',"ymax":' + extent[3] +
+            ',"spatialReference":{"wkid":' + esriSrs + '}}' +
             '&geometryType=esriGeometryEnvelope' +
             '&inSR=' + esriSrs + '&outFields=*' + '' +
             '&returnIdsOnly=false&returnCountOnly=false' +
@@ -45,7 +48,7 @@ var agsFeature = function agsFeature(layerOptions) {
         $.ajax({
           url: url,
           dataType: 'jsonp',
-          success: function(response) {
+          success: function (response) {
             if (response.error) {
               alert(response.error.message + '\n' +
                 response.error.details.join('\n'));

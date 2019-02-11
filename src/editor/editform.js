@@ -5,14 +5,14 @@ module.exports = function createForm(obj) {
   var cls = obj.cls || '';
   cls += id;
   cls += obj.isVisible ? "" : " o-hidden"; // isVisible is overriden in edithandler...
-  console.log(obj, obj.isVisible, cls)
+  // console.log(obj, obj.isVisible, cls)
   var label = obj.title;
   var val = obj.isVisible ? obj.val : '';
   var type = obj.type;
   var maxLength = obj.maxLength ? ' maxlength="' + obj.maxLength + '" ' : '';
   var dropdownOptions = obj.options || [];
-
-  var hash = window.location.hash.replace('#pageid=', '') || val;
+  var hash = window.location.hash.split('pageid');
+  hash = hash.length === 2 ? hash[1].substring(1, hash[1].length) : '';
   var el;
   var checked;
   var firstOption;
@@ -50,7 +50,6 @@ module.exports = function createForm(obj) {
       break;
     case 'pageid':
       el = '<div class="' + cls + '"><label>' + label + '</label><br><input type="text" id="' + id + '" value="' + hash + '"' + maxLength + ' readonly></div>';
-      // el = `<div class="${cls}"><label>${label}</label><br><input type="text" id="${id}" value="${hash}" ${maxLength} readonly></div>`;
       break;
     default:
       break;

@@ -59,10 +59,10 @@ function init(el, mapOptions) {
   settings.center = urlParams.center || mapOptions.center;
   settings.zoom = urlParams.zoom || mapOptions.zoom;
   mapOptions.tileGrid = mapOptions.tileGrid || {};
-  settings.tileSize = mapOptions.tileGrid.tileSize ? [mapOptions.tileGrid.tileSize,mapOptions.tileGrid.tileSize] : [256,256];
+  settings.tileSize = mapOptions.tileGrid.tileSize ? [mapOptions.tileGrid.tileSize, mapOptions.tileGrid.tileSize] : [256, 256];
   settings.alignBottomLeft = mapOptions.tileGrid.alignBottomLeft;
 
-  if (mapOptions.hasOwnProperty('proj4Defs') || mapOptions.projectionCode=="EPSG:3857" || mapOptions.projectionCode=="EPSG:4326") {
+  if (mapOptions.hasOwnProperty('proj4Defs') || mapOptions.projectionCode == "EPSG:3857" || mapOptions.projectionCode == "EPSG:4326") {
     // Projection to be used in map
     settings.projectionCode = mapOptions.projectionCode || undefined;
     settings.projectionExtent = mapOptions.projectionExtent;
@@ -109,12 +109,22 @@ function init(el, mapOptions) {
     settings.featureinfoOptions.savedSelection = new ol.Feature({
       geometry: new ol.geom[urlParams.selection.geometryType](urlParams.selection.coordinates)
     });
+  } else if (urlParams.pageid) {
+    settings.layers.forEach((layer) => {
+      if (layer.get('type') === 'AGS_FEATURE' && layer.get('visible')) {
+        var id = urlParams.pageid;
+        var f = "PAGEID='" + urlParams.pageid + "'";
+        layer.set('filter', f);
+        var s = layer.getSource();
+      }
+    })
   }
+
   featureinfo.init(settings.featureinfoOptions);
 }
 
 function addLayers(layers) {
-  layers.forEach(function(layer) {
+  layers.forEach(function (layer) {
     map.addLayer(layer);
   });
 }
@@ -170,7 +180,7 @@ function parseArg() {
       var la, match;
       for (var j = 0; j < layers.length; j++) {
         match = 0;
-        $.each(l, function(index, el) {
+        $.each(l, function (index, el) {
           la = el.split(",");
           if (layers[j].get('group')) {
             if ((layers[j].get('group') == 'background') && (la[0] == layers[j].get('name'))) {
@@ -254,7 +264,7 @@ function getMapUrl() {
   var layers = map.getLayers();
 
   //add layer if visible
-  layers.forEach(function(el) {
+  layers.forEach(function (el) {
     if (el.getVisible() == true) {
       layerNames += el.get('name') + ';';
     } else if (el.get('legend') == true) {
@@ -273,7 +283,7 @@ function getLayers() {
 }
 
 function getLayersByProperty(key, val, byName) {
-  var layers = map.getLayers().getArray().filter(function(layer) {
+  var layers = map.getLayers().getArray().filter(function (layer) {
     if (layer.get(key)) {
       if (layer.get(key) === val) {
         return layer;
@@ -282,7 +292,7 @@ function getLayersByProperty(key, val, byName) {
   });
 
   if (byName) {
-    return layers.map(function(layer) {
+    return layers.map(function (layer) {
       return layer.get('name');
     });
   } else {
@@ -291,14 +301,14 @@ function getLayersByProperty(key, val, byName) {
 }
 
 function getLayer(layername) {
-  var layer = $.grep(settings.layers, function(obj) {
+  var layer = $.grep(settings.layers, function (obj) {
     return (obj.get('name') == layername);
   });
   return layer[0];
 }
 
 function getQueryableLayers() {
-  var queryableLayers = settings.layers.filter(function(layer) {
+  var queryableLayers = settings.layers.filter(function (layer) {
     if (layer.get('queryable') && layer.getVisible()) {
       return layer;
     }
@@ -307,14 +317,14 @@ function getQueryableLayers() {
 }
 
 function getGroup(group) {
-  var group = $.grep(settings.layers, function(obj) {
+  var group = $.grep(settings.layers, function (obj) {
     return (obj.get('group') == group);
   });
   return group;
 }
 
 function getGroups(opt) {
-  if(opt == 'top') {
+  if (opt == 'top') {
     return settings.groups;
   } else if (opt == 'sub') {
     return getSubgroups();
@@ -332,14 +342,14 @@ function getSubgroups() {
     }
 
     if (groups[n].groups) {
-      groups[n].groups.forEach(function(subgroup) {
+      groups[n].groups.forEach(function (subgroup) {
         subgroups.push(subgroup);
       });
 
       findSubgroups(groups[n].groups, 0);
     }
 
-    findSubgroups(groups, n+1);
+    findSubgroups(groups, n + 1);
   }
 
   findSubgroups(settings.groups, 0);
@@ -359,7 +369,7 @@ function getMapSource() {
 }
 
 function getControlNames() {
-  var controlNames = settings.controls.map(function(obj) {
+  var controlNames = settings.controls.map(function (obj) {
     return obj.name;
   });
   return controlNames;
@@ -369,7 +379,7 @@ function getTarget() {
   return settings.target;
 }
 
-function getClusterOptions(){
+function getClusterOptions() {
   return settings.clusterOptions;
 }
 
@@ -418,7 +428,7 @@ function getScale(resolution) {
 
 function getUnits(proj) {
   var units;
-  switch(proj) {
+  switch (proj) {
     case 'EPSG:3857':
       units = 'm';
       break;
@@ -460,7 +470,7 @@ function autoPan() {
     }
     map.getView().animate({
       center: ([center[0] + dx, center[1] + dy]),
-	  duration:300
+      duration: 300
     });
   }
   /*End workaround*/
@@ -469,7 +479,7 @@ function autoPan() {
 function removeOverlays(overlays) {
   if (overlays) {
     if (overlays.constructor === Array || overlays instanceof ol.Collection) {
-      overlays.forEach(function(overlay) {
+      overlays.forEach(function (overlay) {
         map.removeOverlay(overlay);
       })
     } else {
@@ -536,7 +546,7 @@ module.exports.getTileGrid = getTileGrid;
 module.exports.getTileSize = getTileSize;
 module.exports.autoPan = autoPan;
 module.exports.removeOverlays = removeOverlays;
-module.exports.checkScale= checkScale;
+module.exports.checkScale = checkScale;
 module.exports.getMapName = getMapName;
 module.exports.getConsoleId = getConsoleId;
 module.exports.getUrl = getUrl;
