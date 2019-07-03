@@ -2,17 +2,28 @@ import { Component } from '../ui';
 
 export default function Footer(options = {}) {
   const {
+    footerData
+  } = options;
+  const {
     cls = '',
-    data = {}
+      data = footerData,
   } = options;
 
   return Component({
     render: function render() {
       let middleContent = '';
-      if (data.img) {
+      if (data.img && !data.url && !data.urlText) {
+        middleContent = `<img src="${data.img}">`;
+      } else if (data.img && data.url && !data.urlText) {
+        middleContent = `<img src="${data.img}"><a href="${data.url}"></a>`;
+      } else if (data.img && !data.url && data.urlText) {
+        middleContent = `<img src="${data.img}">${data.urlText}`;
+      } else if (data.img && data.url && data.urlText) {
+        middleContent = `<img src="${data.img}"><a href="${data.url}">${data.urlText}</a>`;
+      } else if (data.img) {
         middleContent = `<img src="${data.img}">`;
       } else if (data.url && data.urlText) {
-        middleContent = `<a href="${data.url}">${data.urlText}</a>">`;
+        middleContent = `<a href="${data.url}">${data.urlText}</a>`;
       } else if (data.text) {
         middleContent = `<p>${data.text}</p>`;
       }
