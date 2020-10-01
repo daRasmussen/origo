@@ -7,6 +7,7 @@ import awesomeParser from './utils/awesomeParser';
 import makeEmptyList from './utils/makeEmptyList';
 import attachBtnEvent from './utils/attachBtnEvent';
 import attachInputEvent from './utils/attachInputEvent';
+import moveBtn from './utils/moveBtn';
 
 let options = {};
 const list = [];
@@ -60,17 +61,26 @@ function render() {
       } else {
         olist = awesomeParser(olist);
       }
+
       const origoConfigOptions = JSON.parse(input.getAttribute('o-config'));
       let config = {
-        list: olist
+        list: olist,
+        filter: function (text, input) {
+          const { value } = text;
+          return value.includes(input);
+        }
       };
+
       if (hasImages) {
-        config.item = text =>
-          Awesomplete.$.create('li', {
+        config.item = function (text) {
+          const item = Awesomplete.$.create('li', {
             innerHTML: text,
-            'area-selected': false
+            'area-selected': true
           });
+          return item;
+        }
       }
+
       config = origoConfigOptions ? $.extend({}, config, origoConfigOptions) : config;
 
       awesome = new Awesomplete(input, config);
@@ -78,6 +88,7 @@ function render() {
       const btn = sList.querySelector('button');
       attachBtnEvent(btn, awesome, list);
       attachInputEvent(input);
+      moveBtn(btn);
     }
   });
   createEmptyLists();
