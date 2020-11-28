@@ -29,7 +29,7 @@
     "@babel/runtime-corejs3": "^7.11.2",
     "acorn": "^8.0.1",
     "awesomplete": "^1.1.5",
-    "copyfiles": "^2.3.0",
+    "copyfiles": "^2.4.1",
     "core-js": "^3.6.5",
     "cuid": "^2.1.4",
     "downloadjs": "^1.4.7",
